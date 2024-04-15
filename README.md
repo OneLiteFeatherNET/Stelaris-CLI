@@ -21,5 +21,5 @@ The CLI can only be used with specific arguments otherwise it will not work. The
 Arguments which contains a <span style="color: red;">*</span> are optional.
 
 - -update <major, minor, patch, rev> updates the version tag of the generated files
-- -help displays the help message
+- -help<span style="color: red;">*</span> displays the help message
 - -experimental<span style="color: red;">*</span> enables experimental features
