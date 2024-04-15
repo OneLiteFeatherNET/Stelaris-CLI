@@ -18,7 +18,8 @@ will be incremented. This aids in identifying the latest version for a specific 
 ### Usage
 
 The CLI can only be used with specific arguments otherwise it will not work. The following arguments are required:
+Arguments which contains a <span style="color: red;">*</span> are optional.
 
 - -update <major, minor, patch, rev> updates the version tag of the generated files
 - -help displays the help message
-- -experimental enables experimental features
+- -experimental<span style="color: red;">*</span> enables experimental features
