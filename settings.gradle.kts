@@ -3,7 +3,7 @@ rootProject.name = "stelaris-cli"
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            version("kotlin", "2.0.0")
+            version("kotlin", "2.0.10")
             version("junit", "5.10.2")
             library("jetbrains.annotation", "org.jetbrains", "annotations").version("24.1.0")
             library("microtus", "net.onelitefeather.microtus", "Minestom").version("1.3.1")
