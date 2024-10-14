@@ -5,7 +5,7 @@ dependencyResolutionManagement {
         create("libs") {
             version("kotlin", "2.0.20")
             version("junit", "5.11.0")
-            library("jetbrains.annotation", "org.jetbrains", "annotations").version("24.1.0")
+            library("jetbrains.annotation", "org.jetbrains", "annotations").version("26.0.1")
             library("microtus", "net.onelitefeather.microtus", "Minestom").version("1.3.1")
             library("dartpoet", "dev.themeinerlp", "dartpoet").version("0.0.1-SNAPSHOT")
             library("guava", "com.google.guava", "guava").version("33.3.0-jre")
