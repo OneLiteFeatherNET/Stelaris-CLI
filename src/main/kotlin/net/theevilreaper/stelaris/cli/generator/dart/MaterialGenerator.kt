@@ -52,7 +52,6 @@ class MaterialGenerator : BaseGenerator<Material>(
         return when (subType) {
             MaterialSubType.BLOCK -> material.isBlock
             MaterialSubType.ARMOR -> material.isArmor
-            MaterialSubType.FOOD -> material.isFood
         }
     }
 

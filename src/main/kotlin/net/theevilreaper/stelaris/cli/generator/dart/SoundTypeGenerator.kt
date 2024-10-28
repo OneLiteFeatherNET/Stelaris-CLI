@@ -4,9 +4,9 @@ import net.kyori.adventure.sound.Sound
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartModifier
 import net.theevilreaper.dartpoet.clazz.ClassSpec
-import net.theevilreaper.dartpoet.enum.EnumPropertySpec
-import net.theevilreaper.dartpoet.function.constructor.ConstructorSpec
-import net.theevilreaper.dartpoet.parameter.ParameterSpec
+import net.theevilreaper.dartpoet.constructor.ConstructorSpec
+import net.theevilreaper.dartpoet.enum.EnumEntrySpec
+import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.util.StringHelper
@@ -22,9 +22,8 @@ class SoundTypeGenerator : BaseGenerator<Any>(
                 val entries = Sound.Source.entries
                 entries.forEach {
                     enumProperty(
-                        EnumPropertySpec
-                            .builder(it.name.lowercase())
-                            .parameter("%C", StringHelper.mapDisplayName(it.name))
+                        EnumEntrySpec.builder(it.name.lowercase())
+                            .parameter(EnumParameterSpec.positional("%C", StringHelper.mapDisplayName(it.name)))
                             .build()
                     )
                 }
@@ -33,7 +32,6 @@ class SoundTypeGenerator : BaseGenerator<Any>(
             .constructor(
                 ConstructorSpec.builder(className)
                     .modifier(DartModifier.CONST)
-                    .parameter(ParameterSpec.builder("name").build())
                     .build()
             )
             .build()

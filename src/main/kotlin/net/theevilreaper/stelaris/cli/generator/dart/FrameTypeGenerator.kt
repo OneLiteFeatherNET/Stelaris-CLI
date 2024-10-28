@@ -4,8 +4,9 @@ import net.minestom.server.advancements.FrameType
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartModifier
 import net.theevilreaper.dartpoet.clazz.ClassSpec
-import net.theevilreaper.dartpoet.enum.EnumPropertySpec
-import net.theevilreaper.dartpoet.function.constructor.ConstructorSpec
+import net.theevilreaper.dartpoet.constructor.ConstructorSpec
+import net.theevilreaper.dartpoet.enum.EnumEntrySpec
+import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.dartpoet.parameter.ParameterSpec
 import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
@@ -23,8 +24,8 @@ class FrameTypeGenerator : BaseGenerator<FrameType>(
                 FrameType.entries.forEach { model ->
                     val name = model.name.lowercase()
                     it.enumProperty(
-                        EnumPropertySpec.builder(name)
-                            .parameter("%C", StringHelper.mapDisplayName(name))
+                        EnumEntrySpec.builder(name)
+                            .parameter(EnumParameterSpec.positional("%C", StringHelper.mapDisplayName(name)))
                             .build()
                     )
                 }
@@ -33,7 +34,7 @@ class FrameTypeGenerator : BaseGenerator<FrameType>(
             .constructor(
                 ConstructorSpec.builder(className)
                     .modifier(DartModifier.CONST)
-                    .parameter(ParameterSpec.builder(displayEntry).build())
+                    .parameter(ParameterSpec.positional(displayEntry).build())
                     .build()
             )
             .endWithNewLine(true)

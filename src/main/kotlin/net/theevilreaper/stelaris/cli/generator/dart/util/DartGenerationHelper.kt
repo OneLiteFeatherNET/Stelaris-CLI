@@ -12,8 +12,8 @@ import net.theevilreaper.dartpoet.property.PropertySpec
  **/
 
 val DEFAULT_PARAMETERS = arrayOf(
-    ParameterSpec.builder("displayName").build(),
-    ParameterSpec.builder("type").build()
+    ParameterSpec.positional("displayName").build(),
+    ParameterSpec.positional("type").build()
 )
 
 val DEFAULT_PROPERTIES = arrayOf(

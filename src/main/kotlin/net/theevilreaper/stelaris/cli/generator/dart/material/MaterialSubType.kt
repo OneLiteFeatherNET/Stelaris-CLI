@@ -11,6 +11,5 @@ package net.theevilreaper.stelaris.cli.generator.dart.material
 enum class MaterialSubType(val type: String) {
 
     BLOCK("block"),
-    FOOD("food"),
     ARMOR("armor"),
 }
