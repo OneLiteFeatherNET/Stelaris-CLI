@@ -4,8 +4,9 @@ import net.minestom.server.item.Material
 import net.theevilreaper.dartpoet.DartModifier
 import net.theevilreaper.dartpoet.clazz.ClassBuilder
 import net.theevilreaper.dartpoet.clazz.ClassSpec
-import net.theevilreaper.dartpoet.enum.EnumPropertySpec
-import net.theevilreaper.dartpoet.function.constructor.ConstructorSpec
+import net.theevilreaper.dartpoet.constructor.ConstructorSpec
+import net.theevilreaper.dartpoet.enum.EnumEntrySpec
+import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.dartpoet.parameter.ParameterSpec
 import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
@@ -20,10 +21,10 @@ internal object MaterialSubGenerator {
     fun generateBlockMaterialEnum(className: String, materials: List<Material>): ClassBuilder {
         val enumProperties = materials.map {
             val name = escapeMinecraftPart(it.name())
-            EnumPropertySpec.builder(name)
-                .parameter("%C", StringHelper.mapDisplayName(name))
-                .parameter("%C", name)
-                .parameter("%L", it.maxStackSize())
+            EnumEntrySpec.builder(name)
+                .parameter(EnumParameterSpec.positional("%C", StringHelper.mapDisplayName(name)))
+                .parameter(EnumParameterSpec.positional("%C", name))
+                .parameter(EnumParameterSpec.positional("%L", it.maxStackSize()))
                 .build()
         }.toSet()
         val enumFile = ClassSpec.enumClass(className)
@@ -37,9 +38,9 @@ internal object MaterialSubGenerator {
                 ConstructorSpec.builder(className)
                     .modifier(DartModifier.CONST)
                     .parameters(
-                        ParameterSpec.builder("displayName").build(),
-                        ParameterSpec.builder(MATERIAL_KEY).build(),
-                        ParameterSpec.builder(MAX_STACK_SIZE).build()
+                        ParameterSpec.positional("displayName").build(),
+                        ParameterSpec.positional(MATERIAL_KEY).build(),
+                        ParameterSpec.positional(MAX_STACK_SIZE).build()
                     )
                     .build()
             )
