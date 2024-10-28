@@ -1,24 +1,15 @@
 package net.theevilreaper.stelaris.cli.generator.dart
 
-import net.theevilreaper.dartpoet.DartFile
-import net.theevilreaper.dartpoet.DartModifier
-import net.theevilreaper.dartpoet.enum.EnumPropertySpec
-import net.minestom.server.item.ItemHideFlag
-import net.theevilreaper.dartpoet.clazz.ClassSpec
-import net.theevilreaper.dartpoet.function.constructor.ConstructorSpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PARAMETERS
-import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PROPERTIES
-import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
-class ItemFlagGenerator : BaseGenerator<ItemHideFlag>(
+class ItemFlagGenerator : BaseGenerator<Any>(
     className = "ItemFlags",
     packageName = "item_flags",
 ) {
 
     override fun generate(javaPath: Path) {
-        val enumFile = DartFile.builder(packageName)
+        /*val enumFile = DartFile.builder(packageName)
             .type(
                 ClassSpec.enumClass(className)
                     .apply {
@@ -43,7 +34,7 @@ class ItemFlagGenerator : BaseGenerator<ItemHideFlag>(
                     .build()
             )
             .build()
-        enumFile.write(javaPath)
+        enumFile.write(javaPath)*/
     }
 
     override fun getName() = "DartItemFlagGenerator"

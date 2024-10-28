@@ -1,11 +1,13 @@
 package net.theevilreaper.stelaris.cli.generator.dart
 
-import net.minestom.server.item.Enchantment
+import net.minestom.server.MinecraftServer
+import net.minestom.server.item.enchant.Enchantment
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartModifier
 import net.theevilreaper.dartpoet.clazz.ClassSpec
-import net.theevilreaper.dartpoet.enum.EnumPropertySpec
-import net.theevilreaper.dartpoet.function.constructor.ConstructorSpec
+import net.theevilreaper.dartpoet.constructor.ConstructorSpec
+import net.theevilreaper.dartpoet.enum.EnumEntrySpec
+import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.util.CLASS_PROPERTIES
 import net.theevilreaper.stelaris.cli.generator.dart.util.CONSTRUCTOR_PARAMETERS
@@ -27,8 +29,8 @@ class EnchantmentGenerator : BaseGenerator<Enchantment>(
     private val defaultLevel: Int = 1
 
     override fun generate(javaPath: Path) {
-        val enchantmentData = Enchantment.values()
-        val properties = mutableSetOf<EnumPropertySpec>()
+        val enchantmentData = MinecraftServer.getEnchantmentRegistry().values()
+        val properties = mutableSetOf<EnumEntrySpec>()
         enchantmentData.forEach { properties.add(mapEnchantmentToEnumProperty(it)) }
         val enumClass = ClassSpec.enumClass(className)
             .enumProperties(*properties.toTypedArray())
@@ -52,13 +54,16 @@ class EnchantmentGenerator : BaseGenerator<Enchantment>(
      * @param enchantment the given enchantment
      * @return the generated property
      */
-    private fun mapEnchantmentToEnumProperty(enchantment: Enchantment): EnumPropertySpec {
+    private fun mapEnchantmentToEnumProperty(enchantment: Enchantment): EnumEntrySpec {
         val enchantmentEntry = enchantment.registry()
-        return EnumPropertySpec.builder(enchantmentEntry.namespace.path())
-            .parameter("%C", StringHelper.mapDisplayName(enchantmentEntry.namespace.path()))
-            .parameter("%C", "MEEPO")
-            .parameter("%L", defaultLevel)
-            .parameter("%L", enchantmentEntry.maxLevel)
+        return EnumEntrySpec.builder(enchantmentEntry!!.namespace.path())
+            .parameter(EnumParameterSpec.positional(
+                "%C",
+                StringHelper.mapDisplayName(enchantmentEntry.namespace.path())
+            ))
+            .parameter(EnumParameterSpec.positional("%C", "MEEPO"))
+            .parameter(EnumParameterSpec.positional("%L", defaultLevel))
+            .parameter(EnumParameterSpec.positional("%L", 1)) //TODO: Fix me
             .build()
     }
 

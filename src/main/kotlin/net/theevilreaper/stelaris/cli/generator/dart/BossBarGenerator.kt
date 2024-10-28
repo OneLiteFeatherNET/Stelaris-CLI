@@ -4,8 +4,9 @@ import net.kyori.adventure.bossbar.BossBar
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartModifier
 import net.theevilreaper.dartpoet.clazz.ClassSpec
-import net.theevilreaper.dartpoet.enum.EnumPropertySpec
-import net.theevilreaper.dartpoet.function.constructor.ConstructorSpec
+import net.theevilreaper.dartpoet.constructor.ConstructorSpec
+import net.theevilreaper.dartpoet.enum.EnumEntrySpec
+import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PARAMETERS
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PROPERTIES
@@ -48,9 +49,14 @@ class BossBarGenerator : BaseGenerator<BossBar>(
                     .apply {
                         BossBar.Color.entries.forEach { color ->
                             enumProperty(
-                                EnumPropertySpec.builder(color.name.lowercase())
-                                    .parameter(stringIdentifier, StringHelper.mapDisplayName(color.name))
-                                    .parameter(stringIdentifier, color.name.uppercase())
+                                EnumEntrySpec.builder(color.name.lowercase())
+                                    .parameter(
+                                        EnumParameterSpec.positional(
+                                            stringIdentifier,
+                                            StringHelper.mapDisplayName(color.name)
+                                        )
+                                    )
+                                    .parameter(EnumParameterSpec.positional(stringIdentifier, color.name.uppercase()))
                                     .build()
                             )
                         }
@@ -76,9 +82,14 @@ class BossBarGenerator : BaseGenerator<BossBar>(
                     .apply {
                         BossBar.Overlay.entries.forEach { overlay ->
                             enumProperty(
-                                EnumPropertySpec.builder(overlay.name.lowercase())
-                                    .parameter(stringIdentifier, StringHelper.mapDisplayName(overlay.name))
-                                    .parameter(stringIdentifier, overlay.name.uppercase())
+                                EnumEntrySpec.builder(overlay.name.lowercase())
+                                    .parameter(
+                                        EnumParameterSpec.positional(
+                                            stringIdentifier,
+                                            StringHelper.mapDisplayName(overlay.name)
+                                        )
+                                    )
+                                    .parameter(EnumParameterSpec.positional(stringIdentifier, overlay.name.uppercase()))
                                     .build()
                             )
                         }
@@ -104,9 +115,14 @@ class BossBarGenerator : BaseGenerator<BossBar>(
                     .apply {
                         BossBar.Flag.entries.forEach { overlay ->
                             enumProperty(
-                                EnumPropertySpec.builder(overlay.name.lowercase())
-                                    .parameter(stringIdentifier, StringHelper.mapDisplayName(overlay.name))
-                                    .parameter(stringIdentifier, overlay.name.uppercase())
+                                EnumEntrySpec.builder(overlay.name.lowercase())
+                                    .parameter(
+                                        EnumParameterSpec.positional(
+                                            stringIdentifier,
+                                            StringHelper.mapDisplayName(overlay.name)
+                                        )
+                                    )
+                                    .parameter(EnumParameterSpec.positional(stringIdentifier, overlay.name.uppercase()))
                                     .build()
                             )
                         }

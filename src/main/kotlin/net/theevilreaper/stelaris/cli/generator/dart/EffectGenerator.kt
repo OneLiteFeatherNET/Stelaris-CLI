@@ -4,8 +4,9 @@ import net.minestom.server.effects.Effects
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartModifier
 import net.theevilreaper.dartpoet.clazz.ClassSpec
-import net.theevilreaper.dartpoet.enum.EnumPropertySpec
-import net.theevilreaper.dartpoet.function.constructor.ConstructorSpec
+import net.theevilreaper.dartpoet.constructor.ConstructorSpec
+import net.theevilreaper.dartpoet.enum.EnumEntrySpec
+import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PARAMETERS
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PROPERTIES
@@ -18,10 +19,11 @@ class EffectGenerator : BaseGenerator<Effects>(
 ) {
     override fun generate(javaPath: Path) {
         val effects = Effects.entries
-        val enumEntries = mutableListOf<EnumPropertySpec>()
+        val enumEntries = mutableListOf<EnumEntrySpec>()
         effects.forEach {
             enumEntries.add(
-                EnumPropertySpec.builder(it.name.lowercase()).parameter("%C", StringHelper.mapDisplayName(it.name))
+                EnumEntrySpec.builder(it.name.lowercase())
+                    .parameter(EnumParameterSpec.positional("%C", StringHelper.mapDisplayName(it.name)))
                     .build()
             )
         }

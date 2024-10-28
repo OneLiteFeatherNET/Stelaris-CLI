@@ -12,8 +12,8 @@ internal val CLASS_PROPERTIES: Array<PropertySpec> = arrayOf(
 )
 
 internal val CONSTRUCTOR_PARAMETERS: Array<ParameterSpec> = arrayOf(
-    ParameterSpec.builder("name").modifier(DartModifier.FINAL).build(),
-    ParameterSpec.builder("category").modifier(DartModifier.FINAL).build(),
-    ParameterSpec.builder("minLevel").modifier(DartModifier.FINAL).build(),
-    ParameterSpec.builder("maxLevel").modifier(DartModifier.FINAL).build()
+    ParameterSpec.positional("name").build(),
+    ParameterSpec.positional("category").build(),
+    ParameterSpec.positional("minLevel").build(),
+    ParameterSpec.positional("maxLevel").build()
 )
