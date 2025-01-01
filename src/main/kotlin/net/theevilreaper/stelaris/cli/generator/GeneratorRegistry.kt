@@ -10,7 +10,6 @@ class GeneratorRegistry {
         EnchantmentGenerator(),
         EntityTypeGenerator(),
         FrameTypeGenerator(),
-        ItemFlagGenerator(),
         MaterialGenerator(),
         SoundTypeGenerator(),
     )
