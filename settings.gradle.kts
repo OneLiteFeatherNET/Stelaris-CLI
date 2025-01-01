@@ -5,7 +5,7 @@ dependencyResolutionManagement {
         create("libs") {
             version("kotlin", "2.0.21")
             version("minestom", "1.5.0-SNAPSHOT")
-            version("junit", "5.11.3")
+            version("junit", "5.11.4")
             library("microtus-bom", "net.onelitefeather.microtus", "bom").versionRef("minestom")
             library("jetbrains.annotation", "org.jetbrains", "annotations").withoutVersion()
             library("microtus", "net.onelitefeather.microtus", "Microtus").withoutVersion()
