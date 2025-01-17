@@ -4,7 +4,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             version("kotlin", "2.1.0")
-            version("minestom", "1.5.0-SNAPSHOT")
+            version("minestom", "1.5.1")
             version("junit", "5.11.4")
             library("microtus-bom", "net.onelitefeather.microtus", "bom").versionRef("minestom")
             library("jetbrains.annotation", "org.jetbrains", "annotations").withoutVersion()
