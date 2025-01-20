@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "net.theevilreaper.stelaris.cli"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.2-SNAPSHOT"
 
 kotlin {
     jvmToolchain(21)
@@ -13,7 +13,6 @@ kotlin {
 repositories {
     mavenCentral()
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -24,6 +23,7 @@ dependencies {
     implementation(libs.guava)
     implementation(libs.jgit)
 
+    testImplementation(platform(libs.microtus.bom))
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly(libs.junit.jupiter.engine)
 }
