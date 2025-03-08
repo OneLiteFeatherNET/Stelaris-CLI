@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "net.theevilreaper.stelaris.cli"
-version = "0.0.2-SNAPSHOT"
+version = "0.0.3-SNAPSHOT"
 
 kotlin {
     jvmToolchain(21)
@@ -29,7 +29,24 @@ dependencies {
 }
 
 tasks {
+    compileJava {
+        options.encoding = "UTF-8"
+        options.release.set(21)
+    }
+
+    jacocoTestReport {
+        dependsOn(rootProject.tasks.test)
+        reports {
+            xml.required.set(true)
+            csv.required.set(true)
+        }
+    }
+
     test {
+        finalizedBy(rootProject.tasks.jacocoTestReport)
         useJUnitPlatform()
+        testLogging {
+            events("passed", "skipped", "failed")
+        }
     }
 }
