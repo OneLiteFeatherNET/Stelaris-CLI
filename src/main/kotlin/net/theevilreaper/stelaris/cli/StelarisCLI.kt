@@ -83,6 +83,6 @@ fun main(args: Array<String>) {
         )
     )
 
-    gitPush.setForce(true)
+    gitPush.isForce = true
     gitPush.call()
 }
