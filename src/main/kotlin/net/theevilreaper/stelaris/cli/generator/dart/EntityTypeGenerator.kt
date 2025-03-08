@@ -14,7 +14,7 @@ import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
-class EntityTypeGenerator : BaseGenerator<EntityType>(
+class EntityTypeGenerator : BaseGenerator(
     className = "EntityType",
     packageName = "entity_type",
 ) {

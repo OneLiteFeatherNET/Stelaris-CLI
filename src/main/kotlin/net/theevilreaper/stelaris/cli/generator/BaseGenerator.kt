@@ -7,26 +7,25 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.nio.file.Path
-import javax.lang.model.element.Modifier
 
 /**
  * @author theEvilReaper
  * @version 1.0.0
  * @since
  **/
-abstract class BaseGenerator<T>(
+abstract class BaseGenerator(
     val className: String,
     val packageName: String,
 ) : Generator {
 
+    private val emptyMessage: String = "No files to write. Skipping the file write"
+
     private val logger: Logger = LoggerFactory.getLogger(BaseGenerator::class.java)
-    protected val defaultModifiers = arrayOf(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
     private val filesToGenerate: MutableList<DartFile> = arrayListOf()
-    protected val emptyComponent = "empty()"
 
     protected fun writeFiles(filesList: List<DartFile>, outputFolder: Path) {
         if (filesList.isEmpty()) {
-            logger.info("No files to write. Skipping the file write")
+            logger.info(emptyMessage)
             return
         }
         write(filesList, outputFolder)
@@ -34,7 +33,7 @@ abstract class BaseGenerator<T>(
 
     protected fun writeFiles(outputFolder: Path) {
         if (filesToGenerate.isEmpty()) {
-            logger.info("No files to write. Skipping the file write")
+            logger.info(emptyMessage)
             return
         }
         write(filesToGenerate, outputFolder)
@@ -56,10 +55,6 @@ abstract class BaseGenerator<T>(
      */
     override fun cleanUp() {
         this.filesToGenerate.clear()
-    }
-
-    fun toConstantVarDeclaration(identifier: String?, name: String): String {
-        return if (identifier.isNullOrEmpty()) changeFormat(name) else identifier + changeFormat(name)
     }
 
     private fun changeFormat(name: String): String = CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, name)

@@ -19,7 +19,7 @@ import java.nio.file.Path
  * @author theEvilReaper
  * @since 1.0.0
  */
-class BossBarGenerator : BaseGenerator<BossBar>(
+class BossBarGenerator : BaseGenerator(
     className = "BossBarColor",
     packageName = "boss_bar_color",
 ) {

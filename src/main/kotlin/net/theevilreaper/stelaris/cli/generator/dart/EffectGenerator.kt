@@ -13,7 +13,7 @@ import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PROPERTIES
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
-class EffectGenerator : BaseGenerator<Effects>(
+class EffectGenerator : BaseGenerator(
     className = "Effect",
     packageName = "effect",
 ) {

@@ -12,7 +12,7 @@ import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
-class SoundTypeGenerator : BaseGenerator<Any>(
+class SoundTypeGenerator : BaseGenerator(
     className = "SoundSource",
     packageName = "sound",
 ) {

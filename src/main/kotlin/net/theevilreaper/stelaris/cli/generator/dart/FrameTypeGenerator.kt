@@ -13,7 +13,7 @@ import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
-class FrameTypeGenerator : BaseGenerator<FrameType>(
+class FrameTypeGenerator : BaseGenerator(
     className = "FrameType",
     packageName = "frame_type",
 ) {
