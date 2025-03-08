@@ -21,7 +21,7 @@ import java.nio.file.Path
  * @version 1.0
  * @author theEvilReaper
  */
-class EnchantmentGenerator : BaseGenerator<Enchantment>(
+class EnchantmentGenerator : BaseGenerator(
     className = "Enchantment",
     packageName = "enchantment",
 ) {

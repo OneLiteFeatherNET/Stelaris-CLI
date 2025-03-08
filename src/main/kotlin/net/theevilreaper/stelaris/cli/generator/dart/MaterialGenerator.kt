@@ -12,7 +12,7 @@ import java.nio.file.Path
  *
  * @author theEvilReaper
  */
-class MaterialGenerator : BaseGenerator<Material>(
+class MaterialGenerator : BaseGenerator(
     className = "Materials",
     packageName = "materials",
 ) {
