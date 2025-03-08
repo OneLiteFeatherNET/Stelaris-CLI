@@ -13,7 +13,4 @@ class GeneratorRegistry {
         MaterialGenerator(),
         SoundTypeGenerator(),
     )
-
-    internal inline fun getGenerators(crossinline predicate: (BaseGenerator<*>) -> Boolean): Set<Generator> =
-        generators.filter { predicate(it as BaseGenerator<*>) }.toSet()
 }
