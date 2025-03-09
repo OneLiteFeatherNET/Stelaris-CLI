@@ -1,7 +1,10 @@
 package net.theevilreaper.stelaris.cli
 
+import net.minestom.server.MinecraftServer
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.GeneratorRegistry
+import net.theevilreaper.stelaris.cli.strategy.ExportMode
+import net.theevilreaper.stelaris.cli.strategy.LocalExportStrategy
 import net.theevilreaper.stelaris.cli.util.*
 import org.eclipse.jgit.lib.PersonIdent
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
@@ -17,12 +20,15 @@ fun main(args: Array<String>) {
     val generatorRegistry = GeneratorRegistry()
     var showHelp = false
     var versionPart: VersionPart? = null
+    var exportMode = ExportMode.LOCAL
     var generators: Set<Generator> = generatorRegistry.generators
 
     args.forEachIndexed { index, arg ->
         if (arg.startsWith(ARGUMENT_IDENTIFIER)) {
             val argument: String = arg.substring(1, arg.length)
+            println("Argument: $argument")
             val commandArg: CommandArgument? = CommandArgument.fromIdentifier(argument)
+            println("Command argument: $commandArg")
 
             if (commandArg == null) {
                 println("The argument $argument is not supported")
@@ -40,10 +46,10 @@ fun main(args: Array<String>) {
 
                     versionPart = VersionPart.parse(versionPartString)
                 }
+
                 CommandArgument.EXPERIMENTAL -> generators = generatorRegistry.generators
+                CommandArgument.GIT -> exportMode = ExportMode.GIT
             }
-        } else {
-            println("Unknown argument: $arg")
         }
     }
 
@@ -58,7 +64,10 @@ fun main(args: Array<String>) {
 
     val tempFile: Path = Files.createTempDirectory(TEMP_DIR_NAME)
 
-    generators.forEach { it.generate(tempFile) }
+    MinecraftServer.init();
+
+    LocalExportStrategy(tempFile, generators.toList()).export()
+    return
 
     val gitRepo = cloneBaseRepo(
         System.getenv("stelaris.cli.username"),
