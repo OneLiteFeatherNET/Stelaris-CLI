@@ -1,5 +1,6 @@
 package net.theevilreaper.stelaris.cli.util
 
+import net.theevilreaper.stelaris.cli.arguments.CommandArgument
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
