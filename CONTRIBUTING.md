@@ -35,7 +35,7 @@ Before you contribute to the project:
 1. Fork the repository
 2. Create a new branch
     - Use a descriptive name
-    - Start with `feature/`, `fix/`, `docs/`, etc.
+    - Start for example with `feature/`, `fix/`, `docs/`, etc.
 3. Make your changes
 4. Commit your changes
     - Use descriptive commit messages
