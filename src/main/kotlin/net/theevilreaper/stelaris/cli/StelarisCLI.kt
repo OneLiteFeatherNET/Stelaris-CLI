@@ -11,6 +11,7 @@ import net.theevilreaper.stelaris.cli.generator.GeneratorRegistry
 import net.theevilreaper.stelaris.cli.util.*
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
     if (args.isEmpty()) {
@@ -25,6 +26,12 @@ fun main(args: Array<String>) {
         println(HELP_MESSAGE)
     }
 
+    if (parsedArgs.versionPart == null) {
+        println("The version part is required")
+        exitProcess(1)
+        return
+    }
+
     val generators: Set<Generator> = when (parsedArgs.experimental) {
         false -> generatorRegistry.getGenerators { !it.isExperimental() }
         true -> generatorRegistry.getGenerators()
@@ -32,6 +39,7 @@ fun main(args: Array<String>) {
 
     if (generators.isEmpty()) {
         println("The cli needs generators to run")
+        exitProcess(1)
         return
     }
 
@@ -45,7 +53,7 @@ fun main(args: Array<String>) {
 
     val projectExporter = when (parsedArgs.localBuild) {
         true -> LocalProjectExporter(workingDir, "", generators)
-        false -> GitProjectExporter(workingDir, "", versionPart = parsedArgs.versionPart!!, generators)
+        false -> GitProjectExporter(workingDir, "", versionPart = parsedArgs.versionPart, generators)
     }
 
     projectExporter.export()
