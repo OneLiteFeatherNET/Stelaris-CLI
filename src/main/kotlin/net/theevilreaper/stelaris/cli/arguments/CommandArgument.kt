@@ -1,4 +1,4 @@
-package net.theevilreaper.stelaris.cli.util
+package net.theevilreaper.stelaris.cli.arguments
 
 /**
  * Represents the different command arguments which can be used.
@@ -12,7 +12,10 @@ enum class CommandArgument(val identifier: String, val helpMessage: String) {
 
     HELP("help", "Shows this help message"),
     UPDATE("update", "Updates a specific part of the version string"),
-    EXPERIMENTAL("experimental", "Enables experimental generators");
+    EXPERIMENTAL("experimental", "Enables experimental generators"),
+    TYPE("type", "The generation type")
+
+    ;
 
     companion object {
 
