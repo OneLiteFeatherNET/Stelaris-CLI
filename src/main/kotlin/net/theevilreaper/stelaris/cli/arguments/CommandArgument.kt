@@ -13,8 +13,8 @@ enum class CommandArgument(val identifier: String, val helpMessage: String) {
     HELP("help", "Shows this help message"),
     UPDATE("update", "Updates a specific part of the version string"),
     EXPERIMENTAL("experimental", "Enables experimental generators"),
-    TYPE("type", "The generation type")
-
+    TYPE("type", "The generation type"),
+    PATH("path", "The path to the project")
     ;
 
     companion object {
