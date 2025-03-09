@@ -1,13 +1,17 @@
 package net.theevilreaper.stelaris.cli
 
 import net.minestom.server.MinecraftServer
+import net.theevilreaper.stelaris.cli.arguments.CommandArgument
+import net.theevilreaper.stelaris.cli.arguments.ParsedArgs
+import net.theevilreaper.stelaris.cli.exporter.ExportStrategy
+import net.theevilreaper.stelaris.cli.exporter.GitProjectExporter
+import net.theevilreaper.stelaris.cli.exporter.LocalProjectExporter
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.GeneratorRegistry
 import net.theevilreaper.stelaris.cli.util.*
-import org.eclipse.jgit.lib.PersonIdent
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
     if (args.isEmpty()) {
@@ -16,9 +20,51 @@ fun main(args: Array<String>) {
     }
 
     val generatorRegistry = GeneratorRegistry()
+    val parsedArgs = parseArguments(args)
+
+    if (parsedArgs.showHelp) {
+        println(HELP_MESSAGE)
+    }
+
+    if (parsedArgs.versionPart == null) {
+        println("The version part is required")
+        exitProcess(1)
+        return
+    }
+
+    val generators: Set<Generator> = when (parsedArgs.experimental) {
+        false -> generatorRegistry.getGenerators { !it.isExperimental() }
+        true -> generatorRegistry.getGenerators()
+    }
+
+    if (generators.isEmpty()) {
+        println("The cli needs generators to run")
+        exitProcess(1)
+        return
+    }
+
+    // Use the user-specified path if provided; otherwise, use the default for Git
+    val workingDir = when {
+        parsedArgs.localBuild -> parsedArgs.path ?: Files.createTempDirectory(TEMP_DIR_NAME)
+        else -> Files.createTempDirectory(TEMP_DIR_NAME)
+    }
+
+    MinecraftServer.init()
+
+    val projectExporter = when (parsedArgs.localBuild) {
+        true -> LocalProjectExporter(workingDir, "", generators)
+        false -> GitProjectExporter(workingDir, "", versionPart = parsedArgs.versionPart, generators)
+    }
+
+    projectExporter.export()
+}
+
+private fun parseArguments(args: Array<String>): ParsedArgs {
     var showHelp = false
     var versionPart: VersionPart? = null
-    var experimental: Boolean = false
+    var experimental = false
+    var localBuild = true
+    var path: Path? = null
 
     args.forEachIndexed { index, arg ->
         if (arg.startsWith(ARGUMENT_IDENTIFIER)) {
@@ -40,58 +86,25 @@ fun main(args: Array<String>) {
                         println("A version part can't start with an $ARGUMENT_IDENTIFIER")
                         return@forEachIndexed
                     }
-
                     versionPart = VersionPart.parse(versionPartString)
                 }
 
                 CommandArgument.EXPERIMENTAL -> experimental = true
+                CommandArgument.TYPE -> {
+                    val type = args[index + 1]
+                    val exportStrategy = ExportStrategy.fromIdentifier(type)
+                    if (exportStrategy == ExportStrategy.GIT) {
+                        localBuild = false
+                    }
+                }
+
+                CommandArgument.PATH -> {
+                    val pathString = args[index + 1]
+                    path = Path.of(pathString)
+                }
             }
         }
     }
 
-    if (showHelp) {
-        println(HELP_MESSAGE)
-    }
-
-    val generators: Set<Generator> = when(experimental) {
-        false -> generatorRegistry.getGenerators { !it.isExperimental() }
-        true -> generatorRegistry.getGenerators()
-    }
-
-    if (generators.isEmpty()) {
-        println("The cli needs generators to run")
-        return
-    }
-
-    val tempFile: Path = Files.createTempDirectory(TEMP_DIR_NAME)
-
-    MinecraftServer.init();
-
-    generators.forEach { generator -> generator.generate(tempFile) }
-
-    val gitRepo = cloneBaseRepo(
-        System.getenv("stelaris.cli.username"),
-        System.getenv("stelaris.cli.password"),
-        System.getenv("stelaris.cli.cloneUrl"),
-        tempFile
-    )
-
-    gitRepo.add().addFilepattern(".").call()
-    val commit = gitRepo.commit()
-    commit.message = "Update version part: ${versionPart!!.part}"
-    commit.setAuthor(PersonIdent("Stelaris CLI", "gitlab+generator@onelitefeather.net"))
-    commit.setAll(true)
-    commit.call()
-
-    val gitPush = gitRepo.push()
-
-    gitPush.setCredentialsProvider(
-        UsernamePasswordCredentialsProvider(
-            System.getenv("stelaris.cli.username"),
-            System.getenv("stelaris.cli.password")
-        )
-    )
-
-    gitPush.isForce = true
-    gitPush.call()
+    return ParsedArgs(showHelp, versionPart, experimental, localBuild, path)
 }
