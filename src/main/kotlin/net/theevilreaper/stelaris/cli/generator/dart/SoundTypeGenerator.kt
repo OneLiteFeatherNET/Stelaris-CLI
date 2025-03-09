@@ -43,4 +43,6 @@ class SoundTypeGenerator : BaseGenerator(
     }
 
     override fun getName(): String = "SoundTypeGenerator"
+
+    override fun isExperimental() = true
 }

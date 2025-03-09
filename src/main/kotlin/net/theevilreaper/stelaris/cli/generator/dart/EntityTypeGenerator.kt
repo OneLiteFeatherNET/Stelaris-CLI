@@ -50,4 +50,6 @@ class EntityTypeGenerator : BaseGenerator(
     }
 
     override fun getName() = "EntityTypeGenerator"
+
+    override fun isExperimental() = false
 }

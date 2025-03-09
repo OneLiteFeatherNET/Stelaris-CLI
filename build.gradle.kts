@@ -23,9 +23,10 @@ dependencies {
     implementation(libs.guava)
     implementation(libs.jgit)
 
-    testImplementation(platform(libs.microtus.bom))
     testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.jupiter.params)
     testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks {
@@ -35,7 +36,7 @@ tasks {
     }
 
     jacocoTestReport {
-        dependsOn(rootProject.tasks.test)
+        dependsOn(test)
         reports {
             xml.required.set(true)
             csv.required.set(true)
@@ -43,8 +44,8 @@ tasks {
     }
 
     test {
-        finalizedBy(rootProject.tasks.jacocoTestReport)
         useJUnitPlatform()
+        finalizedBy(jacocoTestReport)
         testLogging {
             events("passed", "skipped", "failed")
         }

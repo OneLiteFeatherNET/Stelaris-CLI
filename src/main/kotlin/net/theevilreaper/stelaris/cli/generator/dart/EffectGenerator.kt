@@ -46,4 +46,6 @@ class EffectGenerator : BaseGenerator(
     }
 
     override fun getName(): String = "EffectGenerator"
+
+    override fun isExperimental() = false
 }

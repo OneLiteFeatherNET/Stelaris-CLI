@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
     val generatorRegistry = GeneratorRegistry()
     var showHelp = false
     var versionPart: VersionPart? = null
-    var generators: Set<Generator> = generatorRegistry.generators
+    var experimental: Boolean = false
 
     args.forEachIndexed { index, arg ->
         if (arg.startsWith(ARGUMENT_IDENTIFIER)) {
@@ -44,13 +44,18 @@ fun main(args: Array<String>) {
                     versionPart = VersionPart.parse(versionPartString)
                 }
 
-                CommandArgument.EXPERIMENTAL -> generators = generatorRegistry.generators
+                CommandArgument.EXPERIMENTAL -> experimental = true
             }
         }
     }
 
     if (showHelp) {
         println(HELP_MESSAGE)
+    }
+
+    val generators: Set<Generator> = when(experimental) {
+        false -> generatorRegistry.getGenerators { !it.isExperimental() }
+        true -> generatorRegistry.getGenerators()
     }
 
     if (generators.isEmpty()) {
@@ -61,6 +66,8 @@ fun main(args: Array<String>) {
     val tempFile: Path = Files.createTempDirectory(TEMP_DIR_NAME)
 
     MinecraftServer.init();
+
+    generators.forEach { generator -> generator.generate(tempFile) }
 
     val gitRepo = cloneBaseRepo(
         System.getenv("stelaris.cli.username"),
