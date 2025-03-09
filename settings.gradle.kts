@@ -12,8 +12,10 @@ dependencyResolutionManagement {
             library("dartpoet", "dev.themeinerlp", "dartpoet").version("0.0.1-SNAPSHOT")
             library("guava", "com.google.guava", "guava").version("33.4.0-jre")
             library("jgit", "org.eclipse.jgit", "org.eclipse.jgit").version("7.1.0.202411261347-r")
-            library("junit.jupiter", "org.junit.jupiter", "junit-jupiter").versionRef("junit")
+            library("junit.jupiter", "org.junit.jupiter", "junit-jupiter-api").versionRef("junit")
+            library("junit.jupiter.params", "org.junit.jupiter", "junit-jupiter-params").versionRef("junit")
             library("junit.jupiter.engine", "org.junit.jupiter", "junit-jupiter-engine").versionRef("junit")
+            library("junit.platform.launcher", "org.junit.platform", "junit-platform-launcher").version("1.10.2")
             plugin("kotlin", "org.jetbrains.kotlin.jvm").versionRef("kotlin")
         }
     }

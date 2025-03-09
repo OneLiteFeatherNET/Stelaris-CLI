@@ -72,4 +72,6 @@ class EnchantmentGenerator : BaseGenerator(
      * @return the given name
      */
     override fun getName() = "EnchantmentGenerator"
+
+    override fun isExperimental() = false
 }

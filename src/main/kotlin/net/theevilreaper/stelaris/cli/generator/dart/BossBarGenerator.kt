@@ -143,4 +143,6 @@ class BossBarGenerator : BaseGenerator(
      * @return the given name
      */
     override fun getName(): String = "BossBarGenerator"
+
+    override fun isExperimental() = false
 }
