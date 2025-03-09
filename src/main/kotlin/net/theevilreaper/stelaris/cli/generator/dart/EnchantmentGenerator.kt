@@ -31,8 +31,8 @@ class EnchantmentGenerator : BaseGenerator(
     override fun generate(javaPath: Path) {
         val enchantmentData = MinecraftServer.getEnchantmentRegistry().values()
         val properties = mutableSetOf<EnumEntrySpec>()
-        enchantmentData.forEach { properties.add(mapEnchantmentToEnumProperty(it)) }
-        val enumClass = ClassSpec.enumClass(className)
+        //enchantmentData.forEach { properties.add(mapEnchantmentToEnumProperty(it)) }
+        /*val enumClass = ClassSpec.enumClass(className)
             .enumProperties(*properties.toTypedArray())
             .properties(*CLASS_PROPERTIES)
             .constructor {
@@ -46,7 +46,7 @@ class EnchantmentGenerator : BaseGenerator(
             .doc("The file is generated. Don't change anything here")
             .type(enumClass)
             .build()
-        enumFile.write(javaPath)
+        enumFile.write(javaPath)*/
     }
 
     /**
