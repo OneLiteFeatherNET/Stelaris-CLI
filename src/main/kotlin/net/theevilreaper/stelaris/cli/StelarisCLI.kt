@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
     val generatorRegistry = GeneratorRegistry()
     var showHelp = false
     var versionPart: VersionPart? = null
-    var generators: Set<Generator> = generatorRegistry.generators
+    var experimental: Boolean = false
 
     args.forEachIndexed { index, arg ->
         if (arg.startsWith(ARGUMENT_IDENTIFIER)) {
@@ -44,13 +44,18 @@ fun main(args: Array<String>) {
                     versionPart = VersionPart.parse(versionPartString)
                 }
 
-                CommandArgument.EXPERIMENTAL -> generators = generatorRegistry.generators
+                CommandArgument.EXPERIMENTAL -> experimental = true
             }
         }
     }
 
     if (showHelp) {
         println(HELP_MESSAGE)
+    }
+
+    val generators: Set<Generator> = when(experimental) {
+        true -> generatorRegistry.getGenerators { it.isExperimental() }
+        false -> generatorRegistry.getGenerators()
     }
 
     if (generators.isEmpty()) {
