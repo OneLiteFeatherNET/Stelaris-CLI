@@ -82,4 +82,6 @@ class MaterialGenerator : BaseGenerator(
      * @return the given name
      */
     override fun getName() = "MaterialGenerator"
+
+    override fun isExperimental() = false
 }
