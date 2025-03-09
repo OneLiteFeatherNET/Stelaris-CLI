@@ -1,11 +1,13 @@
 package net.theevilreaper.stelaris.cli
 
 import net.minestom.server.MinecraftServer
+import net.theevilreaper.stelaris.cli.arguments.CommandArgument
+import net.theevilreaper.stelaris.cli.exporter.ExportStrategy
+import net.theevilreaper.stelaris.cli.exporter.GitProjectExporter
+import net.theevilreaper.stelaris.cli.exporter.LocalProjectExporter
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.GeneratorRegistry
 import net.theevilreaper.stelaris.cli.util.*
-import org.eclipse.jgit.lib.PersonIdent
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -18,7 +20,8 @@ fun main(args: Array<String>) {
     val generatorRegistry = GeneratorRegistry()
     var showHelp = false
     var versionPart: VersionPart? = null
-    var experimental: Boolean = false
+    var experimental = false
+    var localBuild = true
 
     args.forEachIndexed { index, arg ->
         if (arg.startsWith(ARGUMENT_IDENTIFIER)) {
@@ -45,6 +48,13 @@ fun main(args: Array<String>) {
                 }
 
                 CommandArgument.EXPERIMENTAL -> experimental = true
+                CommandArgument.TYPE -> {
+                    val type = args[index + 1]
+                    val exportStrategy = ExportStrategy.fromIdentifier(type)
+                    if (exportStrategy == ExportStrategy.GIT) {
+                        localBuild = false
+                    }
+                }
             }
         }
     }
@@ -67,31 +77,10 @@ fun main(args: Array<String>) {
 
     MinecraftServer.init();
 
-    generators.forEach { generator -> generator.generate(tempFile) }
+    val projectExporter = when(localBuild) {
+        true -> LocalProjectExporter(tempFile, "", generators)
+        false -> GitProjectExporter(tempFile, "", versionPart = versionPart!!, generators)
+    }
 
-    val gitRepo = cloneBaseRepo(
-        System.getenv("stelaris.cli.username"),
-        System.getenv("stelaris.cli.password"),
-        System.getenv("stelaris.cli.cloneUrl"),
-        tempFile
-    )
-
-    gitRepo.add().addFilepattern(".").call()
-    val commit = gitRepo.commit()
-    commit.message = "Update version part: ${versionPart!!.part}"
-    commit.setAuthor(PersonIdent("Stelaris CLI", "gitlab+generator@onelitefeather.net"))
-    commit.setAll(true)
-    commit.call()
-
-    val gitPush = gitRepo.push()
-
-    gitPush.setCredentialsProvider(
-        UsernamePasswordCredentialsProvider(
-            System.getenv("stelaris.cli.username"),
-            System.getenv("stelaris.cli.password")
-        )
-    )
-
-    gitPush.isForce = true
-    gitPush.call()
+    projectExporter.export()
 }
