@@ -18,6 +18,7 @@ repositories {
 dependencies {
     implementation(platform(libs.microtus.bom))
     implementation(libs.dartpoet)
+    implementation(libs.snakeyaml)
     implementation(libs.jetbrains.annotation)
     implementation(libs.microtus)
     implementation(libs.guava)
