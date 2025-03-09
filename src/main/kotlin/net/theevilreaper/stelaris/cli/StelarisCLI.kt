@@ -54,8 +54,8 @@ fun main(args: Array<String>) {
     }
 
     val generators: Set<Generator> = when(experimental) {
-        true -> generatorRegistry.getGenerators { it.isExperimental() }
-        false -> generatorRegistry.getGenerators()
+        false -> generatorRegistry.getGenerators { !it.isExperimental() }
+        true -> generatorRegistry.getGenerators()
     }
 
     if (generators.isEmpty()) {
@@ -66,6 +66,8 @@ fun main(args: Array<String>) {
     val tempFile: Path = Files.createTempDirectory(TEMP_DIR_NAME)
 
     MinecraftServer.init();
+
+    generators.forEach { generator -> generator.generate(tempFile) }
 
     val gitRepo = cloneBaseRepo(
         System.getenv("stelaris.cli.username"),
