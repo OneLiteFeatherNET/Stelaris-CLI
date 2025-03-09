@@ -3,8 +3,6 @@ package net.theevilreaper.stelaris.cli
 import net.minestom.server.MinecraftServer
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.GeneratorRegistry
-import net.theevilreaper.stelaris.cli.strategy.ExportMode
-import net.theevilreaper.stelaris.cli.strategy.LocalExportStrategy
 import net.theevilreaper.stelaris.cli.util.*
 import org.eclipse.jgit.lib.PersonIdent
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
@@ -20,7 +18,6 @@ fun main(args: Array<String>) {
     val generatorRegistry = GeneratorRegistry()
     var showHelp = false
     var versionPart: VersionPart? = null
-    var exportMode = ExportMode.LOCAL
     var generators: Set<Generator> = generatorRegistry.generators
 
     args.forEachIndexed { index, arg ->
@@ -48,7 +45,6 @@ fun main(args: Array<String>) {
                 }
 
                 CommandArgument.EXPERIMENTAL -> generators = generatorRegistry.generators
-                CommandArgument.GIT -> exportMode = ExportMode.GIT
             }
         }
     }
@@ -65,9 +61,6 @@ fun main(args: Array<String>) {
     val tempFile: Path = Files.createTempDirectory(TEMP_DIR_NAME)
 
     MinecraftServer.init();
-
-    LocalExportStrategy(tempFile, generators.toList()).export()
-    return
 
     val gitRepo = cloneBaseRepo(
         System.getenv("stelaris.cli.username"),
