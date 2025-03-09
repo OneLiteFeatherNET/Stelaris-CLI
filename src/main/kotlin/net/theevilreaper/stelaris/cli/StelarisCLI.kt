@@ -2,6 +2,7 @@ package net.theevilreaper.stelaris.cli
 
 import net.minestom.server.MinecraftServer
 import net.theevilreaper.stelaris.cli.arguments.CommandArgument
+import net.theevilreaper.stelaris.cli.arguments.ParsedArgs
 import net.theevilreaper.stelaris.cli.exporter.ExportStrategy
 import net.theevilreaper.stelaris.cli.exporter.GitProjectExporter
 import net.theevilreaper.stelaris.cli.exporter.LocalProjectExporter
@@ -18,10 +19,40 @@ fun main(args: Array<String>) {
     }
 
     val generatorRegistry = GeneratorRegistry()
+    val parsedArgs = parseArguments(args)
+
+    if (parsedArgs.showHelp) {
+        println(HELP_MESSAGE)
+    }
+
+    val generators: Set<Generator> = when(parsedArgs.experimental) {
+        false -> generatorRegistry.getGenerators { !it.isExperimental() }
+        true -> generatorRegistry.getGenerators()
+    }
+
+    if (generators.isEmpty()) {
+        println("The cli needs generators to run")
+        return
+    }
+
+    val workingDir = parsedArgs.path ?: Files.createTempDirectory(TEMP_DIR_NAME)
+
+    MinecraftServer.init()
+
+    val projectExporter = when(parsedArgs.localBuild) {
+        true -> LocalProjectExporter(workingDir, "", generators)
+        false -> GitProjectExporter(workingDir, "", versionPart = parsedArgs.versionPart!!, generators)
+    }
+
+    projectExporter.export()
+}
+
+private fun parseArguments(args: Array<String>): ParsedArgs {
     var showHelp = false
     var versionPart: VersionPart? = null
     var experimental = false
     var localBuild = true
+    var path: Path? = null
 
     args.forEachIndexed { index, arg ->
         if (arg.startsWith(ARGUMENT_IDENTIFIER)) {
@@ -43,10 +74,8 @@ fun main(args: Array<String>) {
                         println("A version part can't start with an $ARGUMENT_IDENTIFIER")
                         return@forEachIndexed
                     }
-
                     versionPart = VersionPart.parse(versionPartString)
                 }
-
                 CommandArgument.EXPERIMENTAL -> experimental = true
                 CommandArgument.TYPE -> {
                     val type = args[index + 1]
@@ -55,32 +84,13 @@ fun main(args: Array<String>) {
                         localBuild = false
                     }
                 }
+                CommandArgument.PATH -> {
+                    val pathString = args[index + 1]
+                    path = Path.of(pathString)
+                }
             }
         }
     }
 
-    if (showHelp) {
-        println(HELP_MESSAGE)
-    }
-
-    val generators: Set<Generator> = when(experimental) {
-        false -> generatorRegistry.getGenerators { !it.isExperimental() }
-        true -> generatorRegistry.getGenerators()
-    }
-
-    if (generators.isEmpty()) {
-        println("The cli needs generators to run")
-        return
-    }
-
-    val tempFile: Path = Files.createTempDirectory(TEMP_DIR_NAME)
-
-    MinecraftServer.init();
-
-    val projectExporter = when(localBuild) {
-        true -> LocalProjectExporter(tempFile, "", generators)
-        false -> GitProjectExporter(tempFile, "", versionPart = versionPart!!, generators)
-    }
-
-    projectExporter.export()
+    return ParsedArgs(showHelp, versionPart, experimental, localBuild, path)
 }
