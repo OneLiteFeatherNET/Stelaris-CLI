@@ -1,0 +1,12 @@
+name: minecraft-data
+description: Lib which contains some extracted data from the game Minecraft
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: $version
+
+environment:
+  sdk: ">=3.6.2 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter

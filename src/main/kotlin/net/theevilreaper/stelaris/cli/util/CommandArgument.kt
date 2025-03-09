@@ -12,7 +12,8 @@ enum class CommandArgument(val identifier: String, val helpMessage: String) {
 
     HELP("help", "Shows this help message"),
     UPDATE("update", "Updates a specific part of the version string"),
-    EXPERIMENTAL("experimental", "Enables experimental generators");
+    EXPERIMENTAL("experimental", "Enables experimental generators"),
+    GIT("git", "Enables the git support");
 
     companion object {
 
