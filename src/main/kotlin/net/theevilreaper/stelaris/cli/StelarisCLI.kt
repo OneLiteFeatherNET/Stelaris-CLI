@@ -25,7 +25,7 @@ fun main(args: Array<String>) {
         println(HELP_MESSAGE)
     }
 
-    val generators: Set<Generator> = when(parsedArgs.experimental) {
+    val generators: Set<Generator> = when (parsedArgs.experimental) {
         false -> generatorRegistry.getGenerators { !it.isExperimental() }
         true -> generatorRegistry.getGenerators()
     }
@@ -35,11 +35,15 @@ fun main(args: Array<String>) {
         return
     }
 
-    val workingDir = parsedArgs.path ?: Files.createTempDirectory(TEMP_DIR_NAME)
+    // Use the user-specified path if provided; otherwise, use the default for Git
+    val workingDir = when {
+        parsedArgs.localBuild -> parsedArgs.path ?: Files.createTempDirectory(TEMP_DIR_NAME)
+        else -> Files.createTempDirectory(TEMP_DIR_NAME)
+    }
 
     MinecraftServer.init()
 
-    val projectExporter = when(parsedArgs.localBuild) {
+    val projectExporter = when (parsedArgs.localBuild) {
         true -> LocalProjectExporter(workingDir, "", generators)
         false -> GitProjectExporter(workingDir, "", versionPart = parsedArgs.versionPart!!, generators)
     }
@@ -76,6 +80,7 @@ private fun parseArguments(args: Array<String>): ParsedArgs {
                     }
                     versionPart = VersionPart.parse(versionPartString)
                 }
+
                 CommandArgument.EXPERIMENTAL -> experimental = true
                 CommandArgument.TYPE -> {
                     val type = args[index + 1]
@@ -84,6 +89,7 @@ private fun parseArguments(args: Array<String>): ParsedArgs {
                         localBuild = false
                     }
                 }
+
                 CommandArgument.PATH -> {
                     val pathString = args[index + 1]
                     path = Path.of(pathString)
