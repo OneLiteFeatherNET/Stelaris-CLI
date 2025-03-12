@@ -16,6 +16,7 @@ a `-rv` tag. If a version for a specific Minecraft version is generated again, t
 
 An example of a version tag would be `1.17.1-rv1`. This helps to identify the latest version for a specific Minecraft
 version. If a new version is available, the revision tag will be incremented (e.g., `1.17.1-rv2`).
+
 ### Usage
 
 The CLI comes with a few arguments which can be used to customize the process of generating the Dart files.
