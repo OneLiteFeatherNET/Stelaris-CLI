@@ -9,7 +9,6 @@ jobs:
   build_and_test:
     if: github.repository_owner == 'OneLiteFeatherNET'
     name: Build and Test
-    description: This job builds and tests the project on different operating systems.
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
