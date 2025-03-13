@@ -11,14 +11,14 @@ class ParsedArgsTest {
     fun `test ParsedArgs creation with all parameters`() {
         val parsedArgs = ParsedArgs(
             showHelp = true,
-            versionPart = VersionPart.parse("1.0.0"),
+            versionPart = VersionPart.parse("minor"),
             experimental = true,
             localBuild = false,
             path = Paths.get("/some/path")
         )
 
         assertEquals(true, parsedArgs.showHelp)
-        assertEquals(VersionPart.parse("1.0.0"), parsedArgs.versionPart)
+        assertEquals(VersionPart.parse("minor"), parsedArgs.versionPart)
         assertEquals(true, parsedArgs.experimental)
         assertEquals(false, parsedArgs.localBuild)
         assertEquals(Paths.get("/some/path"), parsedArgs.path)
@@ -62,14 +62,14 @@ class ParsedArgsTest {
     fun `test ParsedArgs equality`() {
         val args1 = ParsedArgs(
             showHelp = true,
-            versionPart = VersionPart.parse("1.0.0"),
+            versionPart = VersionPart.parse("rev"),
             experimental = false,
             localBuild = true,
             path = Paths.get("/path")
         )
         val args2 = ParsedArgs(
             showHelp = true,
-            versionPart = VersionPart.parse("1.0.0"),
+            versionPart = VersionPart.parse("rev"),
             experimental = false,
             localBuild = true,
             path = Paths.get("/path")
@@ -82,14 +82,14 @@ class ParsedArgsTest {
     fun `test ParsedArgs inequality`() {
         val args1 = ParsedArgs(
             showHelp = true,
-            versionPart = VersionPart.parse("1.0.0"),
+            versionPart = VersionPart.parse("minor"),
             experimental = false,
             localBuild = true,
             path = Paths.get("/path")
         )
         val args2 = ParsedArgs(
             showHelp = false,
-            versionPart = VersionPart.parse("1.0.1"),
+            versionPart = VersionPart.parse("patch"),
             experimental = true,
             localBuild = false,
             path = Paths.get("/different/path")
