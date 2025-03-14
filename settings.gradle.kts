@@ -15,7 +15,7 @@ dependencyResolutionManagement {
             library("junit.jupiter", "org.junit.jupiter", "junit-jupiter-api").versionRef("junit")
             library("junit.jupiter.params", "org.junit.jupiter", "junit-jupiter-params").versionRef("junit")
             library("junit.jupiter.engine", "org.junit.jupiter", "junit-jupiter-engine").versionRef("junit")
-            library("junit.platform.launcher", "org.junit.platform", "junit-platform-launcher").version("1.10.2")
+            library("junit.platform.launcher", "org.junit.platform", "junit-platform-launcher").version("1.12.0")
             plugin("kotlin", "org.jetbrains.kotlin.jvm").versionRef("kotlin")
         }
     }
