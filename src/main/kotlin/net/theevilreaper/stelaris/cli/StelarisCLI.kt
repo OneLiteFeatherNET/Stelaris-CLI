@@ -24,6 +24,7 @@ fun main(args: Array<String>) {
 
     if (parsedArgs.showHelp) {
         println(HELP_MESSAGE)
+        return
     }
 
     if (parsedArgs.versionPart == null) {
