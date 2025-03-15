@@ -1,5 +1,7 @@
 package net.theevilreaper.stelaris.cli.util
 
+import net.theevilreaper.stelaris.cli.arguments.CommandArgument
+
 const val EMPTY_STRING: String = ""
 const val SPACE_STRING: String = ""
 
