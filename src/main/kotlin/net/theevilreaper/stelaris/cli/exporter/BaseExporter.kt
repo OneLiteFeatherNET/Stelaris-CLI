@@ -22,7 +22,7 @@ abstract class BaseExporter protected constructor() : ProjectExporter {
     protected val templatePath: Path
 
     init {
-        val templateDirPath = {}::class.java.classLoader.getResource(templateDir).path
+        val templateDirPath = {}::class.java.classLoader.getResource(templateDir)?.toURI()
             ?: throw IllegalStateException("Could not find template directory")
         templatePath = Paths.get(templateDirPath)
 
