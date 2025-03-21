@@ -3,14 +3,14 @@ rootProject.name = "stelaris-cli"
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            version("kotlin", "2.1.10")
+            version("kotlin", "2.1.20")
             version("minestom", "1.5.1")
             version("junit", "5.12.1")
             library("microtus-bom", "net.onelitefeather.microtus", "bom").versionRef("minestom")
             library("jetbrains.annotation", "org.jetbrains", "annotations").withoutVersion()
             library("microtus", "net.onelitefeather.microtus", "Microtus").withoutVersion()
             library("dartpoet", "dev.themeinerlp", "dartpoet").version("0.0.1-SNAPSHOT")
-            library("guava", "com.google.guava", "guava").version("33.4.0-jre")
+            library("guava", "com.google.guava", "guava").version("33.4.5-jre")
             library("jgit", "org.eclipse.jgit", "org.eclipse.jgit").version("7.1.0.202411261347-r")
             library("junit.jupiter", "org.junit.jupiter", "junit-jupiter-api").versionRef("junit")
             library("junit.jupiter.params", "org.junit.jupiter", "junit-jupiter-params").versionRef("junit")
