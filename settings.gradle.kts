@@ -10,7 +10,7 @@ dependencyResolutionManagement {
             library("jetbrains.annotation", "org.jetbrains", "annotations").withoutVersion()
             library("microtus", "net.onelitefeather.microtus", "Microtus").withoutVersion()
             library("dartpoet", "dev.themeinerlp", "dartpoet").version("0.0.1-SNAPSHOT")
-            library("guava", "com.google.guava", "guava").version("33.4.6-jre")
+            library("guava", "com.google.guava", "guava").version("33.4.7-jre")
             library("jgit", "org.eclipse.jgit", "org.eclipse.jgit").version("7.2.0.202503040940-r")
             library("junit.jupiter", "org.junit.jupiter", "junit-jupiter-api").versionRef("junit")
             library("junit.jupiter.params", "org.junit.jupiter", "junit-jupiter-params").versionRef("junit")
