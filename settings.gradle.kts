@@ -3,7 +3,7 @@ rootProject.name = "stelaris-cli"
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            version("kotlin", "2.1.21")
+            version("kotlin", "2.2.0")
             version("minestom", "1.5.1")
             version("junit", "5.13.2")
             library("microtus-bom", "net.onelitefeather.microtus", "bom").versionRef("minestom")
