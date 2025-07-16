@@ -13,7 +13,6 @@ class GeneratorRegistry {
 
     private val generators: Set<Generator> = setOf(
         BossBarGenerator(),
-        EffectGenerator(),
         EnchantmentGenerator(),
         EntityTypeGenerator(),
         FrameTypeGenerator(),
