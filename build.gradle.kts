@@ -3,7 +3,7 @@ plugins {
     jacoco
 }
 
-group = "net.theevilreaper.stelaris.cli"
+group = "net.theevilreaper"
 version = "0.0.3-SNAPSHOT"
 
 kotlin {
