@@ -1,6 +1,7 @@
 package net.theevilreaper.stelaris.cli.generator.dart
 
-import net.minestom.server.effects.Effects
+import net.minestom.server.item.enchant.Enchantment
+import net.minestom.server.particle.Particle
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartModifier
 import net.theevilreaper.dartpoet.clazz.ClassSpec
@@ -18,8 +19,7 @@ class EffectGenerator : BaseGenerator(
     packageName = "effect",
 ) {
     override fun generate(javaPath: Path) {
-        val effects = Effects.entries
-        val enumEntries = mutableListOf<EnumEntrySpec>()
+        /*val enumEntries = mutableListOf<EnumEntrySpec>()
         effects.forEach {
             enumEntries.add(
                 EnumEntrySpec.builder(it.name.lowercase())
@@ -42,7 +42,7 @@ class EffectGenerator : BaseGenerator(
             .doc("Generated class to represent the available effects from the game Minecraft")
             .type(enumClass)
             .build()
-        file.write(javaPath)
+        file.write(javaPath)*/
     }
 
     override fun getName(): String = "EffectGenerator"
