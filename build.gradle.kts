@@ -10,11 +10,6 @@ kotlin {
     jvmToolchain(21)
 }
 
-repositories {
-    mavenCentral()
-    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-}
-
 dependencies {
     implementation(platform(libs.microtus.bom))
     implementation(libs.dartpoet)
