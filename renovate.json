@@ -3,33 +3,16 @@
   "extends": [
     "config:recommended"
   ],
-  "rebaseWhen": "conflicted",
   "labels": [
     "renovate"
   ],
+  "rebaseWhen": "conflicted",
   "packageRules": [
     {
       "matchUpdateTypes": [
         "patch"
       ],
-      "automerge": true,
-      "automergeType": "branch",
-      "groupName": "patch",
-      "schedule": [
-        "after 10pm",
-        "before 6:00am"
-      ],
-      "commitMessage": "Update {{depName}} from {{currentVersion}} to {{newVersion}}"
-    },
-    {
-      "matchUpdateTypes": [
-        "minor"
-      ],
-      "automerge": false,
-      "schedule": [
-        "before 6:00am on friday"
-      ],
-      "commitMessage": "Update {{depName}} from {{currentVersion}} to {{newVersion}}"
+      "automerge": true
     }
   ],
   "vulnerabilityAlerts": {
