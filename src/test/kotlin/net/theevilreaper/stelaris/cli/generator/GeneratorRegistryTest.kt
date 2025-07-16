@@ -9,7 +9,7 @@ class GeneratorRegistryTest {
     fun testGetGenerators() {
         val generatorRegistry = GeneratorRegistry()
         val generators = generatorRegistry.getGenerators()
-        assertEquals(7, generators.size)
+        assertEquals(6, generators.size)
     }
 
     @Test
