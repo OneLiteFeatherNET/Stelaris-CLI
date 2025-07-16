@@ -11,11 +11,10 @@ kotlin {
 }
 
 dependencies {
-    implementation(platform(libs.microtus.bom))
+    implementation(platform(libs.mycelium.bom))
     implementation(libs.dartpoet)
     implementation(libs.snakeyaml)
-    implementation(libs.jetbrains.annotation)
-    implementation(libs.microtus)
+    implementation(libs.minestom)
     implementation(libs.guava)
     implementation(libs.jgit)
 

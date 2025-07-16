@@ -23,16 +23,15 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             version("kotlin", "2.1.21")
-            version("minestom", "1.5.1")
+            version("bom", "1.4.0")
             version("junit", "5.13.3")
             version("snakeyaml", "2.4")
             version("dartpoet", "0.0.1-SNAPSHOT")
             version("guava", "33.4.8-jre")
             version("jgit", "7.3.0.202506031305-r")
 
-            library("microtus-bom", "net.onelitefeather.microtus", "bom").versionRef("minestom")
-            library("jetbrains.annotation", "org.jetbrains", "annotations").withoutVersion()
-            library("microtus", "net.onelitefeather.microtus", "Microtus").withoutVersion()
+            library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
+            library("minestom", "net.minestom", "minestom").withoutVersion()
             library("dartpoet", "dev.themeinerlp", "dartpoet").versionRef("dartpoet")
             library("guava", "com.google.guava", "guava").versionRef("guava")
             library("jgit", "org.eclipse.jgit", "org.eclipse.jgit").versionRef("jgit")
