@@ -19,7 +19,7 @@ class BossBarFlagGenerator : BaseGenerator(
 ) {
 
     override fun generate(javaPath: Path) {
-        val file = DartFile.builder("bossbar_flag")
+        val file = DartFile.builder("boss_bar_flag")
             .type(
                 ClassSpec.enumClass(className)
                     .apply {

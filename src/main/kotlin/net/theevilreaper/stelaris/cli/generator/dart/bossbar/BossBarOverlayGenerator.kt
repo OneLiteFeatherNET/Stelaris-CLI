@@ -14,13 +14,13 @@ import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
 class BossBarOverlayGenerator: BaseGenerator(
-    className = "BossbarOverlay",
+    className = "BossBarOverlay",
     packageName = "bossbar"
 ) {
     override fun generate(javaPath: Path) {
-        val file = DartFile.builder("bossbar_overlay")
+        val file = DartFile.builder("boss_bar_overlay")
             .type(
-                ClassSpec.builder(className)
+                ClassSpec.enumClass(className)
                     .apply {
                         BossBar.Overlay.entries.forEach { overlay ->
                             enumProperty(

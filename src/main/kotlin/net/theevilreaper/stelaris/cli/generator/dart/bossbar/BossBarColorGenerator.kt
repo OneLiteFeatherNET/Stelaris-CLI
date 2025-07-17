@@ -19,7 +19,7 @@ class BossBarColorGenerator : BaseGenerator(
 ) {
 
     override fun generate(javaPath: Path) {
-        val file = DartFile.builder(packageName)
+        val file = DartFile.builder("boss_bar_color")
             .type(
                 ClassSpec.enumClass(className)
                     .apply {
