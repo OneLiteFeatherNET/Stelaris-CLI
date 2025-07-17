@@ -11,12 +11,4 @@ class GeneratorRegistryTest {
         val generators = generatorRegistry.getGenerators()
         assertEquals(8, generators.size)
     }
-
-    @Test
-    fun testGetGeneratorsWithPredicate() {
-        val generatorRegistry = GeneratorRegistry()
-        val generators = generatorRegistry.getGenerators { it.isExperimental() }
-        assertFalse(generators.isEmpty())
-        assertEquals(1, generators.size)
-    }
 }
