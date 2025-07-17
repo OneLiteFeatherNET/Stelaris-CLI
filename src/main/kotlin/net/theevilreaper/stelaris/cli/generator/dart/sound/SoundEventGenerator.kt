@@ -1,4 +1,4 @@
-package net.theevilreaper.stelaris.cli.generator.dart
+package net.theevilreaper.stelaris.cli.generator.dart.sound
 
 import net.kyori.adventure.sound.Sound
 import net.theevilreaper.dartpoet.DartFile
@@ -12,8 +12,8 @@ import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
-class SoundTypeGenerator : BaseGenerator(
-    className = "SoundSource",
+class SoundEventGenerator : BaseGenerator(
+    className = "SoundEvent",
     packageName = "sound",
 ) {
     override fun generate(javaPath: Path) {
