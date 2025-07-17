@@ -3,7 +3,7 @@ package net.theevilreaper.stelaris.cli.util
 import net.theevilreaper.stelaris.cli.arguments.CommandArgument
 
 const val EMPTY_STRING: String = ""
-const val SPACE_STRING: String = ""
+const val SPACE_STRING: String = " "
 
 const val TEMP_DIR_NAME: String = "stelaris-cli"
 val HELP_MESSAGE: String = """
