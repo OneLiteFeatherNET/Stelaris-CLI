@@ -1,6 +1,9 @@
 package net.theevilreaper.stelaris.cli.generator
 
 import net.theevilreaper.stelaris.cli.generator.dart.*
+import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarColorGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarFlagGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarOverlayGenerator
 
 /**
  * The [GeneratorRegistry] holds all available generators which can be used to generate dart files.
@@ -12,7 +15,9 @@ import net.theevilreaper.stelaris.cli.generator.dart.*
 class GeneratorRegistry {
 
     private val generators: Set<Generator> = setOf(
-        BossBarGenerator(),
+        BossBarColorGenerator(),
+        BossBarFlagGenerator(),
+        BossBarOverlayGenerator(),
         EnchantmentGenerator(),
         EntityTypeGenerator(),
         FrameTypeGenerator(),
