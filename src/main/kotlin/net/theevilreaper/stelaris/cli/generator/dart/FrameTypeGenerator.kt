@@ -46,6 +46,4 @@ class FrameTypeGenerator : BaseGenerator(
     }
 
     override fun getName() = "FrameTypeGenerator"
-
-    override fun isExperimental() = false
 }

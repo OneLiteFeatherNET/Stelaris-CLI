@@ -55,6 +55,4 @@ class BossBarFlagGenerator : BaseGenerator(
     }
 
     override fun getName(): String = "BossBarFlagGenerator"
-
-    override fun isExperimental(): Boolean = false
 }

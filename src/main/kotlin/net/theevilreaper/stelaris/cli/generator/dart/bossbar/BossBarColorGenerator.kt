@@ -55,6 +55,4 @@ class BossBarColorGenerator : BaseGenerator(
     }
 
     override fun getName(): String = "BossBarColorGenerator"
-
-    override fun isExperimental(): Boolean = false
 }

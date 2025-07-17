@@ -49,5 +49,4 @@ class BossBarOverlayGenerator: BaseGenerator(
     }
 
     override fun getName(): String = "BossbarOverlayGenerator"
-    override fun isExperimental() = false
 }
