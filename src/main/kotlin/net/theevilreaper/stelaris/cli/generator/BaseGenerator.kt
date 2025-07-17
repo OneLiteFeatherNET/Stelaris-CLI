@@ -2,6 +2,7 @@ package net.theevilreaper.stelaris.cli.generator
 
 import com.google.common.base.CaseFormat
 import net.theevilreaper.dartpoet.DartFile
+import org.jetbrains.annotations.ApiStatus
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -22,6 +23,10 @@ abstract class BaseGenerator(
 
     private val logger: Logger = LoggerFactory.getLogger(BaseGenerator::class.java)
     private val filesToGenerate: MutableList<DartFile> = arrayListOf()
+
+    private val experimental: Boolean by lazy {
+        this.javaClass.isAnnotationPresent(ApiStatus.Experimental::class.java)
+    }
 
     protected fun writeFiles(filesList: List<DartFile>, outputFolder: Path) {
         if (filesList.isEmpty()) {
@@ -70,4 +75,10 @@ abstract class BaseGenerator(
      * @return the given name as string
      */
     abstract override fun getName(): String
+
+    /**
+     * Returns whether the generator is experimental or not.
+     * @return true if the generator is experimental, false otherwise
+     */
+    override fun isExperimental(): Boolean = experimental
 }
