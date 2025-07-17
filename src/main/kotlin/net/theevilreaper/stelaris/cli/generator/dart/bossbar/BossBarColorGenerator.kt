@@ -19,21 +19,21 @@ class BossBarColorGenerator : BaseGenerator(
 ) {
 
     override fun generate(javaPath: Path) {
-        val file = DartFile.Companion.builder(packageName)
+        val file = DartFile.builder(packageName)
             .type(
-                ClassSpec.Companion.enumClass(className)
+                ClassSpec.enumClass(className)
                     .apply {
                         BossBar.Color.entries.forEach { color ->
                             enumProperty(
-                                EnumEntrySpec.Companion.builder(color.name.lowercase())
+                                EnumEntrySpec.builder(color.name.lowercase())
                                     .parameter(
-                                        EnumParameterSpec.Companion.positional(
+                                        EnumParameterSpec.positional(
                                             "%C",
                                             StringHelper.mapDisplayName(color.name)
                                         )
                                     )
                                     .parameter(
-                                        EnumParameterSpec.Companion.positional(
+                                        EnumParameterSpec.positional(
                                             "%C",
                                             color.name.uppercase()
                                         )
@@ -44,7 +44,7 @@ class BossBarColorGenerator : BaseGenerator(
                     }
                     .properties(*DEFAULT_PROPERTIES)
                     .constructor(
-                        ConstructorSpec.Companion.builder(className)
+                        ConstructorSpec.builder(className)
                             .modifier(DartModifier.CONST)
                             .parameters(*DEFAULT_PARAMETERS)
                             .build()
