@@ -97,10 +97,4 @@ class EnchantmentGenerator : BaseGenerator(
      * @return the name
      */
     override fun getName() = "EnchantmentGenerator"
-
-    /**
-     * Returns whether the generator is experimental or not.
-     * @return false, since this generator is not experimental
-     */
-    override fun isExperimental(): Boolean = false
 }
