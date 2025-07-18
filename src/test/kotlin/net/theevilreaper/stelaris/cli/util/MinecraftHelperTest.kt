@@ -7,7 +7,7 @@ class MinecraftHelperTest {
 
     @Test
     fun `test group parsing`() {
-        val group = "#minecraft:enchantable/sword"
+        val group = "minecraft:enchantable/sword"
         val parsedGroup = MinecraftHelper.extractEnchantmentGroup(group)
         assertNotNull(parsedGroup, "Parsed group should not be null")
         assertEquals("sword", parsedGroup, "Parsed group does not match expected value")
