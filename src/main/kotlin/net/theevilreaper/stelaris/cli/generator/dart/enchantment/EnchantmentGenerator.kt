@@ -53,18 +53,18 @@ class EnchantmentGenerator : BaseGenerator(
             enchantments.forEach { properties.add(mapEnchantmentToEnumProperty(it)) }
             val updatedClassName = "${group.classPart.replaceFirstChar { it.uppercase() }}$className"
 
-            val enumClass = ClassSpec.Companion.enumClass(updatedClassName)
+            val enumClass = ClassSpec.enumClass(updatedClassName)
                 .enumProperties(*properties.toTypedArray())
                 .properties(*CLASS_PROPERTIES)
                 .constructor {
-                    ConstructorSpec.Companion.builder(updatedClassName)
+                    ConstructorSpec.builder(updatedClassName)
                         .modifier(DartModifier.CONST)
                         .parameters(*CONSTRUCTOR_PARAMETERS)
                         .build()
                 }
                 .build()
             val fileName = "${group.classPart}_${className.replaceFirstChar { it.lowercase() }}"
-            val enumFile = DartFile.Companion.builder(fileName)
+            val enumFile = DartFile.builder(fileName)
                 .doc("The file is generated. Don't change anything here")
                 .type(enumClass)
                 .build()
@@ -80,15 +80,15 @@ class EnchantmentGenerator : BaseGenerator(
     private fun mapEnchantmentToEnumProperty(enchantment: Enchantment): EnumEntrySpec {
         val translatable = enchantment.description() as TranslatableComponent
         val enchantmentName = translatable.key().substringAfterLast(".")
-        return EnumEntrySpec.Companion.builder(enchantmentName)
+        return EnumEntrySpec.builder(enchantmentName)
             .parameter(
-                EnumParameterSpec.Companion.positional(
+                EnumParameterSpec.positional(
                     "%C",
                     StringHelper.mapDisplayName(enchantmentName)
                 )
             )
-            .parameter(EnumParameterSpec.Companion.positional("%L", defaultLevel))
-            .parameter(EnumParameterSpec.Companion.positional("%L", enchantment.maxLevel()))
+            .parameter(EnumParameterSpec.positional("%L", defaultLevel))
+            .parameter(EnumParameterSpec.positional("%L", enchantment.maxLevel()))
             .build()
     }
 
