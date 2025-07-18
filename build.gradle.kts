@@ -34,7 +34,8 @@ tasks {
         dependsOn(test)
         reports {
             xml.required.set(true)
-            csv.required.set(true)
+            html.required.set(true)
+            csv.required.set(false)
         }
     }
 
