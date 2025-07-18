@@ -26,6 +26,7 @@ class GeneratorRegistry {
         FrameTypeGenerator(),
         MaterialGenerator(),
         SoundSourceGenerator(),
+        SoundEventGenerator(),
     )
 
     /**
