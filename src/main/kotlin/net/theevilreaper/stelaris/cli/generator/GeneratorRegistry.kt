@@ -4,6 +4,7 @@ import net.theevilreaper.stelaris.cli.generator.dart.*
 import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarColorGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarFlagGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarOverlayGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.enchantment.EnchantmentGenerator
 
 /**
  * The [GeneratorRegistry] holds all available generators which can be used to generate dart files.

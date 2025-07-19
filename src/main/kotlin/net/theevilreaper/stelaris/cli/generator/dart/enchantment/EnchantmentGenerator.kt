@@ -1,4 +1,4 @@
-package net.theevilreaper.stelaris.cli.generator.dart
+package net.theevilreaper.stelaris.cli.generator.dart.enchantment
 
 import net.kyori.adventure.text.TranslatableComponent
 import net.minestom.server.MinecraftServer
@@ -12,7 +12,9 @@ import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.util.CLASS_PROPERTIES
 import net.theevilreaper.stelaris.cli.generator.dart.util.CONSTRUCTOR_PARAMETERS
+import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
 import net.theevilreaper.stelaris.cli.util.StringHelper
+import java.nio.file.Files
 import java.nio.file.Path
 
 /**
@@ -30,28 +32,44 @@ class EnchantmentGenerator : BaseGenerator(
     private val defaultLevel: Int = 1
 
     override fun generate(javaPath: Path) {
+        val enchantmentFolder = javaPath.resolve(packageName)
+        Files.createDirectory(enchantmentFolder)
         val enchantmentData: MutableCollection<Enchantment> = MinecraftServer.getEnchantmentRegistry().values()
-        val properties = mutableSetOf<EnumEntrySpec>()
-
-        enchantmentData.forEach { enchantment ->
-            properties.add(mapEnchantmentToEnumProperty(enchantment))
-        }
-
-        val enumClass = ClassSpec.enumClass(className)
-            .enumProperties(*properties.toTypedArray())
-            .properties(*CLASS_PROPERTIES)
-            .constructor {
-                ConstructorSpec.builder(className)
-                    .modifier(DartModifier.CONST)
-                    .parameters(*CONSTRUCTOR_PARAMETERS)
-                    .build()
+        val mappedEnchantments: Map<EnchantmentGroup, List<Enchantment>> = enchantmentData.mapNotNull { enchantment ->
+            val key = enchantment.supportedItems().key()?.key()?.asString() ?: EMPTY_STRING
+            val group = EnchantmentGroup.matchGroup(key)
+            if (group == null) {
+                null  // ignore this enchantment in the grouping
+            } else {
+                group to enchantment
             }
-            .build()
-        val enumFile = DartFile.builder(className.replaceFirstChar { it.lowercase() })
-            .doc("The file is generated. Don't change anything here")
-            .type(enumClass)
-            .build()
-        enumFile.write(javaPath)
+        }.groupBy(
+            keySelector = { it.first },   // group = it.first
+            valueTransform = { it.second } // enchantment = it.second
+        )
+
+        mappedEnchantments.forEach { (group, enchantments) ->
+            val properties = mutableSetOf<EnumEntrySpec>()
+            enchantments.forEach { properties.add(mapEnchantmentToEnumProperty(it)) }
+            val updatedClassName = "${group.classPart.replaceFirstChar { it.uppercase() }}$className"
+
+            val enumClass = ClassSpec.enumClass(updatedClassName)
+                .enumProperties(*properties.toTypedArray())
+                .properties(*CLASS_PROPERTIES)
+                .constructor {
+                    ConstructorSpec.builder(updatedClassName)
+                        .modifier(DartModifier.CONST)
+                        .parameters(*CONSTRUCTOR_PARAMETERS)
+                        .build()
+                }
+                .build()
+            val fileName = "${group.classPart}_${className.replaceFirstChar { it.lowercase() }}"
+            val enumFile = DartFile.builder(fileName)
+                .doc("The file is generated. Don't change anything here")
+                .type(enumClass)
+                .build()
+            enumFile.write(enchantmentFolder)
+        }
     }
 
     /**
