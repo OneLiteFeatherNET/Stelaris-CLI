@@ -43,13 +43,13 @@ class SoundSourceGenerator : BaseGenerator(
                 ClassSpec.enumClass(className)
                     .enumProperties(*enumProperties.toTypedArray())
                     .properties(
-                        PropertySpec.builder("name", String::class).modifier(DartModifier.FINAL).build(),
-                        PropertySpec.builder("displayName", String::class).modifier(DartModifier.FINAL).build()
+                        PropertySpec.builder("displayName", String::class).modifier(DartModifier.FINAL).build(),
+                        PropertySpec.builder("entry", String::class).modifier(DartModifier.FINAL).build()
                     )
                     .constructor {
                         ConstructorSpec.builder(className)
-                            .parameter(ParameterSpec.positional("name", String::class.java).build())
                             .parameter(ParameterSpec.positional("displayName", String::class.java).build())
+                            .parameter(ParameterSpec.positional("entry", String::class.java).build())
                             .build()
                     }
                     .build()
@@ -59,6 +59,4 @@ class SoundSourceGenerator : BaseGenerator(
     }
 
     override fun getName(): String = "SoundSourceGenerator"
-
-    override fun isExperimental(): Boolean = false
 }
