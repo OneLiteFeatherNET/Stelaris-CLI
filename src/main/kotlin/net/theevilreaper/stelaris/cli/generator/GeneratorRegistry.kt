@@ -7,6 +7,7 @@ import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarOverlayGener
 import net.theevilreaper.stelaris.cli.generator.dart.enchantment.EnchantmentGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundEventGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundSourceGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundTypeGenerator
 
 /**
  * The [GeneratorRegistry] holds all available generators which can be used to generate dart files.
@@ -27,6 +28,7 @@ class GeneratorRegistry {
         MaterialGenerator(),
         SoundSourceGenerator(),
         SoundEventGenerator(),
+        SoundTypeGenerator(),
     )
 
     /**
