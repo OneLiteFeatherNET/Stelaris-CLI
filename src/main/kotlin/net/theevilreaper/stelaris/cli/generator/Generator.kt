@@ -26,7 +26,7 @@ interface Generator {
 
     /**
      * Cleans up any resources or state data used by the generator.
-     * This should be called after generation is complete.
+     * This should be called after the generation is complete.
      */
     fun cleanUp()
 

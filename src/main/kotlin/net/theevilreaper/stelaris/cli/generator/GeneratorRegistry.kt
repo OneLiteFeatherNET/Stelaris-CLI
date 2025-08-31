@@ -38,7 +38,7 @@ class GeneratorRegistry {
     fun getGenerators(): Set<Generator> = generators
 
     /**
-     * Returns all available generators which match the given predicate
+     * Returns all available generators that match the given predicate
      * @param predicate the predicate to filter the generators
      * @return a set of all available generators which match the predicate
      */
