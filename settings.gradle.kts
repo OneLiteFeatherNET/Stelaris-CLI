@@ -25,7 +25,7 @@ dependencyResolutionManagement {
             version("kotlin", "2.2.10")
             version("bom", "1.4.3")
             version("junit", "5.13.4")
-            version("snakeyaml", "2.4")
+            version("snakeyaml", "2.5")
             version("dartpoet", "0.0.1-SNAPSHOT")
             version("guava", "33.4.8-jre")
             version("jgit", "7.3.0.202506031305-r")
