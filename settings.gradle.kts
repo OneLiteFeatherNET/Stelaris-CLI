@@ -27,7 +27,7 @@ dependencyResolutionManagement {
             version("junit", "5.13.4")
             version("snakeyaml", "2.5")
             version("dartpoet", "0.0.1-SNAPSHOT")
-            version("guava", "33.4.8-jre")
+            version("guava", "33.5.0-jre")
             version("jgit", "7.3.0.202506031305-r")
 
             library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
