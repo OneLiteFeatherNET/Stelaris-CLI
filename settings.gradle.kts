@@ -22,7 +22,7 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("libs") {
-            version("kotlin", "2.2.20")
+            version("kotlin", "2.2.21")
             version("bom", "1.4.5")
             version("junit", "6.0.0")
             version("snakeyaml", "2.5")
