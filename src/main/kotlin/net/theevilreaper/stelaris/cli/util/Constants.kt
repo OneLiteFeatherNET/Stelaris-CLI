@@ -10,9 +10,6 @@ val HELP_MESSAGE: String = """
 The following command arguments are available:
 ${
     CommandArgument.entries.joinToString(separator = "\n") { argument ->
-        if (argument == CommandArgument.UPDATE) {
-            return@joinToString "  -${argument.identifier} ${VersionPart.getTextualRepresentation()} : ${argument.helpMessage}"
-        }
         "  -${argument.identifier} : ${argument.helpMessage}"
     }
 }
