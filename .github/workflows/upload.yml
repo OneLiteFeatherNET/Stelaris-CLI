@@ -1,0 +1,71 @@
+name: Generate and Upload Dart Project
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  generate-and-push:
+    runs-on: ubuntu-latest
+    env:
+      ONELITEFEATHER_MAVEN_USERNAME: ${{ secrets.ONELITEFEATHER_MAVEN_USERNAME }}
+      ONELITEFEATHER_MAVEN_PASSWORD: ${{ secrets.ONELITEFEATHER_MAVEN_PASSWORD }}
+      TARGET_REPOSITORY: ${{ secrets.TARGET_REPOSITORY }}
+    steps:
+      - name: Checkout stelaris-cli repository
+        uses: actions/checkout@v5
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Extract and parse version from tag
+        id: parse_version
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          VERSION="${TAG#v}"
+          
+          echo "TAG_NAME=$TAG" >> $GITHUB_OUTPUT
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          
+          # Check if version has revision suffix (e.g., v1.21.10-rev1)
+          if [[ $VERSION =~ -rev[0-9]+ ]]; then
+            echo "UPDATE_TYPE=rev" >> $GITHUB_OUTPUT
+            echo "Detected revision update: $VERSION"
+          # Check for major update (e.g., v2.0.0)
+          elif [[ $VERSION =~ ^[0-9]+\.0\.0$ ]]; then
+            echo "UPDATE_TYPE=major" >> $GITHUB_OUTPUT
+            echo "Detected major update: $VERSION"
+          # Check for minor update (e.g., v1.21.0)
+          elif [[ $VERSION =~ ^[0-9]+\.[0-9]+\.0$ ]]; then
+            echo "UPDATE_TYPE=minor" >> $GITHUB_OUTPUT
+            echo "Detected minor update: $VERSION"
+          # Default to patch (e.g., v1.21.10)
+          else
+            echo "UPDATE_TYPE=patch" >> $GITHUB_OUTPUT
+            echo "Detected patch update: $VERSION"
+          fi
+      - name: Build the CLI
+        run: ./gradlew build
+      - name: Run Stelaris CLI with arguments
+        run: |
+          java -jar build/libs/stelaris-cli.jar \
+            -update ${{ steps.parse_version.outputs.UPDATE_TYPE }} \
+            -type git \
+            -experimental
+      - name: Push generated code to target repository
+        env:
+          DART_REPO_TOKEN: ${{ secrets.DART_REPO_TOKEN }}
+        run: |
+          cd /tmp/stelaris-*
+          git init
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Generated from ${{ steps.parse_version.outputs.TAG_NAME }}"
+          git remote add origin https://x-access-token:${DART_REPO_TOKEN}@github.com/${{ vars.TARGET_REPOSITORY }}.git
+          git push -f origin main
+      
