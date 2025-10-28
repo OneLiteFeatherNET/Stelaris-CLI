@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlin)
     jacoco
+    application
 }
 
 group = "net.theevilreaper"
@@ -22,6 +23,10 @@ dependencies {
     testImplementation(libs.junit.jupiter.params)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
+}
+
+application {
+    mainClass.set("net.theevilreaper.stelaris.cli.StelarisCLI")
 }
 
 tasks {
