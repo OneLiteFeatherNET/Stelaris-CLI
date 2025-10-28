@@ -1,7 +1,8 @@
 plugins {
-    alias(libs.plugins.kotlin)
     jacoco
     application
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.shadow)
 }
 
 group = "net.theevilreaper"
@@ -42,6 +43,19 @@ tasks {
             html.required.set(true)
             csv.required.set(false)
         }
+    }
+
+    shadowJar {
+        archiveBaseName.set("stelaris-cli")
+        archiveClassifier.set("")
+        archiveVersion.set("")
+        manifest {
+            attributes["Main-Class"] = "net.theevilreaper.stelaris.cli.StelarisCLIKt"
+        }
+    }
+
+    build {
+        dependsOn(shadowJar)
     }
 
     test {
