@@ -56,16 +56,11 @@ jobs:
             -update ${{ steps.parse_version.outputs.UPDATE_TYPE }} \
             -type git \
             -experimental
-      - name: Push generated code to target repository
+      - name: Run Stelaris CLI
         env:
-          DART_REPO_TOKEN: ${{ secrets.DART_REPO_TOKEN }}
+          stelaris.cli.username: ${{ vars.GIT_USERNAME }}
+          stelaris.cli.password: ${{ secrets.DART_REPO_TOKEN }}
+          stelaris.cli.cloneUrl: https://github.com/${{ vars.TARGET_REPOSITORY }}.git
         run: |
-          cd /tmp/stelaris-*
-          git init
-          git config user.name "GitHub Actions Bot"
-          git config user.email "actions@github.com"
-          git add .
-          git commit -m "Generated from ${{ steps.parse_version.outputs.TAG_NAME }}"
-          git remote add origin https://x-access-token:${DART_REPO_TOKEN}@github.com/${{ vars.TARGET_REPOSITORY }}.git
-          git push -f origin main
+          ./gradlew run --args="-update ${{ steps.parse_version.outputs.UPDATE_TYPE }} -type git -experimental"
       
