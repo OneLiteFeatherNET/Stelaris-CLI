@@ -50,11 +50,6 @@ jobs:
           fi
       - name: Build the CLI
         run: ./gradlew build
-      - name: Run Stelaris CLI with arguments
-        run: |
-          java -jar build/libs/stelaris-cli.jar \
-            -type git \
-            -experimental
       - name: Run Stelaris CLI
         env:
           stelaris.cli.username: ${{ vars.GIT_USERNAME }}
