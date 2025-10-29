@@ -3,6 +3,7 @@ package net.theevilreaper.stelaris.cli.exporter
 import net.theevilreaper.stelaris.cli.generator.Generator
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.StandardCopyOption
 
 class LocalProjectExporter(
     private val exportPath: Path,
@@ -22,7 +23,7 @@ class LocalProjectExporter(
             println("Created directory: $exportPath")
         }
 
-        copyResourceFolder(templatePath, exportPath)
+        Files.copy(templateStream, exportPath, StandardCopyOption.REPLACE_EXISTING)
 
         val libPath: Path = exportPath.resolve("lib")
         Files.createDirectory(libPath)

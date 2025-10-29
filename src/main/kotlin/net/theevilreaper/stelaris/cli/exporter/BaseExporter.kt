@@ -2,6 +2,7 @@ package net.theevilreaper.stelaris.cli.exporter
 
 import org.yaml.snakeyaml.DumperOptions
 import org.yaml.snakeyaml.Yaml
+import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -19,14 +20,10 @@ abstract class BaseExporter protected constructor() : ProjectExporter {
 
     private val pubSpec: String = "pubspec.yaml"
     protected val templateDir = "template"
-    protected val templatePath: Path
+    protected val templateStream: InputStream
 
     init {
-        val templateUri = javaClass.classLoader.getResource(templateDir)?.toURI()
-            ?: throw IllegalArgumentException("Could not find template directory")
-
-        templatePath = Paths.get(templateUri)
-
+        templateStream = javaClass.classLoader.getResourceAsStream(templateDir)
     }
 
     /**
