@@ -27,34 +27,15 @@ jobs:
         run: |
           TAG="${GITHUB_REF#refs/tags/}"
           VERSION="${TAG#v}"
-          
+
           echo "TAG_NAME=$TAG" >> $GITHUB_OUTPUT
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-          
-          # Check if version has revision suffix (e.g., v1.21.10-rev1)
-          if [[ $VERSION =~ -rev[0-9]+ ]]; then
-            echo "UPDATE_TYPE=rev" >> $GITHUB_OUTPUT
-            echo "Detected revision update: $VERSION"
-          # Check for major update (e.g., v2.0.0)
-          elif [[ $VERSION =~ ^[0-9]+\.0\.0$ ]]; then
-            echo "UPDATE_TYPE=major" >> $GITHUB_OUTPUT
-            echo "Detected major update: $VERSION"
-          # Check for minor update (e.g., v1.21.0)
-          elif [[ $VERSION =~ ^[0-9]+\.[0-9]+\.0$ ]]; then
-            echo "UPDATE_TYPE=minor" >> $GITHUB_OUTPUT
-            echo "Detected minor update: $VERSION"
-          # Default to patch (e.g., v1.21.10)
-          else
-            echo "UPDATE_TYPE=patch" >> $GITHUB_OUTPUT
-            echo "Detected patch update: $VERSION"
-          fi
-      - name: Build the CLI
-        run: ./gradlew build
+
       - name: Run Stelaris CLI
         env:
           stelaris.cli.username: ${{ vars.GIT_USERNAME }}
           stelaris.cli.password: ${{ secrets.DART_REPO_TOKEN }}
           stelaris.cli.cloneUrl: https://github.com/${{ vars.TARGET_REPOSITORY }}.git
         run: |
-          ./gradlew run --args="-update ${{ steps.parse_version.outputs.UPDATE_TYPE }} -type git -experimental"
+          ./gradlew run --args="-version ${{ steps.parse_version.outputs.VERSION }} -type git -experimental"
       
