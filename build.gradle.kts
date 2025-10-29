@@ -27,7 +27,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("net.theevilreaper.stelaris.cli.StelarisCLI")
+    mainClass.set("net.theevilreaper.stelaris.cli.StelarisCLIKt")
 }
 
 tasks {
