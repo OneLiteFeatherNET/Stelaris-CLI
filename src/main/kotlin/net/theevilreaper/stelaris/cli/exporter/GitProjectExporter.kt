@@ -34,6 +34,8 @@ class GitProjectExporter(
             generationFolder
         )
 
+        generators.forEach { generator -> generator.generate(generationFolder) }
+
         gitRepo.add().addFilepattern(".").call()
         val commit = gitRepo.commit()
         commit.message = "Update version to $versionString"
@@ -50,7 +52,6 @@ class GitProjectExporter(
             )
         )
 
-        generators.forEach { generator -> generator.generate(generationFolder) }
 
         gitPush.isForce = true
         gitPush.call()
