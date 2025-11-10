@@ -30,7 +30,7 @@ jobs:
           echo "TAG_NAME=$TAG" >> $GITHUB_OUTPUT
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
       - name: Build JAR gradle project
-        run: ./gradlew clean build jar
+        run: ./gradlew clean build
 
       - name: Run Stelaris CLI
         env:
