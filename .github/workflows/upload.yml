@@ -37,5 +37,5 @@ jobs:
           stelaris.cli.username: 'stelaris-bot'
           stelaris.cli.password: ${{ secrets.DART_REPO_TOKEN }}
           stelaris.cli.cloneUrl: https://github.com/${{ secrets.TARGET_REPOSITORY }}.git
-        run: java -jar build/libs/stelaris-cli-*.jar generate-dart --output ./dart-output --version ${{ steps.parse_version.outputs.VERSION }}
+        run: java -jar build/libs/stelaris-cli.jar -version ${{ env.VERSION }} -type git -experimental
       
