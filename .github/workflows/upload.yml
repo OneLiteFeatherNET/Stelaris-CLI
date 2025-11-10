@@ -11,7 +11,6 @@ jobs:
     env:
       ONELITEFEATHER_MAVEN_USERNAME: ${{ secrets.ONELITEFEATHER_MAVEN_USERNAME }}
       ONELITEFEATHER_MAVEN_PASSWORD: ${{ secrets.ONELITEFEATHER_MAVEN_PASSWORD }}
-      TARGET_REPOSITORY: ${{ secrets.TARGET_REPOSITORY }}
     steps:
       - name: Checkout stelaris-cli repository
         uses: actions/checkout@v5
@@ -30,12 +29,13 @@ jobs:
 
           echo "TAG_NAME=$TAG" >> $GITHUB_OUTPUT
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+      - name: Build JAR gradle project
+        run: ./gradlew clean build jar
 
       - name: Run Stelaris CLI
         env:
-          stelaris.cli.username: ${{ vars.GIT_USERNAME }}
+          stelaris.cli.username: 'stelaris-bot'
           stelaris.cli.password: ${{ secrets.DART_REPO_TOKEN }}
-          stelaris.cli.cloneUrl: https://github.com/${{ vars.TARGET_REPOSITORY }}.git
-        run: |
-          ./gradlew run --args="-version ${{ steps.parse_version.outputs.VERSION }} -type git -experimental"
+          stelaris.cli.cloneUrl: https://github.com/${{ secrets.TARGET_REPOSITORY }}.git
+        run: java -jar build/libs/stelaris-cli-*.jar generate-dart --output ./dart-output --version ${{ steps.parse_version.outputs.VERSION }}
       
