@@ -51,6 +51,10 @@ class GitProjectExporter(
         }
 
         val gitRepo = Git.init().setDirectory(generationFolder.toFile()).call()
+        gitRepo.remoteAdd()
+            .setName("origin")
+            .setUri(org.eclipse.jgit.transport.URIish(cloneUrl))
+            .call()
         gitRepo.lsRemote().setRemote(cloneUrl).setCredentialsProvider(
             UsernamePasswordCredentialsProvider(
                 userName,
