@@ -34,7 +34,6 @@ class ParsedArgsTest {
         )
 
         assertEquals(false, parsedArgs.showHelp)
-        assertEquals("", "")
         assertEquals(false, parsedArgs.experimental)
         assertEquals(true, parsedArgs.localBuild)
         assertEquals(null, parsedArgs.path)
