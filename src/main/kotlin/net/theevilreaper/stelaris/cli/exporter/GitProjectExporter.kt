@@ -4,10 +4,7 @@ import net.theevilreaper.stelaris.cli.generator.Generator
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.PersonIdent
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
-import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.StandardCopyOption
-import java.util.zip.ZipInputStream
 
 class GitProjectExporter(
     private val generationFolder: Path,
@@ -15,56 +12,20 @@ class GitProjectExporter(
     private val generators: Set<Generator>
 ) : BaseExporter() {
 
-    private val userName: String
-    private val password: String
-    private val cloneUrl: String
+    private val userName: String = System.getenv("stelaris.cli.username")
+    private val password: String = System.getenv("stelaris.cli.password")
+    private val cloneUrl: String = System.getenv("stelaris.cli.cloneUrl")
 
     init {
-        require((versionString.isNotEmpty())) { "The version string can't be empty" }
-
-        userName = System.getenv("stelaris.cli.username")
-        password = System.getenv("stelaris.cli.password")
-        cloneUrl = System.getenv("stelaris.cli.cloneUrl")
-
         require((userName.isNotEmpty())) { "The username can't be empty" }
         require((password.isNotEmpty())) { "The password can't be empty" }
         require((cloneUrl.isNotEmpty())) { "The clone url can't be empty" }
     }
 
     override fun export() {
-        val zipStream = javaClass.getClassLoader().getResourceAsStream("flutter_template.zip")
-        ZipInputStream(zipStream).use { zis ->
-            var entry = zis.nextEntry
-            while (entry != null) {
-                val newPath = generationFolder.resolve(entry.name)
-
-                if (entry.isDirectory) {
-                    Files.createDirectories(newPath)
-                } else {
-                    Files.createDirectories(newPath.parent)
-                    Files.copy(zis, newPath, StandardCopyOption.REPLACE_EXISTING)
-                }
-
-                zis.closeEntry()
-                entry = zis.nextEntry
-            }
-        }
-
-        val gitRepo = Git.init().setDirectory(generationFolder.toFile()).call()
-        gitRepo.remoteAdd()
-            .setName("origin")
-            .setUri(org.eclipse.jgit.transport.URIish(cloneUrl))
-            .call()
-        gitRepo.lsRemote().setRemote(cloneUrl).setCredentialsProvider(
-            UsernamePasswordCredentialsProvider(
-                userName,
-                password
-            )
-        ).call()
-
-        val libPath: Path = generationFolder.resolve("lib")
-        if (!Files.exists(libPath)) Files.createDirectory(libPath)
-        modifyPubSpecFile(generationFolder, versionString)
+        val gitRepo = cloneBaseRepo(
+            generationFolder
+        )
 
         generators.forEach { generator -> generator.generate(generationFolder) }
 
@@ -84,7 +45,29 @@ class GitProjectExporter(
             )
         )
 
+        generators.forEach { generator -> generator.generate(generationFolder) }
+
         gitPush.isForce = true
         gitPush.call()
+    }
+
+    /**
+     * Clones the base repository to the given path.
+     * @param username the username for the repository
+     * @param token the token for the repository
+     * @param cloneUrl the clone URL for the repository
+     * @param temp the temporary path to store the repository
+     * @return the cloned repository
+     */
+    private fun cloneBaseRepo(temp: Path): Git {
+        require(cloneUrl.trim().isNotEmpty()) { "Clone URL must not be empty" }
+        val rawGit =
+            Git.cloneRepository().setCredentialsProvider(
+                UsernamePasswordCredentialsProvider(
+                    userName,
+                    password
+                )
+            ).setURI(cloneUrl).setDirectory(temp.toFile()).setCloneAllBranches(true)
+        return rawGit.call()
     }
 }
