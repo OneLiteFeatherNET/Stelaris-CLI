@@ -29,6 +29,7 @@ class MaterialGenerator : BaseGenerator(
      * @param javaPath the path to store the content
      */
     override fun generate(javaPath: Path) {
+        val folder = checkPackageFolder(javaPath, packageName)
         val models = Material.values()
         val enumFiles = mutableListOf<DartFile>()
 
@@ -45,7 +46,7 @@ class MaterialGenerator : BaseGenerator(
         }
 
         if (enumFiles.isEmpty()) return
-        enumFiles.forEach { it.write(javaPath) }
+        enumFiles.forEach { it.write(folder) }
     }
 
     private fun mapTypeToBoolean(subType: MaterialSubType, material: Material): Boolean {

@@ -18,6 +18,7 @@ class BossBarOverlayGenerator: BaseGenerator(
     packageName = "bossbar"
 ) {
     override fun generate(javaPath: Path) {
+        val folder = checkPackageFolder(javaPath, packageName)
         val file = DartFile.builder("boss_bar_overlay")
             .type(
                 ClassSpec.enumClass(className)
@@ -45,7 +46,7 @@ class BossBarOverlayGenerator: BaseGenerator(
                     )
             )
             .build()
-        file.write(javaPath)
+        file.write(folder)
     }
 
     override fun getName(): String = "BossbarOverlayGenerator"
