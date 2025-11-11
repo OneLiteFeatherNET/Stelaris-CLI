@@ -1,7 +1,6 @@
 package net.theevilreaper.stelaris.cli.exporter
 
 import net.theevilreaper.stelaris.cli.generator.Generator
-import net.theevilreaper.stelaris.cli.util.VersionPart
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.PersonIdent
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
@@ -52,6 +51,7 @@ class GitProjectExporter(
         }
 
         val gitRepo = Git.init().setDirectory(generationFolder.toFile()).call()
+        gitRepo.lsRemote().setRemote(cloneUrl).call()
 
         val libPath: Path = generationFolder.resolve("lib")
         if (!Files.exists(libPath)) Files.createDirectory(libPath)
