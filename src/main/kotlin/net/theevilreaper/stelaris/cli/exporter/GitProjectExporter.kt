@@ -8,6 +8,7 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
+import java.util.zip.ZipInputStream
 
 class GitProjectExporter(
     private val generationFolder: Path,
@@ -32,7 +33,23 @@ class GitProjectExporter(
     }
 
     override fun export() {
-     //   Files.copy(templateStream, generationFolder, StandardCopyOption.REPLACE_EXISTING)
+        val zipStream = javaClass.getClassLoader().getResourceAsStream("flutter_template.zip")
+        ZipInputStream(zipStream).use { zis ->
+            var entry = zis.nextEntry
+            while (entry != null) {
+                val newPath = generationFolder.resolve(entry.name)
+
+                if (entry.isDirectory) {
+                    Files.createDirectories(newPath)
+                } else {
+                    Files.createDirectories(newPath.parent)
+                    Files.copy(zis, newPath, StandardCopyOption.REPLACE_EXISTING)
+                }
+
+                zis.closeEntry()
+                entry = zis.nextEntry
+            }
+        }
 
         val gitRepo = Git.init().setDirectory(generationFolder.toFile()).call()
 
