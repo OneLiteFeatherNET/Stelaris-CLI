@@ -4,6 +4,7 @@ import net.theevilreaper.stelaris.cli.generator.Generator
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.PersonIdent
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
+import java.nio.file.Files
 import java.nio.file.Path
 
 class GitProjectExporter(
@@ -27,7 +28,11 @@ class GitProjectExporter(
             generationFolder
         )
 
-        generators.forEach { generator -> generator.generate(generationFolder) }
+        val libFolder = generationFolder.resolve("lib")
+
+        if (!Files.exists(libFolder)) Files.createDirectory(libFolder)
+
+        generators.forEach { generator -> generator.generate(libFolder) }
 
         gitRepo.add().addFilepattern(".").call()
         val commit = gitRepo.commit()
