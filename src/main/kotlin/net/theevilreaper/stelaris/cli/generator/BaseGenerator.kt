@@ -2,6 +2,7 @@ package net.theevilreaper.stelaris.cli.generator
 
 import net.theevilreaper.dartpoet.DartFile
 import org.jetbrains.annotations.ApiStatus
+import java.nio.file.Files
 
 import java.nio.file.Path
 
@@ -26,6 +27,20 @@ abstract class BaseGenerator(
      */
     override fun cleanUp() {
         this.filesToGenerate.clear()
+    }
+
+    /**
+     * Checks if a given package folder exists, if not, it creates it.
+     * @param javaPath the base [Path] where the package folder should be located
+     * @param packageName the name of the package
+     * @return the [Path] of the package folder
+     */
+    protected fun checkPackageFolder(javaPath: Path, packageName: String): Path {
+        val packageFolder = javaPath.resolve(packageName)
+        if (!Files.exists(packageFolder)) {
+            Files.createDirectory(packageFolder)
+        }
+        return packageFolder
     }
 
     /**
