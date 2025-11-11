@@ -51,7 +51,12 @@ class GitProjectExporter(
         }
 
         val gitRepo = Git.init().setDirectory(generationFolder.toFile()).call()
-        gitRepo.lsRemote().setRemote(cloneUrl).call()
+        gitRepo.lsRemote().setRemote(cloneUrl).setCredentialsProvider(
+            UsernamePasswordCredentialsProvider(
+                userName,
+                password
+            )
+        ).call()
 
         val libPath: Path = generationFolder.resolve("lib")
         if (!Files.exists(libPath)) Files.createDirectory(libPath)
