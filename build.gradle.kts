@@ -65,4 +65,15 @@ tasks {
             events("passed", "skipped", "failed")
         }
     }
+
+    processResources {
+        dependsOn("flutter_template_zip")
+    }
+
+    register<Zip>("flutter_template_zip") {
+        exclude("DS_Store")
+        archiveFileName.set("flutter_template.zip")
+        destinationDirectory.set(file("src/main/resources"))
+        from("${rootDir}/assets/flutter_template")
+    }
 }
