@@ -25,7 +25,6 @@ dependencyResolutionManagement {
             version("kotlin", "2.2.21")
             version("bom", "1.4.5")
             version("junit", "6.0.1")
-            version("snakeyaml", "2.5")
             version("dartpoet", "0.0.1-SNAPSHOT")
             version("guava", "33.5.0-jre")
             version("jgit", "7.4.0.202509020913-r")
@@ -40,7 +39,6 @@ dependencyResolutionManagement {
             library("junit.jupiter.params", "org.junit.jupiter", "junit-jupiter-params").versionRef("junit")
             library("junit.jupiter.engine", "org.junit.jupiter", "junit-jupiter-engine").versionRef("junit")
             library("junit.platform.launcher", "org.junit.platform", "junit-platform-launcher").version("6.0.1")
-            library("snakeyaml", "org.yaml", "snakeyaml").versionRef("snakeyaml")
 
             plugin("kotlin", "org.jetbrains.kotlin.jvm").versionRef("kotlin")
             plugin("shadow", "com.gradleup.shadow").versionRef("shadow")

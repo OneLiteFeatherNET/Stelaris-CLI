@@ -15,7 +15,6 @@ kotlin {
 dependencies {
     implementation(platform(libs.mycelium.bom))
     implementation(libs.dartpoet)
-    implementation(libs.snakeyaml)
     implementation(libs.minestom)
     implementation(libs.guava)
     implementation(libs.jgit)

@@ -1,7 +1,5 @@
 package net.theevilreaper.stelaris.cli.exporter
 
-import org.yaml.snakeyaml.DumperOptions
-import org.yaml.snakeyaml.Yaml
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
@@ -17,36 +15,6 @@ import java.nio.file.StandardCopyOption
 abstract class BaseExporter protected constructor() : ProjectExporter {
 
     private val pubSpec: String = "pubspec.yaml"
-    protected val templateDir = "flutter_template"
-
-    /**
-     * Modify the pubspec.yaml file in the given source folder to the new version.
-     * @param sourceFolder The source folder containing the pubspec.yaml file
-     * @param newVersion The new version to set in the pubspec.yaml file
-     */
-    protected fun modifyPubSpecFile(sourceFolder: Path, newVersion: String) {
-        val pubSpecPath = sourceFolder.resolve(pubSpec)
-        check(Files.exists(pubSpecPath)) { "Could not find $pubSpec.yaml in $sourceFolder" }
-
-        val content = String(Files.readAllBytes(pubSpecPath))
-
-        // Configure YAML options for formatting
-        val options = DumperOptions()
-        options.defaultFlowStyle = DumperOptions.FlowStyle.BLOCK
-        options.isPrettyFlow = true
-
-        val yaml = Yaml(options)
-
-        // Parse the YAML content to a mutable map
-        @Suppress("UNCHECKED_CAST")
-        val pubspecMap = yaml.load(content) as MutableMap<String, Any>
-
-        // Modify the version
-        pubspecMap["version"] = newVersion
-
-        // Write the modified content back to the file
-        Files.write(pubSpecPath, yaml.dump(pubspecMap).toByteArray())
-    }
 
     /**
      * Copy the content of the source folder to the destination folder.
