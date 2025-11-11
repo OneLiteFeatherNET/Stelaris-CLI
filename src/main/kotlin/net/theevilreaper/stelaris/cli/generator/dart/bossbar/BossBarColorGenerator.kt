@@ -19,6 +19,7 @@ class BossBarColorGenerator : BaseGenerator(
 ) {
 
     override fun generate(javaPath: Path) {
+        val folder = checkPackageFolder(javaPath, packageName)
         val file = DartFile.builder("boss_bar_color")
             .type(
                 ClassSpec.enumClass(className)
@@ -51,7 +52,7 @@ class BossBarColorGenerator : BaseGenerator(
                     )
             )
             .build()
-        file.write(javaPath)
+        file.write(folder)
     }
 
     override fun getName(): String = "BossBarColorGenerator"

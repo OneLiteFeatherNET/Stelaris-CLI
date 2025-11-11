@@ -11,7 +11,10 @@ class BossBarOverlayGeneratorTest : GenerationTestBase() {
         val generator = BossBarOverlayGenerator()
         generator.generate(generationPath)
 
-        val generatedFiles = generationPath.toFile().listFiles()
+        val folder = generationPath.resolve("bossbar").toFile()
+        assertTrue(folder.exists(), "Expected generated folder to exist")
+        val generatedFiles = generationPath.resolve("bossbar").toFile().listFiles()
+
         assertNotNull(generatedFiles)
         assertEquals(1, generatedFiles!!.size, "Expected exactly one file to be generated")
 

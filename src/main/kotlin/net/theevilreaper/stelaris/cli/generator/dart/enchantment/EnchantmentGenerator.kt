@@ -33,7 +33,7 @@ class EnchantmentGenerator : BaseGenerator(
 
     override fun generate(javaPath: Path) {
         val enchantmentFolder = javaPath.resolve(packageName)
-        Files.createDirectory(enchantmentFolder)
+        checkPackageFolder(javaPath, packageName)
         val enchantmentData: MutableCollection<Enchantment> = MinecraftServer.getEnchantmentRegistry().values()
         val mappedEnchantments: Map<EnchantmentGroup, List<Enchantment>> = enchantmentData.mapNotNull { enchantment ->
             val key = enchantment.supportedItems().key()?.key()?.asString() ?: EMPTY_STRING

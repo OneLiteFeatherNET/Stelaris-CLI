@@ -11,7 +11,6 @@ import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.util.StringHelper
-import java.nio.file.Files
 import java.nio.file.Path
 
 class SoundEventGenerator : BaseGenerator(
@@ -20,10 +19,7 @@ class SoundEventGenerator : BaseGenerator(
 ) {
 
     override fun generate(javaPath: Path) {
-        val folder = javaPath.resolve("sound")
-        if (!Files.exists(folder)) {
-            Files.createDirectory(folder)
-        }
+        val folder = checkPackageFolder(javaPath, packageName)
         val soundEntries = SoundEvent.values()
         val mappedEntries = SoundHelper.mapSoundEvents(soundEntries)
 

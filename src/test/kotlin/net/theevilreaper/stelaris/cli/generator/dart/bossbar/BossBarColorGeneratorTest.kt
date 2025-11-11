@@ -11,8 +11,9 @@ class BossBarColorGeneratorTest : GenerationTestBase() {
     fun `test boss bar color generation`() {
         val generator = BossBarColorGenerator()
         generator.generate(generationPath)
-
-        val generatedFiles = generationPath.toFile().listFiles()
+        val folder = generationPath.resolve("bossbar").toFile()
+        assertTrue(folder.exists(), "Expected generated folder to exist")
+        val generatedFiles = generationPath.resolve("bossbar").toFile().listFiles()
         assertNotNull(generatedFiles)
         assertEquals(1, generatedFiles!!.size, "Expected exactly one file to be generated")
 

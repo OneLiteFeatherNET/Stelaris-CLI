@@ -2,10 +2,8 @@ package net.theevilreaper.stelaris.cli.exporter
 
 import org.yaml.snakeyaml.DumperOptions
 import org.yaml.snakeyaml.Yaml
-import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
 /**
@@ -19,12 +17,7 @@ import java.nio.file.StandardCopyOption
 abstract class BaseExporter protected constructor() : ProjectExporter {
 
     private val pubSpec: String = "pubspec.yaml"
-    protected val templateDir = "template"
-    protected val templateStream: InputStream
-
-    init {
-        templateStream = javaClass.classLoader.getResourceAsStream(templateDir)
-    }
+    protected val templateDir = "flutter_template"
 
     /**
      * Modify the pubspec.yaml file in the given source folder to the new version.

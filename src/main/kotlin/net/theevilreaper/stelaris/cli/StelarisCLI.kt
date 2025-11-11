@@ -11,7 +11,6 @@ import net.theevilreaper.stelaris.cli.generator.GeneratorRegistry
 import net.theevilreaper.stelaris.cli.util.*
 import java.nio.file.Files
 import java.nio.file.Path
-import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
     if (args.isEmpty()) {
@@ -28,7 +27,7 @@ fun main(args: Array<String>) {
     }
 
     if (parsedArgs.version.isBlank()) {
-        println("The version part is missing")
+        println("Please specify a valid version")
         return
     }
 
@@ -52,7 +51,7 @@ fun main(args: Array<String>) {
     val parsedVersion = parsedArgs.version
 
     val projectExporter = when (parsedArgs.localBuild) {
-        true -> LocalProjectExporter(workingDir, parsedVersion, generators)
+        true -> LocalProjectExporter(workingDir, generators)
         false -> GitProjectExporter(workingDir, parsedVersion, generators)
     }
 
