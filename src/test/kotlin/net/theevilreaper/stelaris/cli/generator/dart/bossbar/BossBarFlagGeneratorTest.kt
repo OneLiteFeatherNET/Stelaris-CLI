@@ -11,7 +11,10 @@ class BossBarFlagGeneratorTest : GenerationTestBase() {
         val generator = BossBarFlagGenerator()
         generator.generate(generationPath)
 
-        val generatedFiles = generationPath.toFile().listFiles()
+        val folder = generationPath.resolve("bossbar").toFile()
+        assertTrue(folder.exists(), "Expected generated folder to exist")
+        val generatedFiles = generationPath.resolve("bossbar").toFile().listFiles()
+
         assertNotNull(generatedFiles)
         assertEquals(1, generatedFiles!!.size, "Expected exactly one file to be generated")
 
