@@ -1,4 +1,4 @@
-name: minecraft-data
+name: vulpes-data
 description: Lib which contains some extracted data from the game Minecraft
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
