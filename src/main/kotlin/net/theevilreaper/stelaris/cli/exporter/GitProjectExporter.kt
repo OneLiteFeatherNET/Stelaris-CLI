@@ -5,7 +5,9 @@ import net.theevilreaper.stelaris.cli.util.VersionPart
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.PersonIdent
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.StandardCopyOption
 
 class GitProjectExporter(
     private val generationFolder: Path,
@@ -30,9 +32,13 @@ class GitProjectExporter(
     }
 
     override fun export() {
-        val gitRepo = cloneBaseRepo(
-            generationFolder
-        )
+        Files.copy(templateStream, generationFolder, StandardCopyOption.REPLACE_EXISTING)
+
+        val gitRepo = Git.init().setDirectory(generationFolder.toFile()).call()
+
+        val libPath: Path = generationFolder.resolve("lib")
+        if (!Files.exists(libPath)) Files.createDirectory(libPath)
+        modifyPubSpecFile(generationFolder, versionString)
 
         generators.forEach { generator -> generator.generate(generationFolder) }
 
@@ -52,28 +58,7 @@ class GitProjectExporter(
             )
         )
 
-
         gitPush.isForce = true
         gitPush.call()
-    }
-
-    /**
-     * Clones the base repository to the given path.
-     * @param username the username for the repository
-     * @param token the token for the repository
-     * @param cloneUrl the clone URL for the repository
-     * @param temp the temporary path to store the repository
-     * @return the cloned repository
-     */
-    private fun cloneBaseRepo(temp: Path): Git {
-        require(cloneUrl.trim().isNotEmpty()) { "Clone URL must not be empty" }
-        val rawGit =
-            Git.cloneRepository().setCredentialsProvider(
-                UsernamePasswordCredentialsProvider(
-                    userName,
-                    password
-                )
-            ).setURI(cloneUrl).setDirectory(temp.toFile()).setCloneAllBranches(true)
-        return rawGit.call()
     }
 }

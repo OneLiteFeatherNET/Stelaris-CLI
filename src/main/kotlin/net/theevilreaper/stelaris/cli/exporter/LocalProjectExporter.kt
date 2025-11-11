@@ -26,7 +26,7 @@ class LocalProjectExporter(
         Files.copy(templateStream, exportPath, StandardCopyOption.REPLACE_EXISTING)
 
         val libPath: Path = exportPath.resolve("lib")
-        Files.createDirectory(libPath)
+        if (!Files.exists(libPath)) Files.createDirectory(libPath)
         modifyPubSpecFile(exportPath, versionString)
 
         generators.forEach { generator -> generator.generate(libPath) }
