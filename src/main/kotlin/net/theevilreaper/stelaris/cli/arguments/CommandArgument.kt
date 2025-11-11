@@ -11,7 +11,7 @@ package net.theevilreaper.stelaris.cli.arguments
 enum class CommandArgument(val identifier: String, val helpMessage: String) {
 
     HELP("help", "Shows this help message"),
-    UPDATE("update", "Updates a specific part of the version string"),
+    VERSION("version", "The version which should be used"),
     EXPERIMENTAL("experimental", "Enables experimental generators"),
     TYPE("type", "The generation type"),
     PATH("path", "The path to the project")

@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource
 class CommandArgumentTest {
 
     @ParameterizedTest
-    @ValueSource(strings = ["help", "update", "experimental"])
+    @ValueSource(strings = ["help", "experimental"])
     fun `test valid argument mapping`(argument: String) {
         assertNotNull(CommandArgument.fromIdentifier(argument))
     }

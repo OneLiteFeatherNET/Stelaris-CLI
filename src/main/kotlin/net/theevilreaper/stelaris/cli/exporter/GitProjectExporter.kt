@@ -10,7 +10,6 @@ import java.nio.file.Path
 class GitProjectExporter(
     private val generationFolder: Path,
     private val versionString: String,
-    private val versionPart: VersionPart,
     private val generators: Set<Generator>
 ) : BaseExporter() {
 
@@ -35,9 +34,11 @@ class GitProjectExporter(
             generationFolder
         )
 
+        generators.forEach { generator -> generator.generate(generationFolder) }
+
         gitRepo.add().addFilepattern(".").call()
         val commit = gitRepo.commit()
-        commit.message = "Update version part: ${versionPart.part}"
+        commit.message = "Update version to $versionString"
         commit.author = PersonIdent("Stelaris CLI", "gitlab+generator@onelitefeather.net")
         commit.setAll(true)
         commit.call()
@@ -50,6 +51,7 @@ class GitProjectExporter(
                 password
             )
         )
+
 
         gitPush.isForce = true
         gitPush.call()

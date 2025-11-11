@@ -29,6 +29,7 @@ dependencyResolutionManagement {
             version("dartpoet", "0.0.1-SNAPSHOT")
             version("guava", "33.5.0-jre")
             version("jgit", "7.4.0.202509020913-r")
+            version("shadow", "9.2.2")
 
             library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
             library("minestom", "net.minestom", "minestom").withoutVersion()
@@ -42,6 +43,7 @@ dependencyResolutionManagement {
             library("snakeyaml", "org.yaml", "snakeyaml").versionRef("snakeyaml")
 
             plugin("kotlin", "org.jetbrains.kotlin.jvm").versionRef("kotlin")
+            plugin("shadow", "com.gradleup.shadow").versionRef("shadow")
         }
     }
 }

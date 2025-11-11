@@ -27,9 +27,8 @@ fun main(args: Array<String>) {
         return
     }
 
-    if (parsedArgs.versionPart == null) {
-        println("The version part is required")
-        exitProcess(1)
+    if (parsedArgs.version.isBlank()) {
+        println("The version part is missing")
         return
     }
 
@@ -40,7 +39,6 @@ fun main(args: Array<String>) {
 
     if (generators.isEmpty()) {
         println("The cli needs generators to run")
-        exitProcess(1)
         return
     }
 
@@ -51,10 +49,11 @@ fun main(args: Array<String>) {
     }
 
     MinecraftServer.init()
+    val parsedVersion = parsedArgs.version
 
     val projectExporter = when (parsedArgs.localBuild) {
-        true -> LocalProjectExporter(workingDir, "", generators)
-        false -> GitProjectExporter(workingDir, "", versionPart = parsedArgs.versionPart, generators)
+        true -> LocalProjectExporter(workingDir, parsedVersion, generators)
+        false -> GitProjectExporter(workingDir, parsedVersion, generators)
     }
 
     projectExporter.export()
@@ -62,17 +61,15 @@ fun main(args: Array<String>) {
 
 private fun parseArguments(args: Array<String>): ParsedArgs {
     var showHelp = false
-    var versionPart: VersionPart? = null
     var experimental = false
     var localBuild = true
     var path: Path? = null
+    var version: String? = null
 
     args.forEachIndexed { index, arg ->
         if (arg.startsWith(ARGUMENT_IDENTIFIER)) {
             val argument: String = arg.substring(1, arg.length)
-            println("Argument: $argument")
             val commandArg: CommandArgument? = CommandArgument.fromIdentifier(argument)
-            println("Command argument: $commandArg")
 
             if (commandArg == null) {
                 println("The argument $argument is not supported")
@@ -81,15 +78,7 @@ private fun parseArguments(args: Array<String>): ParsedArgs {
 
             when (commandArg) {
                 CommandArgument.HELP -> showHelp = true
-                CommandArgument.UPDATE -> {
-                    val versionPartString = args[index + 1]
-                    if (versionPartString.startsWith(ARGUMENT_IDENTIFIER)) {
-                        println("A version part can't start with an $ARGUMENT_IDENTIFIER")
-                        return@forEachIndexed
-                    }
-                    versionPart = VersionPart.parse(versionPartString)
-                }
-
+                CommandArgument.VERSION -> version = args[index + 1]
                 CommandArgument.EXPERIMENTAL -> experimental = true
                 CommandArgument.TYPE -> {
                     val type = args[index + 1]
@@ -107,5 +96,5 @@ private fun parseArguments(args: Array<String>): ParsedArgs {
         }
     }
 
-    return ParsedArgs(showHelp, versionPart, experimental, localBuild, path)
+    return ParsedArgs(showHelp, version ?: "", experimental, localBuild, path)
 }

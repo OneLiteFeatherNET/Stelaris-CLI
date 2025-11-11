@@ -18,7 +18,7 @@ import java.nio.file.Path
  */
 data class ParsedArgs(
     val showHelp: Boolean,
-    val versionPart: VersionPart?,
+    val version: String,
     val experimental: Boolean,
     val localBuild: Boolean,
     val path: Path?
