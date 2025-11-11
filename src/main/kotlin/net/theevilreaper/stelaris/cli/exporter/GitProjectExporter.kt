@@ -32,7 +32,7 @@ class GitProjectExporter(
     }
 
     override fun export() {
-        Files.copy(templateStream, generationFolder, StandardCopyOption.REPLACE_EXISTING)
+     //   Files.copy(templateStream, generationFolder, StandardCopyOption.REPLACE_EXISTING)
 
         val gitRepo = Git.init().setDirectory(generationFolder.toFile()).call()
 
