@@ -1,14 +1,19 @@
 package net.theevilreaper.stelaris.cli.generator.dart.enchantment
 
+import com.google.common.collect.ImmutableList
 import net.kyori.adventure.text.TranslatableComponent
 import net.minestom.server.MinecraftServer
 import net.minestom.server.item.enchant.Enchantment
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartModifier
+import net.theevilreaper.dartpoet.InheritKeyword
 import net.theevilreaper.dartpoet.clazz.ClassSpec
 import net.theevilreaper.dartpoet.constructor.ConstructorSpec
+import net.theevilreaper.dartpoet.directive.DirectiveFactory
+import net.theevilreaper.dartpoet.directive.DirectiveType
 import net.theevilreaper.dartpoet.enum.EnumEntrySpec
 import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
+import net.theevilreaper.dartpoet.type.ClassName
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.util.CLASS_PROPERTIES
 import net.theevilreaper.stelaris.cli.generator.dart.util.CONSTRUCTOR_PARAMETERS
@@ -54,6 +59,7 @@ class EnchantmentGenerator : BaseGenerator(
             val updatedClassName = "${group.classPart.replaceFirstChar { it.uppercase() }}$className"
 
             val enumClass = ClassSpec.enumClass(updatedClassName)
+                .superClass(ClassName("Enchantment"), InheritKeyword.IMPLEMENTS)
                 .enumProperties(*properties.toTypedArray())
                 .properties(*CLASS_PROPERTIES)
                 .constructor {
@@ -65,6 +71,7 @@ class EnchantmentGenerator : BaseGenerator(
                 .build()
             val fileName = "${group.classPart}_${className.replaceFirstChar { it.lowercase() }}"
             val enumFile = DartFile.builder(fileName)
+                .directive(DirectiveFactory.create(DirectiveType.RELATIVE, "../api/enchantment"))
                 .doc("The file is generated. Don't change anything here")
                 .type(enumClass)
                 .build()
