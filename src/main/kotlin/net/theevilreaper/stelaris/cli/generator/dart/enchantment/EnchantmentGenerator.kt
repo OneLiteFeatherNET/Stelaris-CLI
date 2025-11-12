@@ -34,8 +34,6 @@ class EnchantmentGenerator : BaseGenerator(
     packageName = "enchantment",
 ) {
 
-    private val defaultLevel: Int = 1
-
     override fun generate(javaPath: Path) {
         val enchantmentFolder = javaPath.resolve(packageName)
         checkPackageFolder(javaPath, packageName)
@@ -86,7 +84,12 @@ class EnchantmentGenerator : BaseGenerator(
      */
     private fun mapEnchantmentToEnumProperty(enchantment: Enchantment): EnumEntrySpec {
         val translatable = enchantment.description() as TranslatableComponent
-        val enchantmentName = translatable.key().substringAfterLast(".")
+        val minecraftValue = translatable.key().split(".").drop(1).joinToString(":")
+        val enchantmentName = translatable.key().substringAfterLast(".").split("_")
+            .mapIndexed { index, part ->
+                if (index == 0) part.lowercase() else part.replaceFirstChar { it.uppercase() }
+            }
+            .joinToString("")
         return EnumEntrySpec.builder(enchantmentName)
             .parameter(
                 EnumParameterSpec.positional(
@@ -94,7 +97,7 @@ class EnchantmentGenerator : BaseGenerator(
                     StringHelper.mapDisplayName(enchantmentName)
                 )
             )
-            .parameter(EnumParameterSpec.positional("%L", defaultLevel))
+            .parameter(EnumParameterSpec.positional("%S", minecraftValue))
             .parameter(EnumParameterSpec.positional("%L", enchantment.maxLevel()))
             .build()
     }
