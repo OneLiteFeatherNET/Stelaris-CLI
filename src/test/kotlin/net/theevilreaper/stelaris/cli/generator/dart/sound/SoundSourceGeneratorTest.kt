@@ -49,7 +49,7 @@ class SoundSourceGeneratorTest : GenerationTestBase() {
               final String displayName;
               final String entry;
 
-              SoundSource(String displayName, String entry);
+              const SoundSource(this.displayName, this.entry);
 
             }
         """.trimIndent()

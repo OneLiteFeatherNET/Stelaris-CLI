@@ -41,8 +41,9 @@ class SoundTypeGenerator: BaseGenerator(
             )
             .constructor {
                 ConstructorSpec.builder(className)
-                    .parameter(ParameterSpec.positional("displayName", String::class.java).build())
-                    .parameter(ParameterSpec.positional("entry", String::class.java).build())
+                    .modifier(DartModifier.CONST)
+                    .parameter(ParameterSpec.positional("displayName").build())
+                    .parameter(ParameterSpec.positional("entry").build())
                     .build()
             }
             .build()

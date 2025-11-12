@@ -41,7 +41,7 @@ class SoundTypeGeneratorTest : GenerationTestBase() {
               final String displayName;
               final String entry;
 
-              SoundType(String displayName, String entry);
+              const SoundType(this.displayName, this.entry);
 
             }
         """.trimIndent()

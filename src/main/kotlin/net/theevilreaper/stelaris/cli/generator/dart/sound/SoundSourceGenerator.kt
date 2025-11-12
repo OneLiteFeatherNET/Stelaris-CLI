@@ -37,6 +37,7 @@ class SoundSourceGenerator : BaseGenerator(
         val soundSourceFile = DartFile.builder("sound_source")
             .type(
                 ClassSpec.enumClass(className)
+                    .modifier(DartModifier.CONST)
                     .enumProperties(*enumProperties.toTypedArray())
                     .properties(
                         PropertySpec.builder("displayName", String::class).modifier(DartModifier.FINAL).build(),
@@ -44,8 +45,9 @@ class SoundSourceGenerator : BaseGenerator(
                     )
                     .constructor {
                         ConstructorSpec.builder(className)
-                            .parameter(ParameterSpec.positional("displayName", String::class.java).build())
-                            .parameter(ParameterSpec.positional("entry", String::class.java).build())
+                            .modifier(DartModifier.CONST)
+                            .parameter(ParameterSpec.positional("displayName",).build())
+                            .parameter(ParameterSpec.positional("entry").build())
                             .build()
                     }
                     .build()
