@@ -1,6 +1,5 @@
 package net.theevilreaper.stelaris.cli.generator.dart.enchantment
 
-import com.google.common.collect.ImmutableList
 import net.kyori.adventure.text.TranslatableComponent
 import net.minestom.server.MinecraftServer
 import net.minestom.server.item.enchant.Enchantment
@@ -19,7 +18,6 @@ import net.theevilreaper.stelaris.cli.generator.dart.util.CLASS_PROPERTIES
 import net.theevilreaper.stelaris.cli.generator.dart.util.CONSTRUCTOR_PARAMETERS
 import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
 import net.theevilreaper.stelaris.cli.util.StringHelper
-import java.nio.file.Files
 import java.nio.file.Path
 
 /**

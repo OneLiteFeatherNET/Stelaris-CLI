@@ -10,7 +10,7 @@ object StringHelper {
 
     /**
      * Converts a given string to a name which can be shown in an ui field.
-     * @param rawName the name which should be converted
+     * @param rawName the rawName which should be converted
      * @return the converted name
      */
     fun mapDisplayName(rawName: String): String {
@@ -23,5 +23,22 @@ object StringHelper {
                 char -> char.uppercase()
             }
         }
+    }
+
+    /**
+     * Converts a given string to a lower camel case string.
+     * @param input the input, which should be converted
+     * @return the converted string
+     */
+    fun toLowerCamelCase(input: String): String {
+        val parts = input
+            .lowercase()
+            .split('_')
+            .filter { it.isNotEmpty() } // removes empty segments from "__"
+
+        if (parts.isEmpty()) return ""
+
+        return parts.first() +
+                parts.drop(1).joinToString("") { it.replaceFirstChar(Char::uppercase) }
     }
 }

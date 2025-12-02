@@ -29,27 +29,13 @@ class SoundEventGenerator : BaseGenerator(
             val className = "${key.type.replaceFirstChar { it.uppercase() }}Sound"
             val fileName = "${key.type}_sound"
 
+            val enumEntries = value
+                .distinctBy { it.key().value().split(".").let { parts -> "${parts[1]}_${parts.last()}" } }
+                .map { buildEnumEntry(it.key()) }
+
             val enumClass = ClassSpec.enumClass(className)
                 .apply {
-                    value
-                        .distinctBy { it.key().value().split(".").let { parts -> "${parts[1]}_${parts.last()}" } }
-                        .forEach { it ->
-                            val soundKey: Key = it.key()
-                            val soundData = soundKey.value().split(".")
-                            val soundType = soundData[1]
-                            val variant = soundData.last()
-                            val soundTypeTitle = SoundHelper.refactorSoundData(soundType)
-                            val soundVariant = SoundHelper.refactorSoundData(variant)
-                            val displayName = StringHelper.mapDisplayName("$soundTypeTitle $soundVariant")
-                            val enumName = "${soundType}_$variant"
-
-                            enumProperty(
-                                EnumEntrySpec.builder(enumName)
-                                    .parameter(EnumParameterSpec.positional("%C", displayName))
-                                    .parameter(EnumParameterSpec.positional("%C", it.key().asString()))
-                                    .build()
-                            )
-                        }
+                    enumEntries.forEach { enumProperty(it) }
                 }
                 .property(
                     PropertySpec.builder("name", String::class).modifier(DartModifier.FINAL).build()
@@ -78,4 +64,20 @@ class SoundEventGenerator : BaseGenerator(
     }
 
     override fun getName(): String = "SoundTypeGenerator"
+
+    private fun buildEnumEntry(soundKey: Key): EnumEntrySpec {
+        val parts = soundKey.value().split(".")
+        require(parts.size >= 2) { "Invalid sound key: ${soundKey.value()}" }
+
+        val soundType = parts[1]
+        val variant = parts.last()
+
+        val enumName = StringHelper.toLowerCamelCase("${soundType}_${variant}")
+        val displayName = StringHelper.mapDisplayName("$soundType $variant")
+
+        return EnumEntrySpec.builder(enumName)
+            .parameter(EnumParameterSpec.positional("%C", displayName))
+            .parameter(EnumParameterSpec.positional("%C", soundKey.asString()))
+            .build()
+    }
 }

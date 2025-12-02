@@ -23,11 +23,13 @@ class EntityTypeGenerator : BaseGenerator(
         val models = EntityType.values()
         val enumEntries = mutableListOf<EnumEntrySpec>()
         for (type in models) {
-            val name = type.name().replace("minecraft:", EMPTY_STRING)
+            val nameWithOutMinecraftPrefix = type.name().replace("minecraft:", EMPTY_STRING)
+            val variableName = StringHelper.toLowerCamelCase(nameWithOutMinecraftPrefix)
+            val name = StringHelper.mapDisplayName(nameWithOutMinecraftPrefix)
             enumEntries.add(
-                EnumEntrySpec.builder(name.lowercase())
-                    .parameter(EnumParameterSpec.positional("%C", StringHelper.mapDisplayName(name)))
+                EnumEntrySpec.builder(variableName)
                     .parameter(EnumParameterSpec.positional("%C", name))
+                    .parameter(EnumParameterSpec.positional("%C", type.name()))
                     .build()
             )
         }
