@@ -7,11 +7,14 @@ import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartModifier
 import net.theevilreaper.dartpoet.InheritKeyword
 import net.theevilreaper.dartpoet.clazz.ClassSpec
+import net.theevilreaper.dartpoet.code.buildCodeBlock
 import net.theevilreaper.dartpoet.constructor.ConstructorSpec
 import net.theevilreaper.dartpoet.directive.DirectiveFactory
 import net.theevilreaper.dartpoet.directive.DirectiveType
 import net.theevilreaper.dartpoet.enum.EnumEntrySpec
 import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
+import net.theevilreaper.dartpoet.function.FunctionSpec
+import net.theevilreaper.dartpoet.parameter.ParameterSpec
 import net.theevilreaper.dartpoet.type.ClassName
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.util.CLASS_PROPERTIES
@@ -64,6 +67,32 @@ class EnchantmentGenerator : BaseGenerator(
                         .parameters(*CONSTRUCTOR_PARAMETERS)
                         .build()
                 }
+                .function {
+                    // Create a function to make a lookup
+                    val returnType = ClassName(updatedClassName, isNullable = true)
+                    FunctionSpec.builder("fromValue")
+                        .modifier { DartModifier.STATIC }
+                        .doc("Tries to find the corresponding enchantment type based on a given input")
+                        .doc("If the enchantment string doesn't, it returns null.")
+                        .doc("")
+                        .doc("The [input] to retrieve the enchantment reference for")
+                        .doc("Returns the matched [%L] or null if no enchantment could be found", updatedClassName)
+                        .returns(returnType)
+                        .parameter {
+                            ParameterSpec.positional("input", String::class)
+                                .build()
+                        }
+                        .addCode(
+                            buildCodeBlock {
+                                beginControlFlow("for (var enchantment in values)")
+                                addStatement("if (enchantment.minecraftValue == input) return enchantment;")
+                                endControlFlow()
+                                add("return null;")
+                            }
+
+                        )
+                        .build()
+                }
                 .build()
             val fileName = "${group.classPart}_${className.replaceFirstChar { it.lowercase() }}"
             val enumFile = DartFile.builder(fileName)
@@ -81,23 +110,54 @@ class EnchantmentGenerator : BaseGenerator(
      * @return the mapped [EnumEntrySpec]
      */
     private fun mapEnchantmentToEnumProperty(enchantment: Enchantment): EnumEntrySpec {
-        val translatable = enchantment.description() as TranslatableComponent
-        val minecraftValue = translatable.key().split(".").drop(1).joinToString(":")
-        val enchantmentName = translatable.key().substringAfterLast(".").split("_")
-            .mapIndexed { index, part ->
-                if (index == 0) part.lowercase() else part.replaceFirstChar { it.uppercase() }
-            }
-            .joinToString("")
-        return EnumEntrySpec.builder(enchantmentName)
-            .parameter(
-                EnumParameterSpec.positional(
-                    "%C",
-                    StringHelper.mapDisplayName(enchantmentName)
-                )
-            )
-            .parameter(EnumParameterSpec.positional("%S", minecraftValue))
+        val key = (enchantment.description() as TranslatableComponent).key()
+
+        val enumName = extractEnumName(key)
+        val minecraftId = extractMinecraftId(key)
+        val displayName = StringHelper.mapDisplayName(enumName)
+
+        return EnumEntrySpec.builder(enumName)
+            .parameter(EnumParameterSpec.positional("%C", displayName))
+            .parameter(EnumParameterSpec.positional("%C", minecraftId))
             .parameter(EnumParameterSpec.positional("%L", enchantment.maxLevel()))
             .build()
+    }
+
+    /**
+     * Converts a Minecraft translation key into a camelCase enum name.
+     *
+     * Takes a key like "enchantment.minecraft.depth_strider" and transforms it
+     * into "depthStrider" by taking the last segment, splitting on underscores,
+     * and capitalizing each word except the first.
+     *
+     * @param translationKey the full translation key from Minecraft
+     * @return a camelCase identifier suitable for Dart enum names
+     */
+    private fun extractEnumName(translationKey: String): String {
+        return translationKey
+            .substringAfterLast(".")
+            .split("_")
+            .mapIndexed { index, part ->
+                if (index == 0) part.lowercase()
+                else part.replaceFirstChar { it.uppercase() }
+            }
+            .joinToString("")
+    }
+
+    /**
+     * Extracts the Minecraft resource identifier from a translation key.
+     *
+     * Strips the "enchantment" prefix and rebuilds the remaining parts with colons,
+     * turning "enchantment.minecraft.depth_strider" into "minecraft:depth_strider".
+     *
+     * @param translationKey the full translation key from Minecraft
+     * @return the namespaced identifier used by Minecraft internally
+     */
+    private fun extractMinecraftId(translationKey: String): String {
+        return translationKey
+            .split(".")
+            .drop(1)
+            .joinToString(":")
     }
 
     /**
