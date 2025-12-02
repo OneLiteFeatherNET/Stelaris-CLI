@@ -20,10 +20,13 @@ internal object MaterialSubGenerator {
 
     fun generateBlockMaterialEnum(className: String, materials: List<Material>): ClassBuilder {
         val enumProperties = materials.map {
-            val name = escapeMinecraftPart(it.name())
-            EnumEntrySpec.builder(name)
-                .parameter(EnumParameterSpec.positional("%C", StringHelper.mapDisplayName(name)))
+            val rawName = it.name()
+            val nameWithOutMinecraftPrefix = rawName.replace("minecraft:", EMPTY_STRING)
+            val variableName = StringHelper.toLowerCamelCase(nameWithOutMinecraftPrefix)
+            val name = StringHelper.mapDisplayName(nameWithOutMinecraftPrefix)
+            EnumEntrySpec.builder(variableName)
                 .parameter(EnumParameterSpec.positional("%C", name))
+                .parameter(EnumParameterSpec.positional("%C", rawName))
                 .parameter(EnumParameterSpec.positional("%L", it.maxStackSize()))
                 .build()
         }.toSet()
@@ -45,14 +48,5 @@ internal object MaterialSubGenerator {
                     .build()
             )
         return enumFile
-    }
-
-    /**
-     * Escapes the minecraft part from the given name.
-     * @param name the name to escape
-     * @return the escaped name
-     */
-    private fun escapeMinecraftPart(name: String): String {
-        return name.replace("minecraft:", EMPTY_STRING)
     }
 }
