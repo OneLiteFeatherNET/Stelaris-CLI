@@ -6,6 +6,7 @@ import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarFlagGenerato
 import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarOverlayGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.enchantment.EnchantmentGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.enchantment.EnchantmentGroupGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.enchantment.EnchantmentRegistryGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundEventGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundSourceGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundTypeGenerator
@@ -25,6 +26,7 @@ class GeneratorRegistry {
         BossBarOverlayGenerator(),
         EnchantmentGenerator(),
         EnchantmentGroupGenerator(),
+        EnchantmentRegistryGenerator(),
         EntityTypeGenerator(),
         FrameTypeGenerator(),
         MaterialGenerator(),
