@@ -45,6 +45,10 @@ class EnchantmentGroupGenerator: BaseGenerator(
 
         val classFile = DartFile.builder("enchantment_group")
             .type(enumClass)
+            .doc("Represents a category of enchantments based on their primary application")
+            .doc("")
+            .doc("Enchantments are grouped by the type of items they can be applied to,")
+            .doc("making it easier to filter and organize them by use case.")
             .build();
 
         classFile.write(enchantmentFolder)
