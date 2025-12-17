@@ -9,7 +9,7 @@ group = "net.theevilreaper"
 version = "0.0.3-SNAPSHOT"
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
 }
 
 dependencies {
@@ -32,7 +32,7 @@ application {
 tasks {
     compileJava {
         options.encoding = "UTF-8"
-        options.release.set(21)
+        options.release.set(25)
     }
 
     jacocoTestReport {
