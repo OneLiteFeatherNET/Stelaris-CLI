@@ -24,7 +24,7 @@ dependencyResolutionManagement {
         create("libs") {
             version("kotlin", "2.3.10")
             version("bom", "1.6.0")
-            version("junit", "6.0.1")
+            version("junit", "6.0.3")
             version("dartpoet", "1.0.9")
             version("guava", "33.5.0-jre")
             version("jgit", "7.5.0.202512021534-r")
@@ -38,7 +38,7 @@ dependencyResolutionManagement {
             library("junit.jupiter", "org.junit.jupiter", "junit-jupiter-api").versionRef("junit")
             library("junit.jupiter.params", "org.junit.jupiter", "junit-jupiter-params").versionRef("junit")
             library("junit.jupiter.engine", "org.junit.jupiter", "junit-jupiter-engine").versionRef("junit")
-            library("junit.platform.launcher", "org.junit.platform", "junit-platform-launcher").version("6.0.1")
+            library("junit.platform.launcher", "org.junit.platform", "junit-platform-launcher").version("6.0.3")
 
             plugin("kotlin", "org.jetbrains.kotlin.jvm").versionRef("kotlin")
             plugin("shadow", "com.gradleup.shadow").versionRef("shadow")
