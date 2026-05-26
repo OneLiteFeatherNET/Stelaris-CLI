@@ -63,7 +63,7 @@ class SoundEventGenerator : BaseGenerator(
         enumFiles.forEach { it.write(folder) }
     }
 
-    override fun getName(): String = "SoundTypeGenerator"
+    override fun getName(): String = "SoundEventGenerator"
 
     private fun buildEnumEntry(soundKey: Key): EnumEntrySpec {
         val parts = soundKey.value().split(".")
