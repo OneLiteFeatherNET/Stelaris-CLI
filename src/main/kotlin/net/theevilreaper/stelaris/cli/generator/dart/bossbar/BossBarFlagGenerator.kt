@@ -24,19 +24,19 @@ class BossBarFlagGenerator : BaseGenerator(
             .type(
                 ClassSpec.enumClass(className)
                     .apply {
-                        BossBar.Overlay.entries.forEach { overlay ->
+                        BossBar.Flag.entries.forEach { flag ->
                             enumProperty(
-                                EnumEntrySpec.builder(overlay.name.lowercase())
+                                EnumEntrySpec.builder(flag.name.lowercase())
                                     .parameter(
                                         EnumParameterSpec.positional(
                                             "%C",
-                                            StringHelper.mapDisplayName(overlay.name)
+                                            StringHelper.mapDisplayName(flag.name)
                                         )
                                     )
                                     .parameter(
                                         EnumParameterSpec.positional(
                                             "%C",
-                                            overlay.name.uppercase()
+                                            flag.name.uppercase()
                                         )
                                     )
                                     .build()
