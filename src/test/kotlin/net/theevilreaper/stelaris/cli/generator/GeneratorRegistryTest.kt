@@ -6,11 +6,10 @@ import org.junit.jupiter.api.Test
 
 class GeneratorRegistryTest {
 
-    @Disabled("Need a rework")
     @Test
     fun testGetGenerators() {
         val generatorRegistry = GeneratorRegistry()
         val generators = generatorRegistry.getGenerators()
-        assertEquals(8, generators.size)
+        assertEquals(11, generators.size)
     }
 }
