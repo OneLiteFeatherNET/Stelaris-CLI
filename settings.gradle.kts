@@ -23,7 +23,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             version("kotlin", "2.4.0")
-            version("bom", "1.6.7")
+            version("bom", "1.7.0")
             version("junit", "6.1.0")
             version("dartpoet", "1.0.11")
             version("guava", "33.6.0-jre")
