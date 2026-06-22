@@ -13,7 +13,7 @@ jobs:
       ONELITEFEATHER_MAVEN_PASSWORD: ${{ secrets.ONELITEFEATHER_MAVEN_PASSWORD }}
     steps:
       - name: Checkout stelaris-cli repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
       - name: Set up JDK
