@@ -28,7 +28,7 @@ dependencyResolutionManagement {
             version("dartpoet", "1.0.12")
             version("guava", "33.6.0-jre")
             version("jgit", "7.7.0.202606012155-r")
-            version("shadow", "9.6.0")
+            version("shadow", "9.6.1")
 
             library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
             library("minestom", "net.minestom", "minestom").withoutVersion()
