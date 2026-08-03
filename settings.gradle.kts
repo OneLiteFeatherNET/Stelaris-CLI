@@ -32,6 +32,7 @@ dependencyResolutionManagement {
 
             library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
             library("minestom", "net.minestom", "minestom").withoutVersion()
+            library("cyano", "net.onelitefeather", "cyano").withoutVersion()
             library("dartpoet", "net.theevilreaper", "dartpoet").versionRef("dartpoet")
             library("guava", "com.google.guava", "guava").versionRef("guava")
             library("jgit", "org.eclipse.jgit", "org.eclipse.jgit").versionRef("jgit")

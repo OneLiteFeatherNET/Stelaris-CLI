@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.guava)
     implementation(libs.jgit)
 
+    testImplementation(libs.cyano)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.jupiter.params)
     testRuntimeOnly(libs.junit.jupiter.engine)
