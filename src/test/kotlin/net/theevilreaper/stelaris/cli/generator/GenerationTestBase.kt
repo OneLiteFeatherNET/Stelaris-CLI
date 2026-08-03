@@ -14,6 +14,5 @@ abstract class GenerationTestBase {
     fun setup() {
         val files = Files.list(generationPath).toList()
         check(files.isEmpty()) { "Expected generation folder to be empty, but found: $files" }
-        generationPath = Files.createTempDirectory("stelaris-cli")
     }
 }
