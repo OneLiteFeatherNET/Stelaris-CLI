@@ -1,13 +1,12 @@
 package net.theevilreaper.stelaris.cli.arguments
 
-import net.theevilreaper.stelaris.cli.util.VersionPart
 import java.nio.file.Path
 
 /**
  * Data class representing the parsed command-line arguments.
  *
  * @property showHelp Indicates whether the help message should be displayed.
- * @property versionPart The version part specified by the user, or null if not provided.
+ * @property version The version string specified by the user, or empty string if not provided.
  * @property experimental Indicates whether experimental features are enabled.
  * @property localBuild Indicates whether the local build option is selected.
  * @property path The path specified by the user, or null if not provided.
