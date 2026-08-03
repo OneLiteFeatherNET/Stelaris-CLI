@@ -10,11 +10,8 @@ import java.nio.file.StandardCopyOption
  * @author theEvilReaper
  * @since 1.0.0
  * @version 1.0.0
- * @property pubSpec the name of the pubspec.yaml file
  */
 abstract class BaseExporter protected constructor() : ProjectExporter {
-
-    private val pubSpec: String = "pubspec.yaml"
 
     /**
      * Copy the content of the source folder to the destination folder.
