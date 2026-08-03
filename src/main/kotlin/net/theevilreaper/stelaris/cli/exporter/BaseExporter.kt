@@ -26,8 +26,14 @@ abstract class BaseExporter protected constructor() : ProjectExporter {
             paths.forEach { path ->
                 val destinationPath = destinationFolder.resolve(path.fileName)
                 if (Files.isDirectory(path)) {
+                    if (!Files.exists(destinationPath)) {
+                        Files.createDirectories(destinationPath)
+                    }
                     copyResourceFolder(path, destinationPath) // Pass the correct subfolder source
                 } else {
+                    if (!Files.exists(destinationFolder)) {
+                        Files.createDirectories(destinationFolder)
+                    }
                     Files.copy(path, destinationPath, StandardCopyOption.REPLACE_EXISTING)
                 }
             }
