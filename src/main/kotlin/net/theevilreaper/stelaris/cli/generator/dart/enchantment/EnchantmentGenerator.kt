@@ -81,9 +81,10 @@ class EnchantmentGenerator : BaseGenerator(
      * @return the mapped [EnumEntrySpec]
      */
     private fun mapEnchantmentToEnumProperty(enchantment: Enchantment): EnumEntrySpec {
-        val translatable = enchantment.description() as TranslatableComponent
-        val minecraftValue = translatable.key().split(".").drop(1).joinToString(":")
-        val enchantmentName = translatable.key().substringAfterLast(".").split("_")
+        val translatable = enchantment.description() as? TranslatableComponent
+        val keyString = translatable?.key() ?: ""
+        val minecraftValue = keyString.split(".").drop(1).joinToString(":")
+        val enchantmentName = keyString.substringAfterLast(".").split("_")
             .mapIndexed { index, part ->
                 if (index == 0) part.lowercase() else part.replaceFirstChar { it.uppercase() }
             }

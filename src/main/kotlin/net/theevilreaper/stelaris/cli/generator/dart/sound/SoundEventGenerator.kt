@@ -30,7 +30,10 @@ class SoundEventGenerator : BaseGenerator(
             val fileName = "${key.type}_sound"
 
             val enumEntries = value
-                .distinctBy { it.key().value().split(".").let { parts -> "${parts[1]}_${parts.last()}" } }
+                .distinctBy {
+                    val parts = it.key().value().split(".")
+                    if (parts.size >= 2) "${parts[1]}_${parts.last()}" else parts.last()
+                }
                 .map { buildEnumEntry(it.key()) }
 
             val enumClass = ClassSpec.enumClass(className)

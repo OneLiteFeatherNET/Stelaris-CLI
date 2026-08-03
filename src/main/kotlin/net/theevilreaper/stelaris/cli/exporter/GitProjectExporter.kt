@@ -13,47 +13,42 @@ class GitProjectExporter(
     private val generators: Set<Generator>
 ) : BaseExporter() {
 
-    private val userName: String = System.getenv("stelaris.cli.username")
-    private val password: String = System.getenv("stelaris.cli.password")
-    private val cloneUrl: String = System.getenv("stelaris.cli.cloneUrl")
+    private val userName: String = System.getenv("stelaris.cli.username") ?: ""
+    private val password: String = System.getenv("stelaris.cli.password") ?: ""
+    private val cloneUrl: String = System.getenv("stelaris.cli.cloneUrl") ?: ""
 
     init {
-        require((userName.isNotEmpty())) { "The username can't be empty" }
-        require((password.isNotEmpty())) { "The password can't be empty" }
-        require((cloneUrl.isNotEmpty())) { "The clone url can't be empty" }
+        require(userName.isNotEmpty()) { "The username can't be empty" }
+        require(password.isNotEmpty()) { "The password can't be empty" }
+        require(cloneUrl.isNotEmpty()) { "The clone url can't be empty" }
     }
 
     override fun export() {
-        val gitRepo = cloneBaseRepo(
-            generationFolder
-        )
+        cloneBaseRepo(generationFolder).use { gitRepo ->
+            val libFolder = generationFolder.resolve("lib")
 
-        val libFolder = generationFolder.resolve("lib")
+            if (!Files.exists(libFolder)) Files.createDirectories(libFolder)
 
-        if (!Files.exists(libFolder)) Files.createDirectory(libFolder)
+            generators.forEach { generator -> generator.generate(libFolder) }
 
-        generators.forEach { generator -> generator.generate(libFolder) }
+            gitRepo.add().addFilepattern(".").call()
+            val commit = gitRepo.commit()
+            commit.message = "Update version to $versionString"
+            commit.author = PersonIdent("Stelaris CLI", "gitlab+generator@onelitefeather.net")
+            commit.setAll(true)
+            commit.call()
 
-        gitRepo.add().addFilepattern(".").call()
-        val commit = gitRepo.commit()
-        commit.message = "Update version to $versionString"
-        commit.author = PersonIdent("Stelaris CLI", "gitlab+generator@onelitefeather.net")
-        commit.setAll(true)
-        commit.call()
+            val gitPush = gitRepo.push()
 
-        val gitPush = gitRepo.push()
-
-        gitPush.setCredentialsProvider(
-            UsernamePasswordCredentialsProvider(
-                userName,
-                password
+            gitPush.setCredentialsProvider(
+                UsernamePasswordCredentialsProvider(
+                    userName,
+                    password
+                )
             )
-        )
 
-        generators.forEach { generator -> generator.generate(generationFolder) }
-
-        gitPush.isForce = true
-        gitPush.call()
+            gitPush.call()
+        }
     }
 
     /**

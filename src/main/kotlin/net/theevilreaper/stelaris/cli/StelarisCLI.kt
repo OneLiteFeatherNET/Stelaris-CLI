@@ -42,20 +42,27 @@ fun main(args: Array<String>) {
     }
 
     // Use the user-specified path if provided; otherwise, use the default for Git
+    val isTempDir = parsedArgs.localBuild && parsedArgs.path == null || !parsedArgs.localBuild
     val workingDir = when {
         parsedArgs.localBuild -> parsedArgs.path ?: Files.createTempDirectory(TEMP_DIR_NAME)
         else -> Files.createTempDirectory(TEMP_DIR_NAME)
     }
 
-    MinecraftServer.init()
-    val parsedVersion = parsedArgs.version
+    try {
+        MinecraftServer.init()
+        val parsedVersion = parsedArgs.version
 
-    val projectExporter = when (parsedArgs.localBuild) {
-        true -> LocalProjectExporter(workingDir, generators)
-        false -> GitProjectExporter(workingDir, parsedVersion, generators)
+        val projectExporter = when (parsedArgs.localBuild) {
+            true -> LocalProjectExporter(workingDir, generators)
+            false -> GitProjectExporter(workingDir, parsedVersion, generators)
+        }
+
+        projectExporter.export()
+    } finally {
+        if (isTempDir) {
+            workingDir.toFile().deleteRecursively()
+        }
     }
-
-    projectExporter.export()
 }
 
 private fun parseArguments(args: Array<String>): ParsedArgs {
@@ -77,19 +84,33 @@ private fun parseArguments(args: Array<String>): ParsedArgs {
 
             when (commandArg) {
                 CommandArgument.HELP -> showHelp = true
-                CommandArgument.VERSION -> version = args[index + 1]
+                CommandArgument.VERSION -> {
+                    if (index + 1 < args.size) {
+                        version = args[index + 1]
+                    } else {
+                        println("Missing value for argument $argument")
+                    }
+                }
                 CommandArgument.EXPERIMENTAL -> experimental = true
                 CommandArgument.TYPE -> {
-                    val type = args[index + 1]
-                    val exportStrategy = ExportStrategy.fromIdentifier(type)
-                    if (exportStrategy == ExportStrategy.GIT) {
-                        localBuild = false
+                    if (index + 1 < args.size) {
+                        val type = args[index + 1]
+                        val exportStrategy = ExportStrategy.fromIdentifier(type)
+                        if (exportStrategy == ExportStrategy.GIT) {
+                            localBuild = false
+                        }
+                    } else {
+                        println("Missing value for argument $argument")
                     }
                 }
 
                 CommandArgument.PATH -> {
-                    val pathString = args[index + 1]
-                    path = Path.of(pathString)
+                    if (index + 1 < args.size) {
+                        val pathString = args[index + 1]
+                        path = Path.of(pathString)
+                    } else {
+                        println("Missing value for argument $argument")
+                    }
                 }
             }
         }
