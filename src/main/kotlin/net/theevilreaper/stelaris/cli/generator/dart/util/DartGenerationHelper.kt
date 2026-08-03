@@ -11,12 +11,14 @@ import net.theevilreaper.dartpoet.property.PropertySpec
  * @since
  **/
 
-val DEFAULT_PARAMETERS = arrayOf(
-    ParameterSpec.positional("displayName").build(),
-    ParameterSpec.positional("type").build()
-)
+val DEFAULT_PARAMETERS: Array<ParameterSpec>
+    get() = arrayOf(
+        ParameterSpec.positional("displayName").build(),
+        ParameterSpec.positional("type").build()
+    )
 
-val DEFAULT_PROPERTIES = arrayOf(
-    PropertySpec.builder("displayName", String::class).modifier { DartModifier.FINAL }.build(),
-    PropertySpec.builder("type", String::class).modifier { DartModifier.FINAL }.build()
-)
+val DEFAULT_PROPERTIES: Array<PropertySpec>
+    get() = arrayOf(
+        PropertySpec.builder("displayName", String::class).modifier { DartModifier.FINAL }.build(),
+        PropertySpec.builder("type", String::class).modifier { DartModifier.FINAL }.build()
+    )

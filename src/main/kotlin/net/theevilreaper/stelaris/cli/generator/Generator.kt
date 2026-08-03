@@ -13,9 +13,9 @@ interface Generator {
 
     /**
      * Executes the generation process with the implementation-specific logic.
-     * @param javaPath the output directory path where the generated files should be written
+     * @param outputPath the output directory path where the generated files should be written
      */
-    fun generate(javaPath: Path)
+    fun generate(outputPath: Path)
 
     /**
      * Returns the name from the generator.

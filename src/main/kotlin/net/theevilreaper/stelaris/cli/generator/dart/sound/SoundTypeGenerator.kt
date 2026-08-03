@@ -12,12 +12,12 @@ import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
-class SoundTypeGenerator: BaseGenerator(
+class SoundTypeGenerator : BaseGenerator(
     className = "SoundType",
     packageName = "sound"
 ) {
-    override fun generate(javaPath: Path) {
-        val folder = checkPackageFolder(javaPath, packageName)
+    override fun generate(outputPath: Path) {
+        val folder = checkPackageFolder(outputPath, packageName)
 
         val entries = SoundType.entries
         val enumFile = ClassSpec.enumClass(className)
@@ -48,7 +48,7 @@ class SoundTypeGenerator: BaseGenerator(
             }
             .build()
         val file = DartFile.builder("sound_type")
-            .doc("Generated class for the sound sources. Don't edit this file manually")
+            .doc("Generated class for the sound types. Don't edit this file manually")
             .type(enumFile)
             .build()
         file.write(folder)

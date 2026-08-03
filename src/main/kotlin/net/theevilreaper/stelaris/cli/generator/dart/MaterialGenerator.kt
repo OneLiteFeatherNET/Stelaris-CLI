@@ -26,10 +26,10 @@ class MaterialGenerator : BaseGenerator(
 
     /**
      * Generates the enum which contains all values for dart.
-     * @param javaPath the path to store the content
+     * @param outputPath the path to store the content
      */
-    override fun generate(javaPath: Path) {
-        val folder = checkPackageFolder(javaPath, packageName)
+    override fun generate(outputPath: Path) {
+        val folder = checkPackageFolder(outputPath, packageName)
         val models = Material.values()
         val enumFiles = mutableListOf<DartFile>()
 

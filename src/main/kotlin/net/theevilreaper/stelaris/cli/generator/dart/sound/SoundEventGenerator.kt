@@ -19,8 +19,8 @@ class SoundEventGenerator : BaseGenerator(
     packageName = "sound",
 ) {
 
-    override fun generate(javaPath: Path) {
-        val folder = checkPackageFolder(javaPath, packageName)
+    override fun generate(outputPath: Path) {
+        val folder = checkPackageFolder(outputPath, packageName)
         val soundEntries = SoundEvent.values()
         val mappedEntries = SoundHelper.mapSoundEvents(soundEntries)
 
@@ -55,7 +55,7 @@ class SoundEventGenerator : BaseGenerator(
                 )
                 .build()
             val file = DartFile.builder(fileName)
-                .doc("Generated class for the sound sources. Don't edit this file manually")
+                .doc("Generated class for the sound events. Don't edit this file manually")
                 .type(enumClass)
                 .build()
             enumFiles.add(file)

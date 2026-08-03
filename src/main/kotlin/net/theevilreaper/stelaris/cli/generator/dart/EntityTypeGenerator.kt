@@ -19,13 +19,13 @@ class EntityTypeGenerator : BaseGenerator(
     packageName = "entity_type",
 ) {
 
-    override fun generate(javaPath: Path) {
+    override fun generate(outputPath: Path) {
         val models = EntityType.values()
         val enumEntries = mutableListOf<EnumEntrySpec>()
         for (type in models) {
-            val nameWithOutMinecraftPrefix = type.name().replace("minecraft:", EMPTY_STRING)
-            val variableName = StringHelper.toLowerCamelCase(nameWithOutMinecraftPrefix)
-            val name = StringHelper.mapDisplayName(nameWithOutMinecraftPrefix)
+            val nameWithoutMinecraftPrefix = type.name().replace("minecraft:", EMPTY_STRING)
+            val variableName = StringHelper.toLowerCamelCase(nameWithoutMinecraftPrefix)
+            val name = StringHelper.mapDisplayName(nameWithoutMinecraftPrefix)
             enumEntries.add(
                 EnumEntrySpec.builder(variableName)
                     .parameter(EnumParameterSpec.positional("%C", name))
@@ -48,7 +48,7 @@ class EntityTypeGenerator : BaseGenerator(
             .doc("Generated class to represent the available entities from the game Minecraft")
             .type(enumClass)
             .build()
-        file.write(javaPath)
+        file.write(outputPath)
     }
 
     override fun getName() = "EntityTypeGenerator"

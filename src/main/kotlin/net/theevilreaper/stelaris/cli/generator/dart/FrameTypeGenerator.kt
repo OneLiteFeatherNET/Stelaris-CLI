@@ -18,7 +18,7 @@ class FrameTypeGenerator : BaseGenerator(
     packageName = "frame_type",
 ) {
     private val displayEntry: String = "display"
-    override fun generate(javaPath: Path) {
+    override fun generate(outputPath: Path) {
         val enumFile = ClassSpec.enumClass(className)
             .also {
                 FrameType.entries.forEach { model ->
@@ -42,7 +42,7 @@ class FrameTypeGenerator : BaseGenerator(
         val file = DartFile.builder(packageName)
             .type(enumFile)
             .build()
-        file.write(javaPath)
+        file.write(outputPath)
     }
 
     override fun getName() = "FrameTypeGenerator"

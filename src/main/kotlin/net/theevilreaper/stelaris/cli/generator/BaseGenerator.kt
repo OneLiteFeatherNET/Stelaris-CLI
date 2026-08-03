@@ -16,8 +16,6 @@ abstract class BaseGenerator(
     val packageName: String,
 ) : Generator {
 
-    private val filesToGenerate: MutableList<DartFile> = arrayListOf()
-
     private val experimental: Boolean by lazy {
         this.javaClass.isAnnotationPresent(ApiStatus.Experimental::class.java)
     }
@@ -26,17 +24,16 @@ abstract class BaseGenerator(
      * Clears the internal file cache.
      */
     override fun cleanUp() {
-        this.filesToGenerate.clear()
     }
 
     /**
      * Checks if a given package folder exists, if not, it creates it.
-     * @param javaPath the base [Path] where the package folder should be located
+     * @param outputPath the base [Path] where the package folder should be located
      * @param packageName the name of the package
      * @return the [Path] of the package folder
      */
-    protected fun checkPackageFolder(javaPath: Path, packageName: String): Path {
-        val packageFolder = javaPath.resolve(packageName)
+    protected fun checkPackageFolder(outputPath: Path, packageName: String): Path {
+        val packageFolder = outputPath.resolve(packageName)
         if (!Files.exists(packageFolder)) {
             Files.createDirectories(packageFolder)
         }
@@ -45,9 +42,9 @@ abstract class BaseGenerator(
 
     /**
      * Contains the logic of what happens during the generation.
-     * @param javaPath the [Path] where the files should be generated
+     * @param outputPath the [Path] where the files should be generated
      */
-    abstract override fun generate(javaPath: Path)
+    abstract override fun generate(outputPath: Path)
 
     /**
      * Returns the name from the generator.

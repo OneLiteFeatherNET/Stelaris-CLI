@@ -21,9 +21,9 @@ internal object MaterialSubGenerator {
     fun generateBlockMaterialEnum(className: String, materials: List<Material>): ClassBuilder {
         val enumProperties = materials.map {
             val rawName = it.name()
-            val nameWithOutMinecraftPrefix = rawName.replace("minecraft:", EMPTY_STRING)
-            val variableName = StringHelper.toLowerCamelCase(nameWithOutMinecraftPrefix)
-            val name = StringHelper.mapDisplayName(nameWithOutMinecraftPrefix)
+            val nameWithoutMinecraftPrefix = rawName.replace("minecraft:", EMPTY_STRING)
+            val variableName = StringHelper.toLowerCamelCase(nameWithoutMinecraftPrefix)
+            val name = StringHelper.mapDisplayName(nameWithoutMinecraftPrefix)
             EnumEntrySpec.builder(variableName)
                 .parameter(EnumParameterSpec.positional("%C", name))
                 .parameter(EnumParameterSpec.positional("%C", rawName))

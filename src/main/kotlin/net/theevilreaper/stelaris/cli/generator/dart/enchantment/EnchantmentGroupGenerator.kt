@@ -12,14 +12,13 @@ import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
-class EnchantmentGroupGenerator: BaseGenerator(
+class EnchantmentGroupGenerator : BaseGenerator(
     packageName = "enchantment",
     className = "EnchantmentGroup"
 ) {
 
-    override fun generate(javaPath: Path) {
-        val enchantmentFolder = javaPath.resolve(packageName)
-        checkPackageFolder(javaPath, packageName)
+    override fun generate(outputPath: Path) {
+        val enchantmentFolder = checkPackageFolder(outputPath, packageName)
 
         val enumClass = ClassSpec.enumClass(className)
             .apply {
@@ -49,7 +48,7 @@ class EnchantmentGroupGenerator: BaseGenerator(
             .doc("")
             .doc("Enchantments are grouped by the type of items they can be applied to,")
             .doc("making it easier to filter and organize them by use case.")
-            .build();
+            .build()
 
         classFile.write(enchantmentFolder)
     }

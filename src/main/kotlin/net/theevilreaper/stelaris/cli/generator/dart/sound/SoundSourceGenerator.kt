@@ -18,8 +18,8 @@ class SoundSourceGenerator : BaseGenerator(
     packageName = "sound"
 ) {
 
-    override fun generate(javaPath: Path) {
-        val folder = checkPackageFolder(javaPath, packageName)
+    override fun generate(outputPath: Path) {
+        val folder = checkPackageFolder(outputPath, packageName)
 
         val soundSourceEntries = Sound.Source.entries
         val enumProperties = soundSourceEntries.map {
