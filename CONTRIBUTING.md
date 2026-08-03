@@ -18,14 +18,14 @@ Before you contribute to the project:
 ## Development Setup
 
 1. Ensure you have the following installed:
-    - JDK 21 or later
+    - JDK 25 or later
     - Gradle
     - Kotlin
     - Git
 
 2. Clone the repository locally and set up the development environment:
    ```bash
-   git clone https://github.com/yourusername/stelaris-cli.git
+   git clone https://github.com/OneLiteFeatherNET/Stelaris-CLI.git
    cd stelaris-cli
    ./gradlew build
    ```
