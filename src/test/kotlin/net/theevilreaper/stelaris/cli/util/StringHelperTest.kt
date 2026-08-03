@@ -21,11 +21,25 @@ class StringHelperTest {
                 "This is a test"
             )
         )
+        @JvmStatic
+        private fun providedCamelCaseNames() = Stream.of(
+            Arguments.of("test_name", "testName"),
+            Arguments.of("HELL_WORLD", "hellWorld"),
+            Arguments.of("single", "single"),
+            Arguments.of("", ""),
+            Arguments.of("multiple__underscores", "multipleUnderscores")
+        )
     }
 
     @ParameterizedTest(name = "Test display name mapping for {0}")
     @MethodSource("providedDisplayNames")
     fun `test display name mapping`(rawName: String, expected: String) {
         assertEquals(expected, StringHelper.mapDisplayName(rawName))
+    }
+
+    @ParameterizedTest(name = "Test camel case conversion for {0}")
+    @MethodSource("providedCamelCaseNames")
+    fun `test camel case conversion`(rawName: String, expected: String) {
+        assertEquals(expected, StringHelper.toLowerCamelCase(rawName))
     }
 }
