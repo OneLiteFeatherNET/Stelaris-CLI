@@ -38,7 +38,7 @@ abstract class BaseGenerator(
     protected fun checkPackageFolder(javaPath: Path, packageName: String): Path {
         val packageFolder = javaPath.resolve(packageName)
         if (!Files.exists(packageFolder)) {
-            Files.createDirectory(packageFolder)
+            Files.createDirectories(packageFolder)
         }
         return packageFolder
     }

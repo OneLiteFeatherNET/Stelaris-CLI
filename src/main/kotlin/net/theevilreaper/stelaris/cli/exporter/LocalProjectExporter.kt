@@ -11,10 +11,10 @@ class LocalProjectExporter(
 
     override fun export() {
         if (!Files.exists(exportPath)) {
-            Files.createDirectory(exportPath)
+            Files.createDirectories(exportPath)
         }
         val libPath: Path = exportPath.resolve("lib")
-        if (!Files.exists(libPath)) Files.createDirectory(libPath)
+        if (!Files.exists(libPath)) Files.createDirectories(libPath)
         generators.forEach { generator -> generator.generate(libPath) }
     }
 }
