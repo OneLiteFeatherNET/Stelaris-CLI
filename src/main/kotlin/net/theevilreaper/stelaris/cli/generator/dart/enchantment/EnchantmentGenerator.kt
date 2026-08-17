@@ -5,7 +5,6 @@ import net.minestom.server.MinecraftServer
 import net.minestom.server.item.enchant.Enchantment
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartModifier
-import net.theevilreaper.dartpoet.InheritKeyword
 import net.theevilreaper.dartpoet.clazz.ClassSpec
 import net.theevilreaper.dartpoet.constructor.ConstructorSpec
 import net.theevilreaper.dartpoet.directive.DirectiveFactory
@@ -54,7 +53,7 @@ class EnchantmentGenerator : BaseGenerator(
             val updatedClassName = "${group.classPart.replaceFirstChar { it.uppercase() }}$className"
 
             val enumClass = ClassSpec.enumClass(updatedClassName)
-                .superClass(ClassName("Enchantment"), InheritKeyword.IMPLEMENTS)
+                .superClass(ClassName("Enchantment"))
                 .enumProperties(*properties.toTypedArray())
                 .properties(*CLASS_PROPERTIES)
                 .constructor {
