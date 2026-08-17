@@ -3,6 +3,7 @@ rootProject.name = "stelaris-cli"
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
+        maven("https://repo.onelitefeather.dev/releases")
         maven("https://oss.sonatype.org/content/repositories/snapshots/")
         maven {
             name = "OneLiteFeatherRepository"
@@ -25,7 +26,7 @@ dependencyResolutionManagement {
             version("kotlin", "2.4.10")
             version("bom", "1.8.2")
             version("junit", "6.1.3")
-            version("dartpoet", "1.1.0")
+            version("dartpoet", "2.2.0")
             version("guava", "33.6.0-jre")
             version("jgit", "7.7.1.202607240634-r")
             version("shadow", "9.6.1")
