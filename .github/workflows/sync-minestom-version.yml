@@ -1,0 +1,94 @@
+name: Sync Minestom Version
+
+# Minestom arrives through the mycelium-bom without a version of its own, so a
+# BOM bump can silently change which Minecraft version the CLI generates data
+# for. This mirrors the resolved version into `minestom.version` and, when it
+# actually moved, generates the Dart package for it.
+#
+# The generation runs as a job in THIS run on purpose: a commit pushed with
+# GITHUB_TOKEN does not start another workflow, so a separate workflow watching
+# `minestom.version` would never fire.
+on:
+  push:
+    branches: [develop]
+    paths:
+      - settings.gradle.kts
+      - build.gradle.kts
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-minestom-version
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Mirror the resolved Minestom version
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.resolve.outputs.changed }}
+      sha: ${{ steps.commit.outputs.sha }}
+    env:
+      ONELITEFEATHER_MAVEN_USERNAME: ${{ secrets.ONELITEFEATHER_MAVEN_USERNAME }}
+      ONELITEFEATHER_MAVEN_PASSWORD: ${{ secrets.ONELITEFEATHER_MAVEN_PASSWORD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Resolve Minestom version
+        id: resolve
+        run: |
+          resolved=$(./gradlew -q resolveMinestomVersion | tail -n 1)
+          declared=$(tr -d '[:space:]' < minestom.version)
+
+          # Actions runs `run:` without pipefail, so a failing Gradle leaves
+          # $resolved empty with a zero exit status - which would commit an
+          # empty mirror file.
+          if [ -z "$resolved" ]; then
+            echo "::error::Could not resolve the Minestom version"
+            exit 1
+          fi
+
+          echo "minestom-version=$resolved" >> "$GITHUB_OUTPUT"
+
+          if [ "$declared" = "$resolved" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Minestom unchanged at \`$resolved\`" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "$resolved" > minestom.version
+            echo "Minestom \`$declared\` -> \`$resolved\`" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Commit minestom.version
+        id: commit
+        if: steps.resolve.outputs.changed == 'true'
+        env:
+          RESOLVED: ${{ steps.resolve.outputs.minestom-version }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add minestom.version
+          git commit -m "chore(minestom): sync resolved version to $RESOLVED"
+          git push
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  generate:
+    name: Generate the Dart project
+    needs: sync
+    if: needs.sync.outputs.changed == 'true'
+    uses: ./.github/workflows/generate-dart-project.yml
+    with:
+      ref: ${{ needs.sync.outputs.sha }}
+    secrets: inherit

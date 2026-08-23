@@ -10,12 +10,29 @@ and transformed into Dart files using the code generation library [DartPoet](htt
 
 ### Versioning
 
-For each call of the CLI, a new version tag is created for the generated files. To improve the identification which
-version is related for which Minecraft version, the versioning schema follows the one of Minecraft with the addition of
-a `-rv` tag. If a version for a specific Minecraft version is generated again, the revision tag will be incremented.
+The generated files are versioned after the Minecraft version they describe, with a `-rev` suffix that is incremented
+whenever the same Minecraft version is generated again (e.g. `26.2-rev1`, then `26.2-rev2`). This makes it possible to
+tell which generated package belongs to which Minecraft version, and which of them is the most recent one.
 
-An example of a version tag would be `1.17.1-rv1`. This helps to identify the latest version for a specific Minecraft
-version. If a new version is available, the revision tag will be incremented (e.g., `1.17.1-rv2`).
+Note that this is unrelated to the version of the CLI itself, which is a normal SemVer version managed by
+release-please.
+
+#### Where the Minecraft version comes from
+
+The CLI generates whatever the Minestom version on its classpath exposes, and Minestom arrives without a version of its
+own through the `mycelium-bom`. A bump of that BOM can therefore change the Minecraft version silently. The file
+`minestom.version` mirrors the version the dependency graph actually resolves to - the second half of a Minestom
+version string is the Minecraft version:
+
+```
+2026.08.16-26.2
+           ^^^^ Minecraft version
+```
+
+The `Sync Minestom Version` workflow keeps that mirror up to date and, whenever it moves, generates and pushes the Dart
+package for the new version. `./gradlew resolveMinestomVersion` prints the same value locally. To re-push a version by
+hand, run the `Generate Dart Project` workflow - it always takes the Minecraft version from `minestom.version` and
+refuses to run if that file has gone stale.
 
 ### Usage
 

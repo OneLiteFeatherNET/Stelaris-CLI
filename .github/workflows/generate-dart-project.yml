@@ -1,0 +1,120 @@
+name: Generate Dart Project
+
+# Generates the Dart data package and pushes it to the target repository.
+#
+# The Minecraft version the CLI is invoked with is NOT the CLI's own release
+# version - it identifies the game data being generated, and it always comes
+# from `minestom.version`, which mirrors whatever Minestom the dependency graph
+# resolves to. That is why this is not part of the release workflow.
+on:
+  workflow_dispatch:
+    inputs:
+      experimental:
+        description: 'Enable experimental generators'
+        required: false
+        default: true
+        type: boolean
+  workflow_call:
+    inputs:
+      ref:
+        description: 'Commit to generate from - must contain an up-to-date minestom.version'
+        required: true
+        type: string
+      experimental:
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+# Two runs pushing into the same target repository would race each other.
+concurrency:
+  group: generate-dart-project
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    name: Generate and push the Dart project
+    runs-on: ubuntu-latest
+    env:
+      ONELITEFEATHER_MAVEN_USERNAME: ${{ secrets.ONELITEFEATHER_MAVEN_USERNAME }}
+      ONELITEFEATHER_MAVEN_PASSWORD: ${{ secrets.ONELITEFEATHER_MAVEN_PASSWORD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Build JAR gradle project
+        run: ./gradlew build
+
+      # `minestom.version` is a mirror, so it can go stale - a manual run on a
+      # commit whose BOM has moved on would otherwise label the generated data
+      # with a Minecraft version it was not generated from.
+      - name: Verify minestom.version matches the resolved dependency
+        id: version
+        run: |
+          declared=$(tr -d '[:space:]' < minestom.version)
+          resolved=$(./gradlew -q resolveMinestomVersion | tail -n 1)
+
+          if [ -z "$resolved" ]; then
+            echo "::error::Could not resolve the Minestom version"
+            exit 1
+          fi
+
+          if [ "$declared" != "$resolved" ]; then
+            echo "::error::minestom.version says '$declared' but the runtime classpath resolves to '$resolved'. Run the Sync Minestom Version workflow first."
+            exit 1
+          fi
+
+          # Minestom versions are <date>-<minecraft-version>, e.g. 2026.08.16-26.2
+          minecraft="${declared#*-}"
+          if [ -z "$minecraft" ] || [ "$minecraft" = "$declared" ]; then
+            echo "::error::Cannot derive a Minecraft version from '$declared'"
+            exit 1
+          fi
+
+          echo "minecraft=$minecraft" >> "$GITHUB_OUTPUT"
+          echo "Minestom $declared -> Minecraft $minecraft" >> "$GITHUB_STEP_SUMMARY"
+
+      # The revision counter used to come from hand-written CLI tags
+      # (v1.21.8-rev2). Those are gone now that release-please owns the tags, so
+      # it is counted from what already landed in the target repository.
+      - name: Determine revision
+        id: revision
+        env:
+          GH_TOKEN: ${{ secrets.DART_REPO_TOKEN }}
+          TARGET_REPOSITORY: ${{ secrets.TARGET_REPOSITORY }}
+          MINECRAFT: ${{ steps.version.outputs.minecraft }}
+        run: |
+          existing=$(gh api "repos/$TARGET_REPOSITORY/commits" --paginate \
+            --jq '.[].commit.message | split("\n")[0]' \
+            | grep -c "^Update version to ${MINECRAFT}-rev" || true)
+
+          echo "version=${MINECRAFT}-rev$((existing + 1))" >> "$GITHUB_OUTPUT"
+
+      - name: Run Stelaris CLI
+        env:
+          stelaris.cli.username: 'stelaris-bot'
+          stelaris.cli.password: ${{ secrets.DART_REPO_TOKEN }}
+          stelaris.cli.cloneUrl: https://github.com/${{ secrets.TARGET_REPOSITORY }}.git
+          VERSION: ${{ steps.revision.outputs.version }}
+          EXPERIMENTAL: ${{ inputs.experimental }}
+        run: |
+          args=(-version "$VERSION" -type git)
+          if [ "$EXPERIMENTAL" = "true" ]; then
+            args+=(-experimental)
+          fi
+          java -jar build/libs/stelaris-cli.jar "${args[@]}"
+
+          echo "Pushed \`$VERSION\`" >> "$GITHUB_STEP_SUMMARY"
