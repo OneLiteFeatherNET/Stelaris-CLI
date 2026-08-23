@@ -1,0 +1,51 @@
+name: Release SBOM
+
+# Attaches a CycloneDX SBOM to a published GitHub release. This used to be a job
+# in the release-please run, gated on release_created.
+#
+# It listens for `release: published` rather than the tag push: uploading an
+# asset needs a release to exist, and a tag alone does not create one. Releases
+# cut by hand or with `gh release create` fire this normally - the GITHUB_TOKEN
+# restriction that forced the old chaining only applied to release-please's own
+# tags.
+#
+# security.yml builds the same SBOM as a plain artifact on every push; this one
+# exists so a release carries its inventory with it.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to attach the SBOM to'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  sbom:
+    name: Attach SBOM to release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag || github.event.release.tag_name }}
+
+      - name: Generate CycloneDX SBOM
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: cyclonedx
+          output: bom.json
+          # An SBOM is an inventory, not a finding list - never fail on it.
+          exit-code: '0'
+
+      - name: Attach SBOM to the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag || github.event.release.tag_name }}
+        run: gh release upload "$TAG" bom.json --clobber

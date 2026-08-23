@@ -1,0 +1,85 @@
+name: Generate and Upload Dart Project
+
+# A tag carries the full version of the generated data - Minecraft version plus
+# revision, e.g. v26.2-rev3 - and pushing one generates and uploads the Dart
+# project for exactly that version.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+# Two runs pushing into the same target repository would race each other.
+concurrency:
+  group: generate-dart-project
+  cancel-in-progress: false
+
+jobs:
+  generate-and-push:
+    name: Generate and push the Dart project
+    runs-on: ubuntu-latest
+    env:
+      ONELITEFEATHER_MAVEN_USERNAME: ${{ secrets.ONELITEFEATHER_MAVEN_USERNAME }}
+      ONELITEFEATHER_MAVEN_PASSWORD: ${{ secrets.ONELITEFEATHER_MAVEN_PASSWORD }}
+    steps:
+      - name: Checkout stelaris-cli repository
+        uses: actions/checkout@v7
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Build JAR gradle project
+        run: ./gradlew build
+
+      # Which Minecraft version the CLI generates for is decided by the Minestom
+      # version on its classpath, which arrives without a version of its own
+      # through the mycelium-bom - a BOM bump can change it silently. A tag, on
+      # the other hand, is typed by hand. Generating 26.2 data and pushing it as
+      # 1.21.8 would be invisible afterwards: the commit message is all the
+      # target repository records.
+      - name: Verify the tag against the resolved Minestom version
+        id: version
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          resolved=$(./gradlew -q resolveMinestomVersion | tail -n 1)
+
+          # Actions runs `run:` without pipefail, so a failing Gradle would
+          # otherwise leave $resolved empty with a zero exit status.
+          if [ -z "$resolved" ]; then
+            echo "::error::Could not resolve the Minestom version"
+            exit 1
+          fi
+
+          # Minestom versions are <date>-<minecraft-version>: 2026.08.16-26.2
+          built_minecraft="${resolved#*-}"
+          if [ "$built_minecraft" = "$resolved" ]; then
+            echo "::error::Cannot derive a Minecraft version from '$resolved'"
+            exit 1
+          fi
+
+          # v26.2-rev3 -> 26.2
+          tag_minecraft="${version%%-rev*}"
+
+          if [ "$tag_minecraft" != "$built_minecraft" ]; then
+            echo "::error::Tag '$GITHUB_REF_NAME' names Minecraft $tag_minecraft, but Minestom $resolved generates $built_minecraft data"
+            exit 1
+          fi
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Minestom \`$resolved\` -> pushing \`$version\`" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Run Stelaris CLI
+        env:
+          stelaris.cli.username: 'stelaris-bot'
+          stelaris.cli.password: ${{ secrets.DART_REPO_TOKEN }}
+          stelaris.cli.cloneUrl: https://github.com/${{ secrets.TARGET_REPOSITORY }}.git
+          VERSION: ${{ steps.version.outputs.version }}
+        run: java -jar build/libs/stelaris-cli.jar -version "$VERSION" -type git -experimental

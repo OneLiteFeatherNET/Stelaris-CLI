@@ -1,3 +1,5 @@
+import org.gradle.api.artifacts.result.ResolvedDependencyResult
+
 plugins {
     jacoco
     application
@@ -6,7 +8,7 @@ plugins {
 }
 
 group = "net.theevilreaper"
-version = "1.21.8" // x-release-please-version
+version = "1.21.8"
 
 kotlin {
     jvmToolchain(25)
@@ -28,6 +30,29 @@ dependencies {
 
 application {
     mainClass.set("net.theevilreaper.stelaris.cli.StelarisCLIKt")
+}
+
+// The Minecraft data the CLI generates comes from whatever Minestom version the
+// dependency graph resolves to - which is the mycelium-bom's choice, not
+// anything written down in this repo. This task makes it visible, so a release
+// tag can be checked against the version it actually generates for.
+val resolvedMinestomVersion: Provider<String> = configurations.named("runtimeClasspath").flatMap { configuration ->
+    configuration.incoming.resolutionResult.rootComponent.map { root ->
+        root.dependencies
+            .filterIsInstance<ResolvedDependencyResult>()
+            .mapNotNull { it.selected.moduleVersion }
+            .firstOrNull { it.group == "net.minestom" && it.name == "minestom" }
+            ?.version
+            ?: error("net.minestom:minestom is not on the runtime classpath")
+    }
+}
+
+tasks.register("resolveMinestomVersion") {
+    description = "Prints the Minestom version the runtime classpath resolves to."
+    val minestomVersion = resolvedMinestomVersion
+    doLast {
+        println(minestomVersion.get())
+    }
 }
 
 tasks {
