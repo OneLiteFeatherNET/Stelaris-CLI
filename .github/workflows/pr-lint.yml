@@ -1,8 +1,8 @@
 name: PR Lint
 
 # Conventional Commits on the PR title and every commit on the branch.
-# release-please parses those commit types to decide the version bump and to
-# build the changelog - a non-conventional commit silently produces neither.
+# Keeps the history readable and greppable by change type, and keeps the door
+# open for generating a changelog from it later.
 on:
   pull_request:
     types: [opened, edited, synchronize, reopened]
