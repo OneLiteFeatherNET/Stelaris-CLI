@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "net.theevilreaper"
-version = "1.21.8" // x-release-please-version
+version = "2.0.0" // x-release-please-version
 
 kotlin {
     jvmToolchain(25)
