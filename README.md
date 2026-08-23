@@ -10,12 +10,26 @@ and transformed into Dart files using the code generation library [DartPoet](htt
 
 ### Versioning
 
-For each call of the CLI, a new version tag is created for the generated files. To improve the identification which
-version is related for which Minecraft version, the versioning schema follows the one of Minecraft with the addition of
-a `-rv` tag. If a version for a specific Minecraft version is generated again, the revision tag will be incremented.
+The generated files are versioned after the Minecraft version they describe, with a `-rev` suffix that is incremented
+whenever the same Minecraft version is generated again (e.g. `26.2-rev1`, then `26.2-rev2`). This makes it possible to
+tell which generated package belongs to which Minecraft version, and which of them is the most recent one.
 
-An example of a version tag would be `1.17.1-rv1`. This helps to identify the latest version for a specific Minecraft
-version. If a new version is available, the revision tag will be incremented (e.g., `1.17.1-rv2`).
+#### Generating a version
+
+Pushing a tag of the form `v<minecraft-version>-rev<n>` (e.g. `v26.2-rev3`) generates the Dart project and pushes it to
+the data repository under that version.
+
+Which Minecraft version the CLI can actually generate for is not a free choice: it is decided by the Minestom version on
+its classpath, and Minestom arrives without a version of its own through the `mycelium-bom`, so a bump of that BOM can
+change it silently. The second half of a Minestom version string is the Minecraft version:
+
+```
+2026.08.16-26.2
+           ^^^^ Minecraft version
+```
+
+`./gradlew resolveMinestomVersion` prints the current one. The tag is checked against it before anything is pushed, so a
+tag naming a Minecraft version the build does not generate for fails instead of silently mislabelling the data.
 
 ### Usage
 
