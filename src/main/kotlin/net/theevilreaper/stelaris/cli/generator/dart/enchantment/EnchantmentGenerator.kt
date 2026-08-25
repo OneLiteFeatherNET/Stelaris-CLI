@@ -17,6 +17,7 @@ import net.theevilreaper.stelaris.cli.generator.dart.util.CLASS_PROPERTIES
 import net.theevilreaper.stelaris.cli.generator.dart.util.CONSTRUCTOR_PARAMETERS
 import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
 import net.theevilreaper.stelaris.cli.util.StringHelper
+import java.nio.file.Files
 import java.nio.file.Path
 
 /**
@@ -53,7 +54,7 @@ class EnchantmentGenerator : BaseGenerator(
             val updatedClassName = "${group.classPart.replaceFirstChar { it.uppercase() }}$className"
 
             val enumClass = ClassSpec.enumClass(updatedClassName)
-                .superClass(ClassName("Enchantment"))
+                .implements(ClassName("Enchantment"))
                 .enumProperties(*properties.toTypedArray())
                 .properties(*CLASS_PROPERTIES)
                 .constructor {
