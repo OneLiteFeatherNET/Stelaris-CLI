@@ -1,0 +1,36 @@
+package net.theevilreaper.stelaris.cli.generator.dart.world
+
+import net.theevilreaper.stelaris.cli.generator.GenerationTestBase
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+
+class DifficultyGeneratorTest : GenerationTestBase() {
+
+    @Test
+    fun `test difficulty generation`() {
+        val generator = DifficultyGenerator()
+        assertEquals("DifficultyGenerator", generator.getName())
+
+        generator.generate(generationPath)
+
+        val folder = generationPath.resolve("world").toFile()
+        assertTrue(folder.exists(), "Expected generated folder to exist")
+        val generatedFiles = folder.listFiles()
+        assertNotNull(generatedFiles)
+        assertEquals(1, generatedFiles!!.size, "Expected exactly one file to be generated")
+
+        val generatedFile = generatedFiles.first()
+        assertEquals("difficulty.dart", generatedFile.name)
+
+        val content = generatedFile.readText()
+        assertTrue(content.contains("enum Difficulty"), "Generated file should declare Difficulty enum")
+        assertTrue(content.contains("final String displayName;"))
+        assertTrue(content.contains("final int id;"))
+        assertTrue(content.contains("peaceful('Peaceful', 0)"))
+        assertTrue(content.contains("easy('Easy', 1)"))
+        assertTrue(content.contains("normal('Normal', 2)"))
+        assertTrue(content.contains("hard('Hard', 3)"))
+    }
+}
