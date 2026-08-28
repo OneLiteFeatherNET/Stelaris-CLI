@@ -1,78 +1,45 @@
 package net.theevilreaper.stelaris.cli.generator
 
-import net.theevilreaper.stelaris.cli.generator.dart.*
-import net.theevilreaper.stelaris.cli.generator.dart.banner.BannerPatternGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarColorGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarFlagGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarOverlayGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.color.DyeColorGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.damage.DamageTypeGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.enchantment.EnchantmentGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.enchantment.EnchantmentGroupGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.entity.variant.EntityVariantGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.item.*
-import net.theevilreaper.stelaris.cli.generator.dart.painting.PaintingVariantGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundEventGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundSourceGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundTypeGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.villager.VillagerTypeGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.world.BiomeGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.world.DifficultyGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.world.DimensionTypeGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.world.GameModeGenerator
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 /**
- * The [GeneratorRegistry] holds all available generators which can be used to generate dart files.
+ * The [GeneratorRegistry] holds a descriptor for every available generator.
+ *
+ * The descriptors are contributed by the [GeneratorModule] and carry the metadata of each
+ * generator. Selecting generators therefore does not require creating them: only the descriptors
+ * which pass the given filter are turned into instances.
  * @version 1.0.0
  * @since 1.0.0
- * @property generators the set of all available generators
+ * @property descriptors the descriptors of all available generators
  * @author theEvilReaper
  */
-class GeneratorRegistry {
+@Singleton
+class GeneratorRegistry @Inject constructor(
+    private val descriptors: Set<@JvmSuppressWildcards GeneratorDescriptor>,
+) {
 
-    private val generators: Set<Generator> = setOf(
-        BannerPatternGenerator(),
-        BiomeGenerator(),
-        BossBarColorGenerator(),
-        BossBarFlagGenerator(),
-        BossBarOverlayGenerator(),
-        DamageTypeGenerator(),
-        DifficultyGenerator(),
-        DimensionTypeGenerator(),
-        DyeColorGenerator(),
-        EnchantmentGenerator(),
-        EnchantmentGroupGenerator(),
-        EntityTypeGenerator(),
-        EntityVariantGenerator(),
-        FireworkShapeGenerator(),
-        FrameTypeGenerator(),
-        GameModeGenerator(),
-        InstrumentGenerator(),
-        ItemRarityGenerator(),
-        JukeboxSongGenerator(),
-        MaterialGenerator(),
-        MapPostProcessingGenerator(),
-        PaintingVariantGenerator(),
-        SoundSourceGenerator(),
-        SoundEventGenerator(),
-        SoundTypeGenerator(),
-        TrimMaterialGenerator(),
-        TrimPatternGenerator(),
-        VillagerTypeGenerator()
-    )
+    init {
+        check(descriptors.isNotEmpty()) {
+            "No generators were discovered. When running from the shadow jar this usually means " +
+                "mergeServiceFiles() is missing from the shadowJar task"
+        }
+        val duplicates = descriptors.groupBy { it.name }.filterValues { it.size > 1 }.keys
+        check(duplicates.isEmpty()) { "Duplicate generator names: ${duplicates.joinToString()}" }
+    }
 
     /**
-     * Returns all available generators from the registry
-     * @return a set of all available generators
+     * Returns the descriptors of all available generators.
+     * @return a set of all available descriptors
      */
-    fun getGenerators(): Set<Generator> = generators
+    fun getDescriptors(): Set<GeneratorDescriptor> = descriptors
 
     /**
-     * Returns all available generators that match the given predicate
-     * @param predicate the predicate to filter the generators
-     * @return a set of all available generators which match the predicate
+     * Creates the generators whose descriptor matches the given predicate.
+     * @param predicate the predicate to filter the descriptors
+     * @return a set with an instance of every matching generator
      */
-    fun getGenerators(predicate: (Generator) -> Boolean): Set<Generator> {
-        return generators.filter { predicate(it) }.toSet()
+    fun createGenerators(predicate: (GeneratorDescriptor) -> Boolean = { true }): Set<Generator> {
+        return descriptors.filter(predicate).map { it.create() }.toSet()
     }
 }
