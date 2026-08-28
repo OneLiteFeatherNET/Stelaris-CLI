@@ -16,6 +16,10 @@ import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundEventGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundSourceGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundTypeGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.villager.VillagerTypeGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.world.BiomeGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.world.DifficultyGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.world.DimensionTypeGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.world.GameModeGenerator
 
 /**
  * The [GeneratorRegistry] holds all available generators which can be used to generate dart files.
@@ -28,10 +32,13 @@ class GeneratorRegistry {
 
     private val generators: Set<Generator> = setOf(
         BannerPatternGenerator(),
+        BiomeGenerator(),
         BossBarColorGenerator(),
         BossBarFlagGenerator(),
         BossBarOverlayGenerator(),
         DamageTypeGenerator(),
+        DifficultyGenerator(),
+        DimensionTypeGenerator(),
         DyeColorGenerator(),
         EnchantmentGenerator(),
         EnchantmentGroupGenerator(),
@@ -39,6 +46,7 @@ class GeneratorRegistry {
         EntityVariantGenerator(),
         FireworkShapeGenerator(),
         FrameTypeGenerator(),
+        GameModeGenerator(),
         InstrumentGenerator(),
         ItemRarityGenerator(),
         JukeboxSongGenerator(),
