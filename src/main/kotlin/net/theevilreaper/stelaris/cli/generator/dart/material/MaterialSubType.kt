@@ -12,4 +12,9 @@ enum class MaterialSubType(val type: String) {
 
     BLOCK("block"),
     ARMOR("armor"),
+    TOOL("tool"),
+    WEAPON("weapon"),
+    FOOD("food"),
+    DYE("dye"),
+    SPAWN_EGG("spawn_egg")
 }

@@ -1,11 +1,13 @@
 package net.theevilreaper.stelaris.cli.generator.dart
 
+import net.minestom.server.component.DataComponents
 import net.minestom.server.item.Material
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.clazz.ClassSpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.material.MaterialSubGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.material.MaterialSubType
+import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
 /**
@@ -50,14 +52,21 @@ class MaterialGenerator : BaseGenerator(
     }
 
     private fun mapTypeToBoolean(subType: MaterialSubType, material: Material): Boolean {
+        val prototype = material.prototype()
         return when (subType) {
-            MaterialSubType.BLOCK -> material.isBlock
-            MaterialSubType.ARMOR -> material.isArmor
+            MaterialSubType.BLOCK -> material.block() != null
+            MaterialSubType.ARMOR -> material.equipmentSlot()?.isArmor == true
+            MaterialSubType.TOOL -> prototype.has(DataComponents.TOOL)
+            MaterialSubType.WEAPON -> prototype.has(DataComponents.WEAPON)
+            MaterialSubType.FOOD -> prototype.has(DataComponents.FOOD)
+            MaterialSubType.DYE -> prototype.has(DataComponents.DYE)
+            MaterialSubType.SPAWN_EGG -> material.name().endsWith("_spawn_egg")
         }
     }
 
     private fun translateEnumClassName(materialSubType: MaterialSubType): String {
-        return "${materialSubType.type.replaceFirstChar { it.uppercase() }}$materialClassName"
+        val prefix = StringHelper.toLowerCamelCase(materialSubType.type).replaceFirstChar { it.uppercase() }
+        return "$prefix$materialClassName"
     }
 
     private inline fun generateItemEnum(
