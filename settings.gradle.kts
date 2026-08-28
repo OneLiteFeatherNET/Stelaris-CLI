@@ -30,6 +30,7 @@ dependencyResolutionManagement {
             version("guava", "33.7.1-jre")
             version("jgit", "7.7.1.202607240634-r")
             version("shadow", "9.6.1")
+            version("ksp", "2.3.11")
 
             library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
             library("minestom", "net.minestom", "minestom").withoutVersion()
@@ -42,8 +43,13 @@ dependencyResolutionManagement {
             library("junit.jupiter.engine", "org.junit.jupiter", "junit-jupiter-engine").versionRef("junit")
             library("junit.platform.launcher", "org.junit.platform", "junit-platform-launcher").version("6.1.3")
 
+            library("google.guice", "com.google.inject", "guice").version("7.0.0")
+            library("autoservice.annotations", "com.google.auto.service", "auto-service-annotations").version("1.1.1")
+            library("autoservice.ksp", "dev.zacsweers.autoservice", "auto-service-ksp").version("1.2.0")
+
             plugin("kotlin", "org.jetbrains.kotlin.jvm").versionRef("kotlin")
             plugin("shadow", "com.gradleup.shadow").versionRef("shadow")
+            plugin("ksp", "com.google.devtools.ksp").versionRef("ksp")
         }
     }
 }
