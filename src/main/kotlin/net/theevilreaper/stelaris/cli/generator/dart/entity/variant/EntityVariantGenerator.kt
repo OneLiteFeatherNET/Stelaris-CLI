@@ -1,5 +1,6 @@
 package net.theevilreaper.stelaris.cli.generator.dart.entity.variant
 
+import com.google.auto.service.AutoService
 import net.minestom.server.entity.metadata.animal.FoxMeta
 import net.minestom.server.entity.metadata.animal.MooshroomMeta
 import net.minestom.server.entity.metadata.animal.RabbitMeta
@@ -15,9 +16,13 @@ import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.dartpoet.parameter.ParameterSpec
 import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
+import net.theevilreaper.stelaris.cli.generator.CodeGenerator
+import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
+@AutoService(Generator::class)
+@CodeGenerator(name = "EntityVariantGenerator")
 class EntityVariantGenerator : BaseGenerator(
     className = "EntityVariant",
     packageName = "entity/variant",
@@ -164,6 +169,4 @@ class EntityVariantGenerator : BaseGenerator(
             .type(enumClass)
             .build()
     }
-
-    override fun getName() = "EntityVariantGenerator"
 }

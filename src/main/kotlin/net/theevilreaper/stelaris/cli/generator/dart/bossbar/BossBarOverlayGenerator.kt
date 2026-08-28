@@ -1,5 +1,6 @@
 package net.theevilreaper.stelaris.cli.generator.dart.bossbar
 
+import com.google.auto.service.AutoService
 import net.kyori.adventure.bossbar.BossBar
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartModifier
@@ -8,11 +9,15 @@ import net.theevilreaper.dartpoet.constructor.ConstructorSpec
 import net.theevilreaper.dartpoet.enum.EnumEntrySpec
 import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
+import net.theevilreaper.stelaris.cli.generator.CodeGenerator
+import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PARAMETERS
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PROPERTIES
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
+@AutoService(Generator::class)
+@CodeGenerator(name = "BossBarOverlayGenerator")
 class BossBarOverlayGenerator : BaseGenerator(
     className = "BossBarOverlay",
     packageName = "bossbar"
@@ -48,6 +53,4 @@ class BossBarOverlayGenerator : BaseGenerator(
             .build()
         file.write(folder)
     }
-
-    override fun getName(): String = "BossBarOverlayGenerator"
 }
