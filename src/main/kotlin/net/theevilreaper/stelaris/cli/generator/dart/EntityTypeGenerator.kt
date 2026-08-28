@@ -2,53 +2,60 @@ package net.theevilreaper.stelaris.cli.generator.dart
 
 import net.minestom.server.entity.EntityType
 import net.theevilreaper.dartpoet.DartFile
-import net.theevilreaper.dartpoet.DartModifier
 import net.theevilreaper.dartpoet.clazz.ClassSpec
-import net.theevilreaper.dartpoet.constructor.ConstructorSpec
-import net.theevilreaper.dartpoet.enum.EnumEntrySpec
-import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PARAMETERS
-import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PROPERTIES
-import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
+import net.theevilreaper.stelaris.cli.generator.dart.entity.EntitySubGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.entity.EntitySubType
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
 class EntityTypeGenerator : BaseGenerator(
-    className = "EntityType",
-    packageName = "entity_type",
+    className = "Entities",
+    packageName = "entities",
 ) {
 
-    override fun generate(outputPath: Path) {
-        val models = EntityType.values()
-        val enumEntries = mutableListOf<EnumEntrySpec>()
-        for (type in models) {
-            val nameWithoutMinecraftPrefix = type.name().replace("minecraft:", EMPTY_STRING)
-            val variableName = StringHelper.toLowerCamelCase(nameWithoutMinecraftPrefix)
-            val name = StringHelper.mapDisplayName(nameWithoutMinecraftPrefix)
-            enumEntries.add(
-                EnumEntrySpec.builder(variableName)
-                    .parameter(EnumParameterSpec.positional("%C", name))
-                    .parameter(EnumParameterSpec.positional("%C", type.name()))
-                    .build()
-            )
-        }
-        val enumClass = ClassSpec.enumClass(className)
-            .properties(*DEFAULT_PROPERTIES)
-            .enumProperties(*enumEntries.toTypedArray())
-            .constructor(
-                ConstructorSpec.builder(className)
-                    .modifier(DartModifier.CONST)
-                    .parameters(*DEFAULT_PARAMETERS)
-                    .build()
-            )
-            .build()
+    private val entityClassName = "EntityType"
+    private val classDocumentation = "The file is generated. Don't change anything here"
 
-        val file = DartFile.builder(packageName)
-            .doc("Generated class to represent the available entities from the game Minecraft")
-            .type(enumClass)
-            .build()
-        file.write(outputPath)
+    init {
+        check(className.trim().isNotEmpty()) { "The class name can't be empty" }
+    }
+
+    override fun generate(outputPath: Path) {
+        val folder = checkPackageFolder(outputPath, packageName)
+        val models = EntityType.values()
+        val enumFiles = mutableListOf<DartFile>()
+
+        EntitySubType.entries.forEach { subType ->
+            val className = translateEnumClassName(subType)
+            val fileName = "${subType.type}_entities"
+            val enumClass = generateEntityEnum(models, className) { subType.matches(it) }
+            if (enumClass == null) return@forEach
+            val file = DartFile.builder(fileName)
+                .type(enumClass)
+                .doc(classDocumentation)
+                .build()
+            enumFiles.add(file)
+        }
+
+        if (enumFiles.isEmpty()) return
+        enumFiles.forEach { it.write(folder) }
+    }
+
+    private fun translateEnumClassName(entitySubType: EntitySubType): String {
+        val prefix = StringHelper.toLowerCamelCase(entitySubType.type).replaceFirstChar { it.uppercase() }
+        return "$prefix$entityClassName"
+    }
+
+    private inline fun generateEntityEnum(
+        entities: Collection<EntityType>,
+        className: String,
+        crossinline filter: (EntityType) -> Boolean,
+    ): ClassSpec? {
+        if (entities.isEmpty()) return null
+        val filteredEntities = entities.filter { filter(it) }
+        val enumClass = EntitySubGenerator.generateEntityEnum(className, filteredEntities)
+        return enumClass.build()
     }
 
     override fun getName() = "EntityTypeGenerator"
