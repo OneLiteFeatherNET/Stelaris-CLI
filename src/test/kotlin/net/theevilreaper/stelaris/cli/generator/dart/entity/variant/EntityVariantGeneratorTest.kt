@@ -11,7 +11,6 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
     @Test
     fun `test entity variant generation`() {
         val generator = EntityVariantGenerator()
-        assertEquals("EntityVariantGenerator", generator.getName())
 
         generator.generate(generationPath)
 

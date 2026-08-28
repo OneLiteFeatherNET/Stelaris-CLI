@@ -19,9 +19,7 @@ class LocalProjectExporterTest {
             override fun generate(outputPath: Path) {
                 generatedTarget = outputPath
             }
-            override fun getName(): String = "MockGenerator"
             override fun cleanUp() {}
-            override fun isExperimental(): Boolean = false
         }
 
         val exportPath = tempDir.resolve("export_target")

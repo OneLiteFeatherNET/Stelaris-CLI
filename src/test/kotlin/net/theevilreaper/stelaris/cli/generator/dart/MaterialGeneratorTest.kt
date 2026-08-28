@@ -16,7 +16,6 @@ class MaterialGeneratorTest : GenerationTestBase() {
     @Test
     fun `test material generation`(env: Env) {
         val generator = MaterialGenerator()
-        assertEquals("MaterialGenerator", generator.getName())
 
         generator.generate(generationPath)
 

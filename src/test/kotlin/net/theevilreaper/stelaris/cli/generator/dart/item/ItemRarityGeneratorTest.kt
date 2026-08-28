@@ -11,7 +11,6 @@ class ItemRarityGeneratorTest : GenerationTestBase() {
     @Test
     fun `test item rarity generation`() {
         val generator = ItemRarityGenerator()
-        assertEquals("ItemRarityGenerator", generator.getName())
 
         generator.generate(generationPath)
 

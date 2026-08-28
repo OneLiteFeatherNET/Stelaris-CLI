@@ -11,7 +11,6 @@ class PaintingVariantGeneratorTest : GenerationTestBase() {
     @Test
     fun `test painting variant generation`() {
         val generator = PaintingVariantGenerator()
-        assertEquals("PaintingVariantGenerator", generator.getName())
 
         generator.generate(generationPath)
 

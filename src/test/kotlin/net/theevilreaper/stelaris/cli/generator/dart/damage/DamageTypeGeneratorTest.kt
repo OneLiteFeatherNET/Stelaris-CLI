@@ -11,7 +11,6 @@ class DamageTypeGeneratorTest : GenerationTestBase() {
     @Test
     fun `test damage type generation`() {
         val generator = DamageTypeGenerator()
-        assertEquals("DamageTypeGenerator", generator.getName())
 
         generator.generate(generationPath)
 

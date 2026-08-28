@@ -11,7 +11,6 @@ class DimensionTypeGeneratorTest : GenerationTestBase() {
     @Test
     fun `test dimension type generation`() {
         val generator = DimensionTypeGenerator()
-        assertEquals("DimensionTypeGenerator", generator.getName())
 
         generator.generate(generationPath)
 

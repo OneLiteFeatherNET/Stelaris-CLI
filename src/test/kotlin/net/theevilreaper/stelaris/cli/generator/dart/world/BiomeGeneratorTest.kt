@@ -11,7 +11,6 @@ class BiomeGeneratorTest : GenerationTestBase() {
     @Test
     fun `test biome generation`() {
         val generator = BiomeGenerator()
-        assertEquals("BiomeGenerator", generator.getName())
 
         generator.generate(generationPath)
 

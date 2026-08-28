@@ -11,7 +11,6 @@ class BannerPatternGeneratorTest : GenerationTestBase() {
     @Test
     fun `test banner pattern generation`() {
         val generator = BannerPatternGenerator()
-        assertEquals("BannerPatternGenerator", generator.getName())
 
         generator.generate(generationPath)
 

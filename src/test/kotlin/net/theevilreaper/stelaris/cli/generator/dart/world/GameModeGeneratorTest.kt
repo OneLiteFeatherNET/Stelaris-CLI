@@ -11,7 +11,6 @@ class GameModeGeneratorTest : GenerationTestBase() {
     @Test
     fun `test game mode generation`() {
         val generator = GameModeGenerator()
-        assertEquals("GameModeGenerator", generator.getName())
 
         generator.generate(generationPath)
 

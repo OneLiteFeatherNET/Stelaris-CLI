@@ -11,7 +11,6 @@ class TrimMaterialGeneratorTest : GenerationTestBase() {
     @Test
     fun `test trim material generation`() {
         val generator = TrimMaterialGenerator()
-        assertEquals("TrimMaterialGenerator", generator.getName())
 
         generator.generate(generationPath)
 

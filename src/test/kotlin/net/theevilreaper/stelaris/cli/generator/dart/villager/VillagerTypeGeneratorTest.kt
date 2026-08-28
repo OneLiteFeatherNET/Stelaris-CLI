@@ -11,7 +11,6 @@ class VillagerTypeGeneratorTest : GenerationTestBase() {
     @Test
     fun `test villager type generation`() {
         val generator = VillagerTypeGenerator()
-        assertEquals("VillagerTypeGenerator", generator.getName())
 
         generator.generate(generationPath)
 
