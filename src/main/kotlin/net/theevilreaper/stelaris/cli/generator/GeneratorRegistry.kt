@@ -1,16 +1,17 @@
 package net.theevilreaper.stelaris.cli.generator
 
 import net.theevilreaper.stelaris.cli.generator.dart.*
+import net.theevilreaper.stelaris.cli.generator.dart.banner.BannerPatternGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarColorGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarFlagGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarOverlayGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.color.DyeColorGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.damage.DamageTypeGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.enchantment.EnchantmentGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.enchantment.EnchantmentGroupGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.entity.variant.EntityVariantGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.item.FireworkShapeGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.item.ItemRarityGenerator
-import net.theevilreaper.stelaris.cli.generator.dart.item.MapPostProcessingGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.item.*
+import net.theevilreaper.stelaris.cli.generator.dart.painting.PaintingVariantGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundEventGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundSourceGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundTypeGenerator
@@ -26,9 +27,11 @@ import net.theevilreaper.stelaris.cli.generator.dart.villager.VillagerTypeGenera
 class GeneratorRegistry {
 
     private val generators: Set<Generator> = setOf(
+        BannerPatternGenerator(),
         BossBarColorGenerator(),
         BossBarFlagGenerator(),
         BossBarOverlayGenerator(),
+        DamageTypeGenerator(),
         DyeColorGenerator(),
         EnchantmentGenerator(),
         EnchantmentGroupGenerator(),
@@ -36,12 +39,17 @@ class GeneratorRegistry {
         EntityVariantGenerator(),
         FireworkShapeGenerator(),
         FrameTypeGenerator(),
+        InstrumentGenerator(),
+        ItemRarityGenerator(),
+        JukeboxSongGenerator(),
         MaterialGenerator(),
         MapPostProcessingGenerator(),
+        PaintingVariantGenerator(),
         SoundSourceGenerator(),
         SoundEventGenerator(),
         SoundTypeGenerator(),
-        ItemRarityGenerator(),
+        TrimMaterialGenerator(),
+        TrimPatternGenerator(),
         VillagerTypeGenerator()
     )
 
