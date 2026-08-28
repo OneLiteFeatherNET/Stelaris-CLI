@@ -4,12 +4,17 @@ import net.theevilreaper.stelaris.cli.generator.dart.*
 import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarColorGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarFlagGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.bossbar.BossBarOverlayGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.color.DyeColorGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.enchantment.EnchantmentGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.enchantment.EnchantmentGroupGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.entity.variant.EntityVariantGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.item.FireworkShapeGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.item.ItemRarityGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.item.MapPostProcessingGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundEventGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundSourceGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.sound.SoundTypeGenerator
+import net.theevilreaper.stelaris.cli.generator.dart.villager.VillagerTypeGenerator
 
 /**
  * The [GeneratorRegistry] holds all available generators which can be used to generate dart files.
@@ -24,15 +29,20 @@ class GeneratorRegistry {
         BossBarColorGenerator(),
         BossBarFlagGenerator(),
         BossBarOverlayGenerator(),
+        DyeColorGenerator(),
         EnchantmentGenerator(),
         EnchantmentGroupGenerator(),
         EntityTypeGenerator(),
+        EntityVariantGenerator(),
+        FireworkShapeGenerator(),
         FrameTypeGenerator(),
         MaterialGenerator(),
+        MapPostProcessingGenerator(),
         SoundSourceGenerator(),
         SoundEventGenerator(),
         SoundTypeGenerator(),
-        ItemRarityGenerator()
+        ItemRarityGenerator(),
+        VillagerTypeGenerator()
     )
 
     /**
