@@ -15,15 +15,29 @@ class EntityTypeGeneratorTest : GenerationTestBase() {
 
         generator.generate(generationPath)
 
-        val generatedFiles = generationPath.toFile().listFiles()
-        assertNotNull(generatedFiles)
-        assertEquals(1, generatedFiles!!.size, "Expected exactly one file to be generated")
+        val entitiesFolder = generationPath.resolve("entities").toFile()
+        assertTrue(entitiesFolder.exists(), "Expected entities package folder to exist")
 
-        val file = generatedFiles.first()
-        assertTrue(file.name == "entity_type.dart", "Expected file name to be entity_type.dart")
-        val content = file.readText()
-        assertTrue(content.contains("enum EntityType"), "Generated file should contain enum EntityType")
-        assertTrue(content.contains("final String displayName;"), "Generated file should declare displayName property")
-        assertTrue(content.contains("final String type;"), "Generated file should declare type property")
+        val generatedFiles = entitiesFolder.listFiles()
+        assertNotNull(generatedFiles)
+        assertEquals(6, generatedFiles!!.size, "Expected exactly 6 entity files to be generated")
+
+        val expectedFiles = mapOf(
+            "animal_entities.dart" to "enum AnimalEntityType",
+            "monster_entities.dart" to "enum MonsterEntityType",
+            "water_entities.dart" to "enum WaterEntityType",
+            "projectile_entities.dart" to "enum ProjectileEntityType",
+            "vehicle_entities.dart" to "enum VehicleEntityType",
+            "display_entities.dart" to "enum DisplayEntityType"
+        )
+
+        for ((fileName, expectedEnum) in expectedFiles) {
+            val file = entitiesFolder.resolve(fileName)
+            assertTrue(file.exists(), "Expected $fileName to exist")
+            val content = file.readText()
+            assertTrue(content.contains(expectedEnum), "Expected $fileName to contain '$expectedEnum'")
+            assertTrue(content.contains("final String displayName;"), "$fileName should declare displayName property")
+            assertTrue(content.contains("final String type;"), "$fileName should declare type property")
+        }
     }
 }
