@@ -11,7 +11,6 @@ class DifficultyGeneratorTest : GenerationTestBase() {
     @Test
     fun `test difficulty generation`() {
         val generator = DifficultyGenerator()
-        assertEquals("DifficultyGenerator", generator.getName())
 
         generator.generate(generationPath)
 

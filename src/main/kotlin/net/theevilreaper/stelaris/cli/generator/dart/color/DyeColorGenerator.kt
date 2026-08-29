@@ -1,5 +1,6 @@
 package net.theevilreaper.stelaris.cli.generator.dart.color
 
+import com.google.auto.service.AutoService
 import net.minestom.server.color.DyeColor
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartModifier
@@ -13,9 +14,13 @@ import net.theevilreaper.dartpoet.parameter.ParameterSpec
 import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.dartpoet.type.ClassName
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
+import net.theevilreaper.stelaris.cli.generator.CodeGenerator
+import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
+@AutoService(Generator::class)
+@CodeGenerator(name = "DyeColorGenerator")
 class DyeColorGenerator : BaseGenerator(
     className = "DyeColor",
     packageName = "color",
@@ -86,6 +91,4 @@ class DyeColorGenerator : BaseGenerator(
     private fun formatColor(rgb: Int): String {
         return "Color.fromRGB(0x%06x)".format(rgb)
     }
-
-    override fun getName() = "DyeColorGenerator"
 }

@@ -1,5 +1,6 @@
 package net.theevilreaper.stelaris.cli
 
+import com.google.inject.Guice
 import net.minestom.server.MinecraftServer
 import net.theevilreaper.stelaris.cli.arguments.CommandArgument
 import net.theevilreaper.stelaris.cli.arguments.ParsedArgs
@@ -7,6 +8,7 @@ import net.theevilreaper.stelaris.cli.exporter.ExportStrategy
 import net.theevilreaper.stelaris.cli.exporter.GitProjectExporter
 import net.theevilreaper.stelaris.cli.exporter.LocalProjectExporter
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.GeneratorModule
 import net.theevilreaper.stelaris.cli.generator.GeneratorRegistry
 import net.theevilreaper.stelaris.cli.util.*
 import java.nio.file.Files
@@ -18,7 +20,6 @@ fun main(args: Array<String>) {
         return
     }
 
-    val generatorRegistry = GeneratorRegistry()
     val parsedArgs = parseArguments(args)
 
     if (parsedArgs.showHelp) {
@@ -31,14 +32,10 @@ fun main(args: Array<String>) {
         return
     }
 
-    val generators: Set<Generator> = when (parsedArgs.experimental) {
-        false -> generatorRegistry.getGenerators { !it.isExperimental() }
-        true -> generatorRegistry.getGenerators()
-    }
-
-    if (generators.isEmpty()) {
-        println("The cli needs generators to run")
-        return
+    val registry = Guice.createInjector(GeneratorModule())
+        .getInstance(GeneratorRegistry::class.java)
+    val generators: Set<Generator> = registry.createGenerators {
+        parsedArgs.experimental || !it.experimental
     }
 
     // Use the user-specified path if provided; otherwise, use the default for Git

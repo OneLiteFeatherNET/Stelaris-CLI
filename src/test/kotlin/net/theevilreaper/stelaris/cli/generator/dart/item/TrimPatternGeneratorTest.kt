@@ -11,7 +11,6 @@ class TrimPatternGeneratorTest : GenerationTestBase() {
     @Test
     fun `test trim pattern generation`() {
         val generator = TrimPatternGenerator()
-        assertEquals("TrimPatternGenerator", generator.getName())
 
         generator.generate(generationPath)
 

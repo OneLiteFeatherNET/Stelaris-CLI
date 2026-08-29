@@ -1,10 +1,12 @@
 import org.gradle.api.artifacts.result.ResolvedDependencyResult
+import java.util.zip.ZipFile
 
 plugins {
     jacoco
     application
     alias(libs.plugins.kotlin)
     alias(libs.plugins.shadow)
+    alias(libs.plugins.ksp)
 }
 
 group = "net.theevilreaper"
@@ -20,6 +22,9 @@ dependencies {
     implementation(libs.minestom)
     implementation(libs.guava)
     implementation(libs.jgit)
+    implementation(libs.google.guice)
+    implementation(libs.autoservice.annotations)
+    ksp(libs.autoservice.ksp)
 
     testImplementation(libs.cyano)
     testImplementation(libs.junit.jupiter)
@@ -55,6 +60,26 @@ tasks.register("resolveMinestomVersion") {
     }
 }
 
+// Generators are discovered through META-INF/services. Without mergeServiceFiles() in the
+// shadowJar task that file does not survive into the fat jar and the CLI starts with an empty
+// registry - a failure that only shows up when running the released artifact.
+val verifyShadowJarServices = tasks.register("verifyShadowJarServices") {
+    description = "Verifies that the shadow jar carries the generator service file."
+    dependsOn(tasks.shadowJar)
+    val jarFile = tasks.shadowJar.flatMap { it.archiveFile }
+    val serviceEntry = "META-INF/services/net.theevilreaper.stelaris.cli.generator.Generator"
+    doLast {
+        ZipFile(jarFile.get().asFile).use { jar ->
+            val entry = jar.getEntry(serviceEntry)
+                ?: error("$serviceEntry is missing from the shadow jar. Is mergeServiceFiles() still set?")
+            val generators = jar.getInputStream(entry).bufferedReader().readLines()
+                .filter { it.isNotBlank() }
+            check(generators.isNotEmpty()) { "$serviceEntry is empty in the shadow jar" }
+            logger.lifecycle("Shadow jar registers ${generators.size} generators")
+        }
+    }
+}
+
 tasks {
     compileJava {
         options.encoding = "UTF-8"
@@ -71,6 +96,9 @@ tasks {
     }
 
     shadowJar {
+        // The generator registry is discovered through META-INF/services, so the
+        // service files of every dependency have to survive the merge into the fat jar.
+        mergeServiceFiles()
         archiveBaseName.set("stelaris-cli")
         archiveClassifier.set("")
         archiveVersion.set("")
@@ -80,7 +108,7 @@ tasks {
     }
 
     build {
-        dependsOn(shadowJar)
+        dependsOn(shadowJar, verifyShadowJarServices)
     }
 
     test {

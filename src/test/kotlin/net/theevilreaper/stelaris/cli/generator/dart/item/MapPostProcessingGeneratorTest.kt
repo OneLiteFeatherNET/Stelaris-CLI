@@ -11,7 +11,6 @@ class MapPostProcessingGeneratorTest : GenerationTestBase() {
     @Test
     fun `test map post processing generation`() {
         val generator = MapPostProcessingGenerator()
-        assertEquals("MapPostProcessingGenerator", generator.getName())
 
         generator.generate(generationPath)
 

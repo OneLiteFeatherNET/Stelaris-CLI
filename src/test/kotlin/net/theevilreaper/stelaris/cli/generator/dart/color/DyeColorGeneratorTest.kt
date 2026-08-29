@@ -11,7 +11,6 @@ class DyeColorGeneratorTest : GenerationTestBase() {
     @Test
     fun `test dye color generation`() {
         val generator = DyeColorGenerator()
-        assertEquals("DyeColorGenerator", generator.getName())
 
         generator.generate(generationPath)
 

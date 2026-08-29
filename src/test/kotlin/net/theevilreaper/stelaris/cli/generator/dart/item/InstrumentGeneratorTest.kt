@@ -11,7 +11,6 @@ class InstrumentGeneratorTest : GenerationTestBase() {
     @Test
     fun `test instrument generation`() {
         val generator = InstrumentGenerator()
-        assertEquals("InstrumentGenerator", generator.getName())
 
         generator.generate(generationPath)
 

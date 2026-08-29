@@ -1,5 +1,6 @@
 package net.theevilreaper.stelaris.cli.generator.dart.world
 
+import com.google.auto.service.AutoService
 import net.minestom.server.world.Difficulty
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartModifier
@@ -10,6 +11,8 @@ import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.dartpoet.parameter.ParameterSpec
 import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
+import net.theevilreaper.stelaris.cli.generator.CodeGenerator
+import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
@@ -19,6 +22,8 @@ import java.nio.file.Path
  * @since 1.0.0
  * @author theEvilReaper
  */
+@AutoService(Generator::class)
+@CodeGenerator(name = "DifficultyGenerator")
 class DifficultyGenerator : BaseGenerator(
     className = "Difficulty",
     packageName = "world",
@@ -65,6 +70,4 @@ class DifficultyGenerator : BaseGenerator(
             .build()
         file.write(folder)
     }
-
-    override fun getName() = "DifficultyGenerator"
 }

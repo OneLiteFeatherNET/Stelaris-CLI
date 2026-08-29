@@ -11,7 +11,6 @@ class FireworkShapeGeneratorTest : GenerationTestBase() {
     @Test
     fun `test firework shape generation`() {
         val generator = FireworkShapeGenerator()
-        assertEquals("FireworkShapeGenerator", generator.getName())
 
         generator.generate(generationPath)
 

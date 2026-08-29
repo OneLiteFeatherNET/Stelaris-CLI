@@ -11,7 +11,6 @@ class JukeboxSongGeneratorTest : GenerationTestBase() {
     @Test
     fun `test jukebox song generation`() {
         val generator = JukeboxSongGenerator()
-        assertEquals("JukeboxSongGenerator", generator.getName())
 
         generator.generate(generationPath)
 

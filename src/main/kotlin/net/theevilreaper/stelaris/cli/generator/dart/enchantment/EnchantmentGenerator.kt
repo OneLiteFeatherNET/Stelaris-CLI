@@ -1,5 +1,6 @@
 package net.theevilreaper.stelaris.cli.generator.dart.enchantment
 
+import com.google.auto.service.AutoService
 import net.kyori.adventure.text.TranslatableComponent
 import net.minestom.server.MinecraftServer
 import net.minestom.server.item.enchant.Enchantment
@@ -13,6 +14,8 @@ import net.theevilreaper.dartpoet.enum.EnumEntrySpec
 import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.dartpoet.type.ClassName
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
+import net.theevilreaper.stelaris.cli.generator.CodeGenerator
+import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.util.CLASS_PROPERTIES
 import net.theevilreaper.stelaris.cli.generator.dart.util.CONSTRUCTOR_PARAMETERS
 import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
@@ -27,6 +30,8 @@ import java.nio.file.Path
  * @since 1.0.0
  * @author theEvilReaper
  */
+@AutoService(Generator::class)
+@CodeGenerator(name = "EnchantmentGenerator")
 class EnchantmentGenerator : BaseGenerator(
     className = "Enchantment",
     packageName = "enchantment",
@@ -100,10 +105,4 @@ class EnchantmentGenerator : BaseGenerator(
             .parameter(EnumParameterSpec.positional("%L", enchantment.maxLevel()))
             .build()
     }
-
-    /**
-     * Returns the name of the generator.
-     * @return the name
-     */
-    override fun getName() = "EnchantmentGenerator"
 }

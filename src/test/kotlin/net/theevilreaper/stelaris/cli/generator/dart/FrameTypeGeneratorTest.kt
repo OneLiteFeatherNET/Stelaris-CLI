@@ -11,7 +11,6 @@ class FrameTypeGeneratorTest : GenerationTestBase() {
     @Test
     fun `test frame type generation`() {
         val generator = FrameTypeGenerator()
-        assertEquals("FrameTypeGenerator", generator.getName())
 
         generator.generate(generationPath)
 

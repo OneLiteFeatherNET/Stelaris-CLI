@@ -1,5 +1,6 @@
 package net.theevilreaper.stelaris.cli.generator.dart.sound
 
+import com.google.auto.service.AutoService
 import net.kyori.adventure.key.Key
 import net.minestom.server.sound.SoundEvent
 import net.theevilreaper.dartpoet.DartFile
@@ -11,9 +12,13 @@ import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.dartpoet.parameter.ParameterSpec
 import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
+import net.theevilreaper.stelaris.cli.generator.CodeGenerator
+import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
+@AutoService(Generator::class)
+@CodeGenerator(name = "SoundEventGenerator")
 class SoundEventGenerator : BaseGenerator(
     className = "SoundEvent",
     packageName = "sound",
@@ -65,8 +70,6 @@ class SoundEventGenerator : BaseGenerator(
         // Write all enum files to the folder
         enumFiles.forEach { it.write(folder) }
     }
-
-    override fun getName(): String = "SoundEventGenerator"
 
     private fun buildEnumEntry(soundKey: Key): EnumEntrySpec {
         val parts = soundKey.value().split(".")

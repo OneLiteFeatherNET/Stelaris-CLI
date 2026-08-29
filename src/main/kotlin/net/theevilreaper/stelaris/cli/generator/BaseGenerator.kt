@@ -1,7 +1,6 @@
 package net.theevilreaper.stelaris.cli.generator
 
 import net.theevilreaper.dartpoet.DartFile
-import org.jetbrains.annotations.ApiStatus
 import java.nio.file.Files
 
 import java.nio.file.Path
@@ -15,10 +14,6 @@ abstract class BaseGenerator(
     val className: String,
     val packageName: String,
 ) : Generator {
-
-    private val experimental: Boolean by lazy {
-        this.javaClass.isAnnotationPresent(ApiStatus.Experimental::class.java)
-    }
 
     /**
      * Clears the internal file cache.
@@ -46,15 +41,4 @@ abstract class BaseGenerator(
      */
     abstract override fun generate(outputPath: Path)
 
-    /**
-     * Returns the name from the generator.
-     * @return the given name as string
-     */
-    abstract override fun getName(): String
-
-    /**
-     * Returns whether the generator is experimental or not.
-     * @return true if the generator is experimental, false otherwise
-     */
-    override fun isExperimental(): Boolean = experimental
 }

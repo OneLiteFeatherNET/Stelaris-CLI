@@ -1,14 +1,19 @@
 package net.theevilreaper.stelaris.cli.generator.dart
 
+import com.google.auto.service.AutoService
 import net.minestom.server.entity.EntityType
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.clazz.ClassSpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
+import net.theevilreaper.stelaris.cli.generator.CodeGenerator
+import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.entity.EntitySubGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.entity.EntitySubType
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
+@AutoService(Generator::class)
+@CodeGenerator(name = "EntityTypeGenerator")
 class EntityTypeGenerator : BaseGenerator(
     className = "Entities",
     packageName = "entities",
@@ -57,6 +62,4 @@ class EntityTypeGenerator : BaseGenerator(
         val enumClass = EntitySubGenerator.generateEntityEnum(className, filteredEntities)
         return enumClass.build()
     }
-
-    override fun getName() = "EntityTypeGenerator"
 }

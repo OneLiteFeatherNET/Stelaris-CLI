@@ -1,5 +1,6 @@
 package net.theevilreaper.stelaris.cli.generator.dart.item
 
+import com.google.auto.service.AutoService
 import net.minestom.server.item.component.FireworkExplosion
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartModifier
@@ -10,9 +11,13 @@ import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.dartpoet.parameter.ParameterSpec
 import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
+import net.theevilreaper.stelaris.cli.generator.CodeGenerator
+import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
+@AutoService(Generator::class)
+@CodeGenerator(name = "FireworkShapeGenerator")
 class FireworkShapeGenerator : BaseGenerator(
     className = "FireworkShape",
     packageName = "item",
@@ -61,6 +66,4 @@ class FireworkShapeGenerator : BaseGenerator(
             .build()
         enumFile.write(folder)
     }
-
-    override fun getName() = "FireworkShapeGenerator"
 }
