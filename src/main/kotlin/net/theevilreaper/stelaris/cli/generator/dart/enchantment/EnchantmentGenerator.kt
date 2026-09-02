@@ -72,7 +72,7 @@ class EnchantmentGenerator : BaseGenerator(
                 .build()
             val fileName = "${group.classPart}_${className.replaceFirstChar { it.lowercase() }}"
             val enumFile = DartFile.builder(fileName)
-                .directive(DirectiveFactory.create(DirectiveType.RELATIVE, "../api/enchantment"))
+                .directive(DirectiveFactory.create(DirectiveType.RELATIVE, "../api/enchantment.dart"))
                 .doc("The file is generated. Don't change anything here")
                 .type(enumClass)
                 .build()
