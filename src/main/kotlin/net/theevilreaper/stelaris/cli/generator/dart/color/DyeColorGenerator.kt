@@ -81,7 +81,7 @@ class DyeColorGenerator : BaseGenerator(
             .build()
 
         val enumFile = DartFile.builder("dye_color")
-            .directive(DirectiveFactory.create(DirectiveType.RELATIVE, "../color"))
+            .directive(DirectiveFactory.create(DirectiveType.RELATIVE, "../color.dart"))
             .doc("The file is generated. Don't change anything here")
             .type(enumClass)
             .build()
