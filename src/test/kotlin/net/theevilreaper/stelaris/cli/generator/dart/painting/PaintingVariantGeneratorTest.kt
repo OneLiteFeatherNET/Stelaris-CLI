@@ -2,6 +2,7 @@ package net.theevilreaper.stelaris.cli.generator.dart.painting
 
 import net.theevilreaper.stelaris.cli.generator.GenerationTestBase
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -31,5 +32,7 @@ class PaintingVariantGeneratorTest : GenerationTestBase() {
         assertTrue(content.contains("final int height;"))
         assertTrue(content.contains("final String assetId;"))
         assertTrue(content.contains("kebab('Kebab', 'minecraft:kebab', 1, 1, 'minecraft:kebab')"))
+        assertTrue(content.contains("theVoid('Void', 'minecraft:void', 2, 2, 'minecraft:void')"))
+        assertFalse(content.contains("void("), "Should not contain 'void(' as identifier")
     }
 }

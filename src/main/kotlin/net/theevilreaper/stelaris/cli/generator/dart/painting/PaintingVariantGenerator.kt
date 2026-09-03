@@ -40,7 +40,8 @@ class PaintingVariantGenerator : BaseGenerator(
         for (variant in sortedEntries) {
             val key = registry.getKey(variant)?.name() ?: continue
             val nameWithoutPrefix = key.replace("minecraft:", EMPTY_STRING)
-            val variableName = StringHelper.toLowerCamelCase(nameWithoutPrefix)
+            val camelCaseName = StringHelper.toLowerCamelCase(nameWithoutPrefix)
+            val variableName = if (camelCaseName == "void") "theVoid" else camelCaseName
             val displayName = StringHelper.mapDisplayName(nameWithoutPrefix)
 
             enumEntries.add(
