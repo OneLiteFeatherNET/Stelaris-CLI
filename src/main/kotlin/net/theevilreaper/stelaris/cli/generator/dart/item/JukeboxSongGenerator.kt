@@ -40,7 +40,12 @@ class JukeboxSongGenerator : BaseGenerator(
         for (song in sortedEntries) {
             val key = registry.getKey(song)?.name() ?: continue
             val nameWithoutPrefix = key.replace("minecraft:", EMPTY_STRING)
-            val variableName = StringHelper.toLowerCamelCase(nameWithoutPrefix)
+            val camelCaseName = StringHelper.toLowerCamelCase(nameWithoutPrefix)
+            val variableName = if (camelCaseName.firstOrNull()?.isDigit() == true) {
+                "disc$camelCaseName"
+            } else {
+                camelCaseName
+            }
             val displayName = StringHelper.mapDisplayName(nameWithoutPrefix)
 
             enumEntries.add(
