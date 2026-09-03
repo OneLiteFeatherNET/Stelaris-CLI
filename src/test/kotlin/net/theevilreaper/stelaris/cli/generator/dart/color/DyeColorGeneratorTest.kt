@@ -29,7 +29,7 @@ class DyeColorGeneratorTest : GenerationTestBase() {
 
         val expectedContent = """
             /// The file is generated. Don't change anything here
-            import '../color.dart';
+            import '../api/color.dart';
 
             enum DyeColor {
 
