@@ -31,9 +31,11 @@ dependencyResolutionManagement {
             version("jgit", "7.7.1.202607240634-r")
             version("shadow", "9.6.1")
             version("ksp", "2.3.11")
+            version("adventure", "5.2.0")
 
             library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
             library("minestom", "net.minestom", "minestom").withoutVersion()
+            library("adventure.api", "net.kyori", "adventure-api").versionRef("adventure")
             library("cyano", "net.onelitefeather", "cyano").withoutVersion()
             library("dartpoet", "net.theevilreaper", "dartpoet").versionRef("dartpoet")
             library("guava", "com.google.guava", "guava").versionRef("guava")

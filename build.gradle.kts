@@ -20,6 +20,7 @@ dependencies {
     implementation(platform(libs.mycelium.bom))
     implementation(libs.dartpoet)
     implementation(libs.minestom)
+    implementation(libs.adventure.api)
     implementation(libs.guava)
     implementation(libs.jgit)
     implementation(libs.google.guice)
