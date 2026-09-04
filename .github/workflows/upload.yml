@@ -76,6 +76,25 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "Minestom \`$resolved\` -> pushing \`$version\`" >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Set up Dart
+        uses: dart-lang/setup-dart@v1
+
+      - name: Checkout target Dart repository for validation
+        uses: actions/checkout@v7
+        with:
+          repository: ${{ secrets.TARGET_REPOSITORY }}
+          token: ${{ secrets.DART_REPO_TOKEN }}
+          path: target-repo
+
+      - name: Validate generated Dart code (dry run)
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          java -jar build/libs/stelaris-cli.jar -version "$VERSION" -type local -path "$GITHUB_WORKSPACE/target-repo" -experimental
+          cd target-repo
+          dart pub get
+          dart analyze
+
       - name: Run Stelaris CLI
         env:
           stelaris.cli.username: 'stelaris-bot'
