@@ -16,7 +16,7 @@ import java.nio.file.Path
 @CodeGenerator(name = "EntityTypeGenerator")
 class EntityTypeGenerator : BaseGenerator(
     className = "Entities",
-    packageName = "entities",
+    packageName = "entity",
 ) {
 
     private val entityClassName = "EntityType"

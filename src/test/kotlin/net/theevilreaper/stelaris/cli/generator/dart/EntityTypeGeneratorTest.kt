@@ -14,8 +14,8 @@ class EntityTypeGeneratorTest : GenerationTestBase() {
 
         generator.generate(generationPath)
 
-        val entitiesFolder = generationPath.resolve("entities").toFile()
-        assertTrue(entitiesFolder.exists(), "Expected entities package folder to exist")
+        val entitiesFolder = generationPath.resolve("entity").toFile()
+        assertTrue(entitiesFolder.exists(), "Expected entity package folder to exist")
 
         val generatedFiles = entitiesFolder.listFiles()
         assertNotNull(generatedFiles)
