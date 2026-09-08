@@ -28,7 +28,7 @@ dependencyResolutionManagement {
             version("junit", "6.1.3")
             version("dartpoet", "2.4.0")
             version("guava", "33.7.1-jre")
-            version("jgit", "7.7.1.202607240634-r")
+            version("jgit", "7.8.0.202609011348-r")
             version("shadow", "9.6.1")
             version("ksp", "2.3.11")
             version("adventure", "5.2.0")
