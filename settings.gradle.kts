@@ -26,7 +26,7 @@ dependencyResolutionManagement {
             version("kotlin", "2.4.20")
             version("bom", "1.8.5")
             version("junit", "6.1.3")
-            version("dartpoet", "2.4.0")
+            version("dartpoet", "2.5.0")
             version("guava", "33.7.1-jre")
             version("jgit", "7.8.0.202609011348-r")
             version("shadow", "9.6.1")
