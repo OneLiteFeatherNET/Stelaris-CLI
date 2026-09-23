@@ -55,6 +55,7 @@ class BossBarColorGenerator : BaseGenerator(
                             .parameters(*DEFAULT_PARAMETERS)
                             .build()
                     )
+                    .build()
             )
             .build()
         file.write(folder)
