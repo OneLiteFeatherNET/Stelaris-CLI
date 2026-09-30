@@ -12,6 +12,9 @@ import java.nio.file.Path
 /**
  * Generates the data of every enchantment: which items support it and which enchantments it excludes.
  *
+ * The [EnchantmentData] class itself lives in `lib/api/enchantment_data.dart` of the data repository,
+ * only the table is generated.
+ *
  * With this table the UI can offer exactly the enchantments that fit a material and reject incompatible
  * combinations, without maintaining its own lists.
  * @since 1.0.0
@@ -34,24 +37,7 @@ class EnchantmentDataGenerator : BaseGenerator(
 
     private fun source(enchantments: List<Pair<String, Enchantment>>): String = buildString {
         appendLine(DartSource.GENERATED_HEADER)
-        appendLine()
-        appendLine("/// The data of an enchantment.")
-        appendLine("final class $className {")
-        appendLine("  /// The key of the enchantment, e.g. `minecraft:sharpness`.")
-        appendLine("  final String key;")
-        appendLine("  final int maxLevel;")
-        appendLine()
-        appendLine("  /// The keys of the materials the enchantment can be applied to.")
-        appendLine("  final Set<String> supportedItems;")
-        appendLine()
-        appendLine("  /// The keys of the enchantments which can't be combined with this one.")
-        appendLine("  final Set<String> exclusiveWith;")
-        appendLine()
-        appendLine("  /// The equipment slots in which the enchantment takes effect.")
-        appendLine("  final List<String> slots;")
-        appendLine()
-        appendLine("  const $className(this.key, {required this.maxLevel, required this.supportedItems, required this.exclusiveWith, required this.slots});")
-        appendLine("}")
+        appendLine("import '../api/enchantment_data.dart';")
         appendLine()
         appendLine("/// The data of every enchantment, keyed by the enchantment key.")
         appendLine("const Map<String, $className> enchantmentData = {")
