@@ -38,7 +38,6 @@ class EnchantmentGenerator : BaseGenerator(
 ) {
 
     override fun generate(outputPath: Path) {
-        println(outputPath)
         val enchantmentFolder = checkPackageFolder(outputPath, packageName)
         val enchantmentData: MutableCollection<Enchantment> = MinecraftServer.getEnchantmentRegistry().values()
         val mappedEnchantments: Map<EnchantmentGroup, List<Enchantment>> = enchantmentData.mapNotNull { enchantment ->
