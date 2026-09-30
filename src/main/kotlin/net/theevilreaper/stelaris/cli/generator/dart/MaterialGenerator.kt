@@ -5,6 +5,8 @@ import net.minestom.server.component.DataComponents
 import net.minestom.server.item.Material
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.clazz.ClassSpec
+import net.theevilreaper.dartpoet.directive.DirectiveFactory
+import net.theevilreaper.dartpoet.directive.DirectiveType
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
@@ -72,6 +74,7 @@ class MaterialGenerator : BaseGenerator(
                 .fold(0) { mask, type -> mask or MaterialSearchGenerator.mask(type) }
         }
         return DartFile.builder("material_search")
+            .directive(DirectiveFactory.create(DirectiveType.RELATIVE, "../api/material_search.dart"))
             .type(categoryEnum, searchEnum)
             .doc(classDocumentation)
             .build()

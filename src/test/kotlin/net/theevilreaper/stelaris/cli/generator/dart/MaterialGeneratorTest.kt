@@ -55,8 +55,9 @@ class MaterialGeneratorTest : GenerationTestBase() {
         assertTrue(file.exists(), "Expected material_search.dart to exist")
         val content = file.readText()
 
-        assertTrue(content.contains("enum MaterialCategory"))
-        assertTrue(content.contains("enum MaterialSearchEntry"))
+        assertTrue(content.contains("import '../api/material_search.dart';"))
+        assertTrue(content.contains("enum MaterialCategory implements SearchCategory"))
+        assertTrue(content.contains("enum MaterialSearchEntry implements SearchableMaterial"))
         assertTrue(content.contains("final List<String> terms;"))
         assertTrue(content.contains("final int categories;"))
 

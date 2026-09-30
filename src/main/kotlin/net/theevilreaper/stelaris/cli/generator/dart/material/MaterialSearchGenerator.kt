@@ -17,6 +17,7 @@ import net.theevilreaper.stelaris.cli.util.StringHelper
 /**
  * Generates the data which is needed to search through all materials without doing any string work at runtime.
  * Every material gets a normalized search key, the single words of its name and a bitmask of its categories.
+ * The generated enums implement the interfaces from `api/material_search.dart`, which contains the search itself.
  */
 internal object MaterialSearchGenerator {
 
@@ -36,6 +37,7 @@ internal object MaterialSearchGenerator {
                 .build()
         }
         return ClassSpec.enumClass(className)
+            .implements(ClassName("SearchCategory"))
             .enumProperties(*entries.toTypedArray())
             .properties(PropertySpec.builder(MASK, Int::class).modifier(enumModifier).build())
             .constructor(
@@ -64,6 +66,7 @@ internal object MaterialSearchGenerator {
                 .build()
         }
         return ClassSpec.enumClass(className)
+            .implements(ClassName("SearchableMaterial"))
             .enumProperties(*entries.toTypedArray())
             .properties(
                 PropertySpec.builder(MATERIAL_KEY, String::class).modifier(enumModifier).build(),
