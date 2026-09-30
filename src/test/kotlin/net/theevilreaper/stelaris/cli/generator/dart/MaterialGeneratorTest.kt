@@ -24,7 +24,7 @@ class MaterialGeneratorTest : GenerationTestBase() {
 
         val generatedFiles = materialsFolder.listFiles()
         assertNotNull(generatedFiles)
-        assertEquals(7, generatedFiles!!.size, "Expected exactly 7 material files to be generated")
+        assertEquals(8, generatedFiles!!.size, "Expected exactly 8 material files to be generated")
 
         val expectedFiles = mapOf(
             "block_materials.dart" to "enum BlockMaterial",
@@ -45,5 +45,35 @@ class MaterialGeneratorTest : GenerationTestBase() {
             assertTrue(content.contains("final String material;"), "$fileName should declare material property")
             assertTrue(content.contains("final int maxStackSize;"), "$fileName should declare maxStackSize property")
         }
+    }
+
+    @Test
+    fun `test material search generation`(env: Env) {
+        MaterialGenerator().generate(generationPath)
+
+        val file = generationPath.resolve("materials").resolve("material_search.dart").toFile()
+        assertTrue(file.exists(), "Expected material_search.dart to exist")
+        val content = file.readText()
+
+        assertTrue(content.contains("enum MaterialCategory"))
+        assertTrue(content.contains("enum MaterialSearchEntry"))
+        assertTrue(content.contains("final List<String> terms;"))
+        assertTrue(content.contains("final int categories;"))
+
+        val block = 1 shl 0
+        assertTrue(content.contains("block($block)"), "Expected the block category to use the first bit")
+        assertTrue(
+            content.contains("diamondSword('minecraft:diamond_sword', 'diamond sword', ['diamond', 'sword'],"),
+            "Expected the diamond sword entry to contain its search key and terms"
+        )
+        assertTrue(
+            content.contains("stick('minecraft:stick', 'stick', ['stick'], 0)"),
+            "Expected materials without a category to be part of the search"
+        )
+        assertEquals(
+            Material.values().size,
+            content.lines().count { it.trimStart().contains("('minecraft:") },
+            "Expected one search entry per material"
+        )
     }
 }
