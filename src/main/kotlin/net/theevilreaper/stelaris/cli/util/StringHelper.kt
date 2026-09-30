@@ -41,4 +41,16 @@ object StringHelper {
         return parts.first() +
                 parts.drop(1).joinToString("") { it.replaceFirstChar(Char::uppercase) }
     }
+
+    /**
+     * Converts a given camel case string to a snake case string.
+     * @param input the input, which should be converted
+     * @return the converted string
+     */
+    fun toSnakeCase(input: String): String {
+        return input
+            .replace(Regex("([a-z0-9])([A-Z])"), "$1_$2")
+            .replace(Regex("([A-Z]+)([A-Z][a-z])"), "$1_$2")
+            .lowercase()
+    }
 }

@@ -29,6 +29,14 @@ class StringHelperTest {
             Arguments.of("", ""),
             Arguments.of("multiple__underscores", "multipleUnderscores")
         )
+        @JvmStatic
+        private fun providedSnakeCaseNames() = Stream.of(
+            Arguments.of("maxStackSize", "max_stack_size"),
+            Arguments.of("hitboxMargin", "hitbox_margin"),
+            Arguments.of("single", "single"),
+            Arguments.of("", ""),
+            Arguments.of("customRGBColor", "custom_rgb_color")
+        )
     }
 
     @ParameterizedTest(name = "Test display name mapping for {0}")
@@ -41,5 +49,11 @@ class StringHelperTest {
     @MethodSource("providedCamelCaseNames")
     fun `test camel case conversion`(rawName: String, expected: String) {
         assertEquals(expected, StringHelper.toLowerCamelCase(rawName))
+    }
+
+    @ParameterizedTest(name = "Test snake case conversion for {0}")
+    @MethodSource("providedSnakeCaseNames")
+    fun `test snake case conversion`(rawName: String, expected: String) {
+        assertEquals(expected, StringHelper.toSnakeCase(rawName))
     }
 }
