@@ -14,7 +14,7 @@ class FrameTypeGeneratorTest : GenerationTestBase() {
 
         generator.generate(generationPath)
 
-        val generatedFiles = generationPath.toFile().listFiles()
+        val generatedFiles = generationPath.resolve("advancement").toFile().listFiles()
         assertNotNull(generatedFiles)
         assertEquals(1, generatedFiles!!.size, "Expected exactly one file to be generated")
 
@@ -22,6 +22,6 @@ class FrameTypeGeneratorTest : GenerationTestBase() {
         assertTrue(file.name == "frame_type.dart", "Expected file name to be frame_type.dart")
         val content = file.readText()
         assertTrue(content.contains("enum FrameType"), "Generated file should contain enum FrameType")
-        assertTrue(content.contains("final String display;"), "Generated file should declare display property")
+        assertTrue(content.contains("final String displayName;"), "Generated file should declare displayName property")
     }
 }

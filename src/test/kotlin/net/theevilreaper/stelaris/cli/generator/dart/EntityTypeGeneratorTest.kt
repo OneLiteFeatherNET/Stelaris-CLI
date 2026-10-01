@@ -22,12 +22,12 @@ class EntityTypeGeneratorTest : GenerationTestBase() {
         assertEquals(6, generatedFiles!!.size, "Expected exactly 6 entity files to be generated")
 
         val expectedFiles = mapOf(
-            "animal_entities.dart" to "enum AnimalEntityType",
-            "monster_entities.dart" to "enum MonsterEntityType",
-            "water_entities.dart" to "enum WaterEntityType",
-            "projectile_entities.dart" to "enum ProjectileEntityType",
-            "vehicle_entities.dart" to "enum VehicleEntityType",
-            "display_entities.dart" to "enum DisplayEntityType"
+            "animal_entity_type.dart" to "enum AnimalEntityType",
+            "monster_entity_type.dart" to "enum MonsterEntityType",
+            "water_entity_type.dart" to "enum WaterEntityType",
+            "projectile_entity_type.dart" to "enum ProjectileEntityType",
+            "vehicle_entity_type.dart" to "enum VehicleEntityType",
+            "display_entity_type.dart" to "enum DisplayEntityType"
         )
 
         for ((fileName, expectedEnum) in expectedFiles) {
@@ -36,7 +36,7 @@ class EntityTypeGeneratorTest : GenerationTestBase() {
             val content = file.readText()
             assertTrue(content.contains(expectedEnum), "Expected $fileName to contain '$expectedEnum'")
             assertTrue(content.contains("final String displayName;"), "$fileName should declare displayName property")
-            assertTrue(content.contains("final String type;"), "$fileName should declare type property")
+            assertTrue(content.contains("final String key;"), "$fileName should declare key property")
         }
     }
 }

@@ -12,6 +12,7 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
@@ -53,8 +54,8 @@ class EnchantmentGroupGenerator : BaseGenerator(
             .doc("")
             .doc("Enchantments are grouped by the type of items they can be applied to,")
             .doc("making it easier to filter and organize them by use case.")
-            .build()
 
-        classFile.write(enchantmentFolder)
+
+        classFile.writeGenerated(enchantmentFolder)
     }
 }

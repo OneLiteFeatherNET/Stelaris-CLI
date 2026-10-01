@@ -28,7 +28,6 @@ class TextDecorationGeneratorTest : GenerationTestBase() {
         )
 
         val expectedContent = """
-            /// The file is generated. Don't change anything here
             enum TextDecoration {
 
               bold('Bold', 'bold'),
@@ -38,13 +37,13 @@ class TextDecorationGeneratorTest : GenerationTestBase() {
               underlined('Underlined', 'underlined');
 
               final String displayName;
-              final String name;
+              final String key;
 
-              const TextDecoration(this.displayName, this.name);
+              const TextDecoration(this.displayName, this.key);
 
             }
         """.trimIndent()
 
-        assertEquals(expectedContent, generatedFile.readText(), "Generated Dart class does not match expected content")
+        assertEquals(generated(expectedContent), generatedFile.readText(), "Generated Dart class does not match expected content")
     }
 }

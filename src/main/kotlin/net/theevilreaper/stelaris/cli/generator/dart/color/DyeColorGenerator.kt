@@ -16,6 +16,7 @@ import net.theevilreaper.dartpoet.type.ClassName
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
@@ -82,10 +83,8 @@ class DyeColorGenerator : BaseGenerator(
 
         val enumFile = DartFile.builder("dye_color")
             .directive(DirectiveFactory.create(DirectiveType.RELATIVE, "../api/color.dart"))
-            .doc("The file is generated. Don't change anything here")
             .type(enumClass)
-            .build()
-        enumFile.write(folder, baseDir = outputPath)
+        enumFile.writeGenerated(folder, baseDir = outputPath)
     }
 
     private fun formatColor(rgb: Int): String {

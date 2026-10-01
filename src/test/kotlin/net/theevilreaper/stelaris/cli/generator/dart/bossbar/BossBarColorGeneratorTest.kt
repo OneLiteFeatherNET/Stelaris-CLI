@@ -32,23 +32,23 @@ class BossBarColorGeneratorTest : GenerationTestBase() {
         val expectedClass = """
             enum BossBarColor {
 
-              pink('Pink', 'PINK'),
-              blue('Blue', 'BLUE'),
-              red('Red', 'RED'),
-              green('Green', 'GREEN'),
-              yellow('Yellow', 'YELLOW'),
-              purple('Purple', 'PURPLE'),
-              white('White', 'WHITE');
+              pink('Pink', 'pink'),
+              blue('Blue', 'blue'),
+              red('Red', 'red'),
+              green('Green', 'green'),
+              yellow('Yellow', 'yellow'),
+              purple('Purple', 'purple'),
+              white('White', 'white');
 
               final String displayName;
-              final String type;
+              final String key;
 
-              const BossBarColor(this.displayName, this.type);
+              const BossBarColor(this.displayName, this.key);
 
             }
         """.trimIndent()
 
         val content = Files.readString(bossBarColorFile.toPath())
-        assertEquals(expectedClass, content, "Generated Dart class does not match expected content")
+        assertEquals(generated(expectedClass), content, "Generated Dart class does not match expected content")
     }
 }

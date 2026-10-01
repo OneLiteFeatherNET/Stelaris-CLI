@@ -3,12 +3,14 @@ package net.theevilreaper.stelaris.cli.generator.dart
 import com.google.auto.service.AutoService
 import net.minestom.server.entity.EntityType
 import net.theevilreaper.dartpoet.DartFile
+import net.theevilreaper.dartpoet.DartFileBuilder
 import net.theevilreaper.dartpoet.clazz.ClassSpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.entity.EntitySubGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.entity.EntitySubType
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
@@ -20,7 +22,6 @@ class EntityTypeGenerator : BaseGenerator(
 ) {
 
     private val entityClassName = "EntityType"
-    private val classDocumentation = "The file is generated. Don't change anything here"
 
     init {
         check(className.trim().isNotEmpty()) { "The class name can't be empty" }
@@ -29,22 +30,20 @@ class EntityTypeGenerator : BaseGenerator(
     override fun generate(outputPath: Path) {
         val folder = checkPackageFolder(outputPath, packageName)
         val models = EntityType.values()
-        val enumFiles = mutableListOf<DartFile>()
+        val enumFiles = mutableListOf<DartFileBuilder>()
 
         EntitySubType.entries.forEach { subType ->
             val className = translateEnumClassName(subType)
-            val fileName = "${subType.type}_entities"
+            val fileName = "${subType.type}_entity_type"
             val enumClass = generateEntityEnum(models, className) { subType.matches(it) }
             if (enumClass == null) return@forEach
             val file = DartFile.builder(fileName)
                 .type(enumClass)
-                .doc(classDocumentation)
-                .build()
             enumFiles.add(file)
         }
 
         if (enumFiles.isEmpty()) return
-        enumFiles.forEach { it.write(folder) }
+        enumFiles.forEach { it.writeGenerated(folder) }
     }
 
     private fun translateEnumClassName(entitySubType: EntitySubType): String {

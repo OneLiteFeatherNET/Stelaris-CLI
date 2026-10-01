@@ -13,6 +13,7 @@ import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PARAMETERS
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PROPERTIES
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
@@ -30,14 +31,14 @@ class BossBarOverlayGenerator : BaseGenerator(
                     .apply {
                         BossBar.Overlay.entries.forEach { overlay ->
                             enumProperty(
-                                EnumEntrySpec.builder(overlay.name.lowercase())
+                                EnumEntrySpec.builder(StringHelper.toLowerCamelCase(overlay.name))
                                     .parameter(
                                         EnumParameterSpec.positional(
                                             "%C",
                                             StringHelper.mapDisplayName(overlay.name)
                                         )
                                     )
-                                    .parameter(EnumParameterSpec.positional("%C", overlay.name.uppercase()))
+                                    .parameter(EnumParameterSpec.positional("%C", overlay.name.lowercase()))
                                     .build()
                             )
                         }
@@ -51,7 +52,6 @@ class BossBarOverlayGenerator : BaseGenerator(
                     )
                     .build()
             )
-            .build()
-        file.write(folder)
+        file.writeGenerated(folder)
     }
 }

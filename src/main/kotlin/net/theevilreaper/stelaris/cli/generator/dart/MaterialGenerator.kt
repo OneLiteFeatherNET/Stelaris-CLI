@@ -4,6 +4,7 @@ import com.google.auto.service.AutoService
 import net.minestom.server.component.DataComponents
 import net.minestom.server.item.Material
 import net.theevilreaper.dartpoet.DartFile
+import net.theevilreaper.dartpoet.DartFileBuilder
 import net.theevilreaper.dartpoet.clazz.ClassSpec
 import net.theevilreaper.dartpoet.directive.DirectiveFactory
 import net.theevilreaper.dartpoet.directive.DirectiveType
@@ -13,6 +14,7 @@ import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.material.MaterialSearchGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.material.MaterialSubGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.material.MaterialSubType
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
@@ -24,11 +26,10 @@ import java.nio.file.Path
 @CodeGenerator(name = "MaterialGenerator")
 class MaterialGenerator : BaseGenerator(
     className = "Materials",
-    packageName = "materials",
+    packageName = "material",
 ) {
 
     private val materialClassName = "Material"
-    private val classDocumentation = "The file is generated. Don't change anything here"
 
     init {
         check(className.trim().isNotEmpty()) { "The class name can't be empty" }
@@ -41,32 +42,30 @@ class MaterialGenerator : BaseGenerator(
     override fun generate(outputPath: Path) {
         val folder = checkPackageFolder(outputPath, packageName)
         val models = Material.values()
-        val enumFiles = mutableListOf<DartFile>()
+        val enumFiles = mutableListOf<DartFileBuilder>()
 
         MaterialSubType.entries.forEach {
             val className = translateEnumClassName(it)
-            val fileName = "${it.type}_materials"
+            val fileName = "${it.type}_material"
             val enumClass = generateItemEnum(models, className) { mat -> mapTypeToBoolean(it, mat) }
             if (enumClass == null) return@forEach
             val file = DartFile.builder(fileName)
                 .type(enumClass)
-                .doc(classDocumentation)
-                .build()
             enumFiles.add(file)
         }
 
         enumFiles.add(generateSearchFile(models))
 
-        enumFiles.forEach { it.write(folder, baseDir = outputPath) }
+        enumFiles.forEach { it.writeGenerated(folder, baseDir = outputPath) }
     }
 
     /**
      * Generates the file which contains all materials in a flat, pre-normalized form for a text based search.
      * Unlike the category enums it also contains materials which don't belong to any category.
      * @param materials the materials to include
-     * @return the created [DartFile]
+     * @return the [DartFileBuilder] of the file
      */
-    private fun generateSearchFile(materials: Collection<Material>): DartFile {
+    private fun generateSearchFile(materials: Collection<Material>): DartFileBuilder {
         val categoryEnum = MaterialSearchGenerator.generateCategoryEnum("${materialClassName}Category")
         val searchEnum = MaterialSearchGenerator.generateSearchEnum("${materialClassName}SearchEntry", materials) { mat ->
             MaterialSubType.entries
@@ -76,8 +75,6 @@ class MaterialGenerator : BaseGenerator(
         return DartFile.builder("material_search")
             .directive(DirectiveFactory.create(DirectiveType.RELATIVE, "../api/material_search.dart"))
             .type(categoryEnum, searchEnum)
-            .doc(classDocumentation)
-            .build()
     }
 
     private fun mapTypeToBoolean(subType: MaterialSubType, material: Material): Boolean {

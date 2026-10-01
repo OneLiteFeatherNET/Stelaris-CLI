@@ -13,6 +13,7 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
@@ -80,9 +81,7 @@ class BiomeGenerator : BaseGenerator(
             .build()
 
         val file = DartFile.builder("biome")
-            .doc("The file is generated. Don't change anything here")
             .type(enumClass)
-            .build()
-        file.write(folder)
+        file.writeGenerated(folder)
     }
 }

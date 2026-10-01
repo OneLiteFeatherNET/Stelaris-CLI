@@ -13,6 +13,7 @@ import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PARAMETERS
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PROPERTIES
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
@@ -31,7 +32,7 @@ class BossBarColorGenerator : BaseGenerator(
                     .apply {
                         BossBar.Color.entries.forEach { color ->
                             enumProperty(
-                                EnumEntrySpec.builder(color.name.lowercase())
+                                EnumEntrySpec.builder(StringHelper.toLowerCamelCase(color.name))
                                     .parameter(
                                         EnumParameterSpec.positional(
                                             "%C",
@@ -41,7 +42,7 @@ class BossBarColorGenerator : BaseGenerator(
                                     .parameter(
                                         EnumParameterSpec.positional(
                                             "%C",
-                                            color.name.uppercase()
+                                            color.name.lowercase()
                                         )
                                     )
                                     .build()
@@ -57,7 +58,6 @@ class BossBarColorGenerator : BaseGenerator(
                     )
                     .build()
             )
-            .build()
-        file.write(folder)
+        file.writeGenerated(folder)
     }
 }

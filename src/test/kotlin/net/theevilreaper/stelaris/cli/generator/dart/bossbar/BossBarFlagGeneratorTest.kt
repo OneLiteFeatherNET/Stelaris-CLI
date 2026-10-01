@@ -33,19 +33,19 @@ class BossBarFlagGeneratorTest : GenerationTestBase() {
         val expectedClass = """
             enum BossBarFlag {
 
-              darken_screen('Darken Screen', 'DARKEN_SCREEN'),
-              play_boss_music('Play Boss Music', 'PLAY_BOSS_MUSIC'),
-              create_world_fog('Create World Fog', 'CREATE_WORLD_FOG');
+              darkenScreen('Darken Screen', 'darken_screen'),
+              playBossMusic('Play Boss Music', 'play_boss_music'),
+              createWorldFog('Create World Fog', 'create_world_fog');
 
               final String displayName;
-              final String type;
+              final String key;
 
-              const BossBarFlag(this.displayName, this.type);
+              const BossBarFlag(this.displayName, this.key);
 
             }
         """.trimIndent()
 
         val content = bossBarFlagFile.readText()
-        assertEquals(expectedClass, content, "Generated Dart class does not match expected content")
+        assertEquals(generated(expectedClass), content, "Generated Dart class does not match expected content")
     }
 }

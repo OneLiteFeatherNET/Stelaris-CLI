@@ -34,7 +34,6 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
         // Check axolotl_variant.dart content
         val axolotlFile = folder.resolve("axolotl_variant.dart")
         val expectedAxolotlContent = """
-            /// The file is generated. Don't change anything here
             enum AxolotlVariant {
 
               lucy('Lucy', 0),
@@ -50,12 +49,11 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
 
             }
         """.trimIndent()
-        assertEquals(expectedAxolotlContent, axolotlFile.readText())
+        assertEquals(generated(expectedAxolotlContent), axolotlFile.readText())
 
         // Check mooshroom_variant.dart content
         val mooshroomFile = folder.resolve("mooshroom_variant.dart")
         val expectedMooshroomContent = """
-            /// The file is generated. Don't change anything here
             enum MooshroomVariant {
 
               red('Red', 'red'),
@@ -71,7 +69,6 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
         // Check fox_variant.dart content
         val foxFile = folder.resolve("fox_variant.dart")
         val expectedFoxContent = """
-            /// The file is generated. Don't change anything here
             enum FoxVariant {
 
               red('Red', 0),
@@ -84,12 +81,11 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
 
             }
         """.trimIndent()
-        assertEquals(expectedFoxContent, foxFile.readText())
+        assertEquals(generated(expectedFoxContent), foxFile.readText())
 
         // Check parrot_variant.dart content
         val parrotFile = folder.resolve("parrot_variant.dart")
         val expectedParrotContent = """
-            /// The file is generated. Don't change anything here
             enum ParrotVariant {
 
               redBlue('Red Blue', 0),
@@ -105,12 +101,11 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
 
             }
         """.trimIndent()
-        assertEquals(expectedParrotContent, parrotFile.readText())
+        assertEquals(generated(expectedParrotContent), parrotFile.readText())
 
         // Check rabbit_variant.dart content
         val rabbitFile = folder.resolve("rabbit_variant.dart")
         val expectedRabbitContent = """
-            /// The file is generated. Don't change anything here
             enum RabbitVariant {
 
               brown('Brown', 0),
@@ -128,12 +123,11 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
 
             }
         """.trimIndent()
-        assertEquals(expectedRabbitContent, rabbitFile.readText())
+        assertEquals(generated(expectedRabbitContent), rabbitFile.readText())
 
         // Check salmon_size.dart content
         val salmonFile = folder.resolve("salmon_size.dart")
         val expectedSalmonContent = """
-            /// The file is generated. Don't change anything here
             enum SalmonSize {
 
               small('Small', 0),
@@ -147,6 +141,6 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
 
             }
         """.trimIndent()
-        assertEquals(expectedSalmonContent, salmonFile.readText())
+        assertEquals(generated(expectedSalmonContent), salmonFile.readText())
     }
 }

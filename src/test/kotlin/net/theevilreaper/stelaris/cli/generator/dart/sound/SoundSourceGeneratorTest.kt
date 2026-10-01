@@ -34,27 +34,27 @@ class SoundSourceGeneratorTest : GenerationTestBase() {
         val expectedClass = """
             enum SoundSource {
 
-              MASTER('Master', 'MASTER'),
-              MUSIC('Music', 'MUSIC'),
-              RECORD('Record', 'RECORD'),
-              WEATHER('Weather', 'WEATHER'),
-              BLOCK('Block', 'BLOCK'),
-              HOSTILE('Hostile', 'HOSTILE'),
-              NEUTRAL('Neutral', 'NEUTRAL'),
-              PLAYER('Player', 'PLAYER'),
-              AMBIENT('Ambient', 'AMBIENT'),
-              VOICE('Voice', 'VOICE'),
-              UI('Ui', 'UI');
+              master('Master', 'master'),
+              music('Music', 'music'),
+              record('Record', 'record'),
+              weather('Weather', 'weather'),
+              block('Block', 'block'),
+              hostile('Hostile', 'hostile'),
+              neutral('Neutral', 'neutral'),
+              player('Player', 'player'),
+              ambient('Ambient', 'ambient'),
+              voice('Voice', 'voice'),
+              ui('Ui', 'ui');
 
               final String displayName;
-              final String entry;
+              final String key;
 
-              const SoundSource(this.displayName, this.entry);
+              const SoundSource(this.displayName, this.key);
 
             }
         """.trimIndent()
 
-        assertEquals(expectedClass, soundSourceFile.readText(), "Generated Dart class does not match expected content")
+        assertEquals(generated(expectedClass), soundSourceFile.readText(), "Generated Dart class does not match expected content")
     }
 
 }

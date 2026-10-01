@@ -19,7 +19,7 @@ class MaterialGeneratorTest : GenerationTestBase() {
 
         generator.generate(generationPath)
 
-        val materialsFolder = generationPath.resolve("materials").toFile()
+        val materialsFolder = generationPath.resolve("material").toFile()
         assertTrue(materialsFolder.exists(), "Expected materials package folder to exist")
 
         val generatedFiles = materialsFolder.listFiles()
@@ -27,13 +27,13 @@ class MaterialGeneratorTest : GenerationTestBase() {
         assertEquals(8, generatedFiles!!.size, "Expected exactly 8 material files to be generated")
 
         val expectedFiles = mapOf(
-            "block_materials.dart" to "enum BlockMaterial",
-            "armor_materials.dart" to "enum ArmorMaterial",
-            "tool_materials.dart" to "enum ToolMaterial",
-            "weapon_materials.dart" to "enum WeaponMaterial",
-            "food_materials.dart" to "enum FoodMaterial",
-            "dye_materials.dart" to "enum DyeMaterial",
-            "spawn_egg_materials.dart" to "enum SpawnEggMaterial"
+            "block_material.dart" to "enum BlockMaterial",
+            "armor_material.dart" to "enum ArmorMaterial",
+            "tool_material.dart" to "enum ToolMaterial",
+            "weapon_material.dart" to "enum WeaponMaterial",
+            "food_material.dart" to "enum FoodMaterial",
+            "dye_material.dart" to "enum DyeMaterial",
+            "spawn_egg_material.dart" to "enum SpawnEggMaterial"
         )
 
         for ((fileName, expectedEnum) in expectedFiles) {
@@ -42,7 +42,7 @@ class MaterialGeneratorTest : GenerationTestBase() {
             val content = file.readText()
             assertTrue(content.contains(expectedEnum), "Expected $fileName to contain '$expectedEnum'")
             assertTrue(content.contains("final String displayName;"), "$fileName should declare displayName property")
-            assertTrue(content.contains("final String material;"), "$fileName should declare material property")
+            assertTrue(content.contains("final String key;"), "$fileName should declare key property")
             assertTrue(content.contains("final int maxStackSize;"), "$fileName should declare maxStackSize property")
         }
     }
@@ -51,13 +51,14 @@ class MaterialGeneratorTest : GenerationTestBase() {
     fun `test material search generation`(env: Env) {
         MaterialGenerator().generate(generationPath)
 
-        val file = generationPath.resolve("materials").resolve("material_search.dart").toFile()
+        val file = generationPath.resolve("material").resolve("material_search.dart").toFile()
         assertTrue(file.exists(), "Expected material_search.dart to exist")
         val content = file.readText()
 
         assertTrue(content.contains("import '../api/material_search.dart';"))
         assertTrue(content.contains("enum MaterialCategory implements SearchCategory"))
         assertTrue(content.contains("enum MaterialSearchEntry implements SearchableMaterial"))
+        assertTrue(content.contains("final String key;"))
         assertTrue(content.contains("final List<String> terms;"))
         assertTrue(content.contains("final int categories;"))
 
