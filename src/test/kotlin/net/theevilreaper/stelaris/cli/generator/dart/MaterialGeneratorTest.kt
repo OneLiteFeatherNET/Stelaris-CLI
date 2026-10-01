@@ -43,6 +43,7 @@ class MaterialGeneratorTest : GenerationTestBase() {
             assertTrue(content.contains(expectedEnum), "Expected $fileName to contain '$expectedEnum'")
             assertTrue(content.contains("final String displayName;"), "$fileName should declare displayName property")
             assertTrue(content.contains("final String key;"), "$fileName should declare key property")
+            assertTrue(content.contains("implements Keyed"), "$fileName should implement Keyed")
             assertTrue(content.contains("final int maxStackSize;"), "$fileName should declare maxStackSize property")
         }
     }
@@ -58,23 +59,24 @@ class MaterialGeneratorTest : GenerationTestBase() {
         assertTrue(content.contains("import '../../api/material_search.dart';"))
         assertTrue(content.contains("enum MaterialCategory implements SearchCategory"))
         assertTrue(content.contains("enum MaterialSearchEntry implements SearchableMaterial"))
+        assertTrue(content.contains("final String displayName;"))
         assertTrue(content.contains("final String key;"))
         assertTrue(content.contains("final List<String> terms;"))
         assertTrue(content.contains("final int categories;"))
 
         val block = 1 shl 0
-        assertTrue(content.contains("block($block)"), "Expected the block category to use the first bit")
+        assertTrue(content.contains("block('Block', 'block', $block)"), "Expected the block category to use the first bit")
         assertTrue(
-            content.contains("diamondSword('minecraft:diamond_sword', 'diamond sword', ['diamond', 'sword'],"),
+            content.contains("diamondSword('Diamond Sword', 'minecraft:diamond_sword', 'diamond sword', ['diamond', 'sword'],"),
             "Expected the diamond sword entry to contain its search key and terms"
         )
         assertTrue(
-            content.contains("stick('minecraft:stick', 'stick', ['stick'], 0)"),
+            content.contains("stick('Stick', 'minecraft:stick', 'stick', ['stick'], 0)"),
             "Expected materials without a category to be part of the search"
         )
         assertEquals(
             Material.values().size,
-            content.lines().count { it.trimStart().contains("('minecraft:") },
+            Regex("'minecraft:[a-z0-9_]+'").findAll(content).count(),
             "Expected one search entry per material"
         )
     }

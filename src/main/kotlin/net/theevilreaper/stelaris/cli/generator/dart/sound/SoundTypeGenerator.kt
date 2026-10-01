@@ -12,6 +12,8 @@ import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PARAMETERS
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PROPERTIES
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
@@ -27,6 +29,7 @@ class SoundTypeGenerator : BaseGenerator(
 
         val entries = SoundType.entries
         val enumFile = ClassSpec.enumClass(className)
+            .keyed(className)
             .apply {
                 entries.forEach { soundType ->
                     enumProperty(EnumEntrySpec.builder(soundType.type)
@@ -50,7 +53,8 @@ class SoundTypeGenerator : BaseGenerator(
             }
             .build()
         val file = DartFile.builder("sound_type")
+            .keyedLookup(className)
             .type(enumFile)
-        file.writeGenerated(folder)
+        file.writeGenerated(folder, baseDir = outputPath.parent)
     }
 }

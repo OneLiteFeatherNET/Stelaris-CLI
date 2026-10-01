@@ -9,6 +9,7 @@ import net.theevilreaper.dartpoet.enum.EnumEntrySpec
 import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.dartpoet.parameter.ParameterSpec
 import net.theevilreaper.dartpoet.property.PropertySpec
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
 import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
 import net.theevilreaper.stelaris.cli.util.StringHelper
 
@@ -31,6 +32,7 @@ internal object MaterialSubGenerator {
                 .build()
         }
         val enumFile = ClassSpec.enumClass(className)
+            .keyed(className)
             .enumProperties(*enumProperties.toTypedArray())
             .properties(
                 PropertySpec.builder("displayName", String::class).modifier(enumModifier).build(),

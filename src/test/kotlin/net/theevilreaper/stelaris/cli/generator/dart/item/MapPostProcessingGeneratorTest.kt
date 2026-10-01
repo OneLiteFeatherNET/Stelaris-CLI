@@ -28,15 +28,25 @@ class MapPostProcessingGeneratorTest : GenerationTestBase() {
         )
 
         val expectedContent = """
-            enum MapPostProcessing {
+            import '../../api/keyed.dart';
 
-              lock('Lock'),
-              scale('Scale');
+            final Map<String, MapPostProcessing> _mapPostProcessingByKey = {for (final e in
+                MapPostProcessing.values) e.key: e};
+
+            enum MapPostProcessing implements Keyed {
+
+              lock('Lock', 'lock'),
+              scale('Scale', 'scale');
 
               final String displayName;
+              final String key;
 
-              const MapPostProcessing(this.displayName);
+              const MapPostProcessing(this.displayName, this.key);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static MapPostProcessing? byKey(String key) {
+                return _mapPostProcessingByKey[key];
+              }
             }
         """.trimIndent()
 

@@ -13,6 +13,8 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
@@ -52,6 +54,7 @@ class HoverEventActionGenerator : BaseGenerator(
             }
 
         val enumClass = ClassSpec.enumClass(className)
+            .keyed(className)
             .enumProperties(*enumProperties.toTypedArray())
             .property {
                 PropertySpec.builder("displayName", String::class)
@@ -73,7 +76,8 @@ class HoverEventActionGenerator : BaseGenerator(
             .build()
 
         val enumFile = DartFile.builder("hover_event_action")
+            .keyedLookup(className)
             .type(enumClass)
-        enumFile.writeGenerated(folder, baseDir = outputPath)
+        enumFile.writeGenerated(folder, baseDir = outputPath.parent)
     }
 }

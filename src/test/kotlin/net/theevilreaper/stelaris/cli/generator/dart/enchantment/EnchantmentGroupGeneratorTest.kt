@@ -29,17 +29,27 @@ class EnchantmentGroupGeneratorTest : GenerationTestBase() {
             ///
             /// Enchantments are grouped by the type of items they can be applied to,
             /// making it easier to filter and organize them by use case.
-            enum EnchantmentGroup {
+            import '../../api/keyed.dart';
 
-              armor('Armor'),
-              weapon('Weapon'),
-              tool('Tool'),
-              meta('Meta');
+            final Map<String, EnchantmentGroup> _enchantmentGroupByKey = {for (final e in
+                EnchantmentGroup.values) e.key: e};
+
+            enum EnchantmentGroup implements Keyed {
+
+              armor('Armor', 'armor'),
+              weapon('Weapon', 'weapon'),
+              tool('Tool', 'tool'),
+              meta('Meta', 'meta');
 
               final String displayName;
+              final String key;
 
-              const EnchantmentGroup(this.displayName);
+              const EnchantmentGroup(this.displayName, this.key);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static EnchantmentGroup? byKey(String key) {
+                return _enchantmentGroupByKey[key];
+              }
             }
         """.trimIndent()),
             generatedFile.readText(), "Generated Dart class does not match expected content"

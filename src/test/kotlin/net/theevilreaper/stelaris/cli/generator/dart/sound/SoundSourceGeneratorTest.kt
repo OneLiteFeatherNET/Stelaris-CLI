@@ -32,7 +32,11 @@ class SoundSourceGeneratorTest : GenerationTestBase() {
         )
 
         val expectedClass = """
-            enum SoundSource {
+            import '../../api/keyed.dart';
+
+            final Map<String, SoundSource> _soundSourceByKey = {for (final e in SoundSource.values) e.key: e};
+
+            enum SoundSource implements Keyed {
 
               master('Master', 'master'),
               music('Music', 'music'),
@@ -51,6 +55,10 @@ class SoundSourceGeneratorTest : GenerationTestBase() {
 
               const SoundSource(this.displayName, this.key);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static SoundSource? byKey(String key) {
+                return _soundSourceByKey[key];
+              }
             }
         """.trimIndent()
 

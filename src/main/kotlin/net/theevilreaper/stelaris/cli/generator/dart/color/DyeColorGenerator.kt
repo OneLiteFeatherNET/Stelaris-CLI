@@ -14,7 +14,11 @@ import net.theevilreaper.dartpoet.type.ClassName
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PARAMETERS
+import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PROPERTIES
 import net.theevilreaper.stelaris.cli.generator.dart.util.apiImport
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
@@ -33,6 +37,12 @@ class DyeColorGenerator : BaseGenerator(
             val name = StringHelper.toLowerCamelCase(dyeColor.name)
             EnumEntrySpec.builder(name)
                 .parameter {
+                    EnumParameterSpec.positional("%C", StringHelper.mapDisplayName(dyeColor.name))
+                }
+                .parameter {
+                    EnumParameterSpec.positional("%C", dyeColor.name.lowercase())
+                }
+                .parameter {
                     EnumParameterSpec.positional("%L", formatColor(dyeColor.color().asRGB()))
                 }
                 .parameter {
@@ -48,7 +58,9 @@ class DyeColorGenerator : BaseGenerator(
         }.toList()
 
         val enumClass = ClassSpec.enumClass(className)
+            .keyed(className)
             .enumProperties(*enumProperties.toTypedArray())
+            .properties(*DEFAULT_PROPERTIES)
             .property {
                 PropertySpec.builder("textureDiffuseColor", ClassName("RgbColor"))
                     .modifier { DartModifier.FINAL }
@@ -72,6 +84,7 @@ class DyeColorGenerator : BaseGenerator(
             .constructor {
                 ConstructorSpec.builder(className)
                     .modifier { DartModifier.CONST }
+                    .parameters(*DEFAULT_PARAMETERS)
                     .parameter(ParameterSpec.positional("textureDiffuseColor").build())
                     .parameter(ParameterSpec.positional("textColor").build())
                     .parameter(ParameterSpec.positional("fireworkColor").build())
@@ -81,6 +94,7 @@ class DyeColorGenerator : BaseGenerator(
             .build()
 
         val enumFile = DartFile.builder("dye_color")
+            .keyedLookup(className)
             .directive(apiImport("rgb_color.dart"))
             .type(enumClass)
         enumFile.writeGenerated(folder, baseDir = outputPath.parent)

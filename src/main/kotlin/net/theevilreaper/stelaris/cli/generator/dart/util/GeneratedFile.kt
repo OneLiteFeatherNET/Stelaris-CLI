@@ -19,18 +19,21 @@ const val GENERATED_FILE_HEADER: String =
 private const val DART_FILE_ENDING = ".dart"
 
 /**
- * The path of the handwritten api (`lib/src/api`) relative to the folder of a generated domain
- * (`lib/src/generated/<domain>`).
+ * The folder of the handwritten api (`lib/src/api`), which is a sibling of the generation folder (`lib/src/generated`).
  */
-private const val API_PATH = "../../api"
+private const val API_FOLDER = "api"
 
 /**
  * Creates the import of a file from the handwritten api of the package.
  * A file which uses this import has to be written with the parent of the generation folder as base directory.
  * @param fileName the name of the api file, e.g. `rgb_color.dart`
+ * @param folderDepth the number of folders between the generation folder and the file, e.g. 2 for `entity/variant`
  * @return the created [Directive]
  */
-fun apiImport(fileName: String): Directive = DirectiveFactory.create(DirectiveType.RELATIVE, "$API_PATH/$fileName")
+fun apiImport(fileName: String, folderDepth: Int = 1): Directive {
+    require(folderDepth > 0) { "The folder depth must be positive" }
+    return DirectiveFactory.create(DirectiveType.RELATIVE, "${"../".repeat(folderDepth + 1)}$API_FOLDER/$fileName")
+}
 
 /**
  * Builds and writes the file to the given [folder] and marks it as generated.

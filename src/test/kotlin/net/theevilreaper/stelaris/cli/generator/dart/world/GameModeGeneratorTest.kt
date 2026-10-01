@@ -26,10 +26,11 @@ class GameModeGeneratorTest : GenerationTestBase() {
         val content = generatedFile.readText()
         assertTrue(content.contains("enum GameMode"), "Generated file should declare GameMode enum")
         assertTrue(content.contains("final String displayName;"))
+        assertTrue(content.contains("final String key;"))
         assertTrue(content.contains("final int id;"))
-        assertTrue(content.contains("survival('Survival', 0)"))
-        assertTrue(content.contains("creative('Creative', 1)"))
-        assertTrue(content.contains("adventure('Adventure', 2)"))
-        assertTrue(content.contains("spectator('Spectator', 3)"))
+        assertTrue(content.contains("survival('Survival', 'survival', 0)"))
+        assertTrue(content.contains("creative('Creative', 'creative', 1)"))
+        assertTrue(content.contains("adventure('Adventure', 'adventure', 2)"))
+        assertTrue(content.contains("spectator('Spectator', 'spectator', 3)"))
     }
 }

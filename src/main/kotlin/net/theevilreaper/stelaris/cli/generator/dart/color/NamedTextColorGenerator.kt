@@ -15,6 +15,8 @@ import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.util.apiImport
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
@@ -56,6 +58,7 @@ class NamedTextColorGenerator : BaseGenerator(
         }.toList()
 
         val enumClass = ClassSpec.enumClass(className)
+            .keyed(className)
             .enumProperties(*enumProperties.toTypedArray())
             .property {
                 PropertySpec.builder("displayName", String::class)
@@ -83,6 +86,7 @@ class NamedTextColorGenerator : BaseGenerator(
             .build()
 
         val enumFile = DartFile.builder("named_text_color")
+            .keyedLookup(className)
             .directive(apiImport("rgb_color.dart"))
             .type(enumClass)
         enumFile.writeGenerated(folder, baseDir = outputPath.parent)

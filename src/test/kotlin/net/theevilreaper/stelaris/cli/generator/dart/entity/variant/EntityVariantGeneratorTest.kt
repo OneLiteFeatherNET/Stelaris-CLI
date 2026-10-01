@@ -34,19 +34,29 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
         // Check axolotl_variant.dart content
         val axolotlFile = folder.resolve("axolotl_variant.dart")
         val expectedAxolotlContent = """
-            enum AxolotlVariant {
+            import '../../../api/keyed.dart';
 
-              lucy('Lucy', 0),
-              wild('Wild', 1),
-              gold('Gold', 2),
-              cyan('Cyan', 3),
-              blue('Blue', 4);
+            final Map<String, AxolotlVariant> _axolotlVariantByKey = {for (final e in AxolotlVariant.values)
+                e.key: e};
+
+            enum AxolotlVariant implements Keyed {
+
+              lucy('Lucy', 'lucy', 0),
+              wild('Wild', 'wild', 1),
+              gold('Gold', 'gold', 2),
+              cyan('Cyan', 'cyan', 3),
+              blue('Blue', 'blue', 4);
 
               final String displayName;
+              final String key;
               final int id;
 
-              const AxolotlVariant(this.displayName, this.id);
+              const AxolotlVariant(this.displayName, this.key, this.id);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static AxolotlVariant? byKey(String key) {
+                return _axolotlVariantByKey[key];
+              }
             }
         """.trimIndent()
         assertEquals(generated(expectedAxolotlContent), axolotlFile.readText())
@@ -54,7 +64,12 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
         // Check mooshroom_variant.dart content
         val mooshroomFile = folder.resolve("mooshroom_variant.dart")
         val expectedMooshroomContent = """
-            enum MooshroomVariant {
+            import '../../../api/keyed.dart';
+
+            final Map<String, MooshroomVariant> _mooshroomVariantByKey = {for (final e in
+                MooshroomVariant.values) e.key: e};
+
+            enum MooshroomVariant implements Keyed {
 
               red('Red', 'red'),
               brown('Brown', 'brown');
@@ -64,21 +79,34 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
 
               const MooshroomVariant(this.displayName, this.key);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static MooshroomVariant? byKey(String key) {
+                return _mooshroomVariantByKey[key];
+              }
             }
         """.trimIndent()
         // Check fox_variant.dart content
         val foxFile = folder.resolve("fox_variant.dart")
         val expectedFoxContent = """
-            enum FoxVariant {
+            import '../../../api/keyed.dart';
 
-              red('Red', 0),
-              snow('Snow', 1);
+            final Map<String, FoxVariant> _foxVariantByKey = {for (final e in FoxVariant.values) e.key: e};
+
+            enum FoxVariant implements Keyed {
+
+              red('Red', 'red', 0),
+              snow('Snow', 'snow', 1);
 
               final String displayName;
+              final String key;
               final int id;
 
-              const FoxVariant(this.displayName, this.id);
+              const FoxVariant(this.displayName, this.key, this.id);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static FoxVariant? byKey(String key) {
+                return _foxVariantByKey[key];
+              }
             }
         """.trimIndent()
         assertEquals(generated(expectedFoxContent), foxFile.readText())
@@ -86,19 +114,29 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
         // Check parrot_variant.dart content
         val parrotFile = folder.resolve("parrot_variant.dart")
         val expectedParrotContent = """
-            enum ParrotVariant {
+            import '../../../api/keyed.dart';
 
-              redBlue('Red Blue', 0),
-              blue('Blue', 1),
-              green('Green', 2),
-              yellowBlue('Yellow Blue', 3),
-              grey('Grey', 4);
+            final Map<String, ParrotVariant> _parrotVariantByKey = {for (final e in ParrotVariant.values) e.key:
+                e};
+
+            enum ParrotVariant implements Keyed {
+
+              redBlue('Red Blue', 'red_blue', 0),
+              blue('Blue', 'blue', 1),
+              green('Green', 'green', 2),
+              yellowBlue('Yellow Blue', 'yellow_blue', 3),
+              grey('Grey', 'grey', 4);
 
               final String displayName;
+              final String key;
               final int id;
 
-              const ParrotVariant(this.displayName, this.id);
+              const ParrotVariant(this.displayName, this.key, this.id);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static ParrotVariant? byKey(String key) {
+                return _parrotVariantByKey[key];
+              }
             }
         """.trimIndent()
         assertEquals(generated(expectedParrotContent), parrotFile.readText())
@@ -106,21 +144,31 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
         // Check rabbit_variant.dart content
         val rabbitFile = folder.resolve("rabbit_variant.dart")
         val expectedRabbitContent = """
-            enum RabbitVariant {
+            import '../../../api/keyed.dart';
 
-              brown('Brown', 0),
-              white('White', 1),
-              black('Black', 2),
-              blackAndWhite('Black And White', 3),
-              gold('Gold', 4),
-              saltAndPepper('Salt And Pepper', 5),
-              killerBunny('Killer Bunny', 6);
+            final Map<String, RabbitVariant> _rabbitVariantByKey = {for (final e in RabbitVariant.values) e.key:
+                e};
+
+            enum RabbitVariant implements Keyed {
+
+              brown('Brown', 'brown', 0),
+              white('White', 'white', 1),
+              black('Black', 'black', 2),
+              blackAndWhite('Black And White', 'black_and_white', 3),
+              gold('Gold', 'gold', 4),
+              saltAndPepper('Salt And Pepper', 'salt_and_pepper', 5),
+              killerBunny('Killer Bunny', 'killer_bunny', 6);
 
               final String displayName;
+              final String key;
               final int id;
 
-              const RabbitVariant(this.displayName, this.id);
+              const RabbitVariant(this.displayName, this.key, this.id);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static RabbitVariant? byKey(String key) {
+                return _rabbitVariantByKey[key];
+              }
             }
         """.trimIndent()
         assertEquals(generated(expectedRabbitContent), rabbitFile.readText())
@@ -128,17 +176,26 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
         // Check salmon_size.dart content
         val salmonFile = folder.resolve("salmon_size.dart")
         val expectedSalmonContent = """
-            enum SalmonSize {
+            import '../../../api/keyed.dart';
 
-              small('Small', 0),
-              medium('Medium', 1),
-              large('Large', 2);
+            final Map<String, SalmonSize> _salmonSizeByKey = {for (final e in SalmonSize.values) e.key: e};
+
+            enum SalmonSize implements Keyed {
+
+              small('Small', 'small', 0),
+              medium('Medium', 'medium', 1),
+              large('Large', 'large', 2);
 
               final String displayName;
+              final String key;
               final int id;
 
-              const SalmonSize(this.displayName, this.id);
+              const SalmonSize(this.displayName, this.key, this.id);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static SalmonSize? byKey(String key) {
+                return _salmonSizeByKey[key];
+              }
             }
         """.trimIndent()
         assertEquals(generated(expectedSalmonContent), salmonFile.readText())

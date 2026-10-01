@@ -13,6 +13,7 @@ import net.theevilreaper.stelaris.cli.generator.dart.material.MaterialSearchGene
 import net.theevilreaper.stelaris.cli.generator.dart.material.MaterialSubGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.material.MaterialSubType
 import net.theevilreaper.stelaris.cli.generator.dart.util.apiImport
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
@@ -49,6 +50,7 @@ class MaterialGenerator : BaseGenerator(
             val enumClass = generateItemEnum(models, className) { mat -> mapTypeToBoolean(it, mat) }
             if (enumClass == null) return@forEach
             val file = DartFile.builder(fileName)
+                .keyedLookup(className)
                 .type(enumClass)
             enumFiles.add(file)
         }
@@ -65,14 +67,17 @@ class MaterialGenerator : BaseGenerator(
      * @return the [DartFileBuilder] of the file
      */
     private fun generateSearchFile(materials: Collection<Material>): DartFileBuilder {
-        val categoryEnum = MaterialSearchGenerator.generateCategoryEnum("${materialClassName}Category")
-        val searchEnum = MaterialSearchGenerator.generateSearchEnum("${materialClassName}SearchEntry", materials) { mat ->
+        val categoryClassName = "${materialClassName}Category"
+        val searchClassName = "${materialClassName}SearchEntry"
+        val categoryEnum = MaterialSearchGenerator.generateCategoryEnum(categoryClassName)
+        val searchEnum = MaterialSearchGenerator.generateSearchEnum(searchClassName, materials) { mat ->
             MaterialSubType.entries
                 .filter { mapTypeToBoolean(it, mat) }
                 .fold(0) { mask, type -> mask or MaterialSearchGenerator.mask(type) }
         }
         return DartFile.builder("material_search")
             .directive(apiImport("material_search.dart"))
+            .keyedLookup(categoryClassName, searchClassName, importKeyed = false)
             .type(categoryEnum, searchEnum)
     }
 
