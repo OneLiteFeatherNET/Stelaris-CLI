@@ -28,7 +28,6 @@ class VillagerTypeGeneratorTest : GenerationTestBase() {
         )
 
         val expectedContent = """
-            /// The file is generated. Don't change anything here
             enum VillagerType {
 
               desert('Desert', 'minecraft:desert'),
@@ -47,6 +46,6 @@ class VillagerTypeGeneratorTest : GenerationTestBase() {
             }
         """.trimIndent()
 
-        assertEquals(expectedContent, generatedFile.readText(), "Generated Dart class does not match expected content")
+        assertEquals(generated(expectedContent), generatedFile.readText(), "Generated Dart class does not match expected content")
     }
 }

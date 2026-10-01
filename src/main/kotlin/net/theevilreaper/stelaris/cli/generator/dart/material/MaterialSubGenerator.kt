@@ -14,12 +14,12 @@ import net.theevilreaper.stelaris.cli.util.StringHelper
 
 internal object MaterialSubGenerator {
 
-    private const val MATERIAL_KEY = "material"
+    private const val KEY = "key"
     private const val MAX_STACK_SIZE = "maxStackSize"
     private val enumModifier = DartModifier.FINAL
 
     fun generateBlockMaterialEnum(className: String, materials: List<Material>): ClassBuilder {
-        val enumProperties = materials.map {
+        val enumProperties = materials.distinctBy { it.name() }.sortedBy { it.name() }.map {
             val rawName = it.name()
             val nameWithoutMinecraftPrefix = rawName.replace("minecraft:", EMPTY_STRING)
             val variableName = StringHelper.toLowerCamelCase(nameWithoutMinecraftPrefix)
@@ -29,12 +29,12 @@ internal object MaterialSubGenerator {
                 .parameter(EnumParameterSpec.positional("%C", rawName))
                 .parameter(EnumParameterSpec.positional("%L", it.maxStackSize()))
                 .build()
-        }.toSet()
+        }
         val enumFile = ClassSpec.enumClass(className)
             .enumProperties(*enumProperties.toTypedArray())
             .properties(
                 PropertySpec.builder("displayName", String::class).modifier(enumModifier).build(),
-                PropertySpec.builder(MATERIAL_KEY, String::class).modifier(enumModifier).build(),
+                PropertySpec.builder(KEY, String::class).modifier(enumModifier).build(),
                 PropertySpec.builder(MAX_STACK_SIZE, Int::class).modifier(enumModifier).build()
             )
             .constructor(
@@ -42,7 +42,7 @@ internal object MaterialSubGenerator {
                     .modifier(DartModifier.CONST)
                     .parameters(
                         ParameterSpec.positional("displayName").build(),
-                        ParameterSpec.positional(MATERIAL_KEY).build(),
+                        ParameterSpec.positional(KEY).build(),
                         ParameterSpec.positional(MAX_STACK_SIZE).build()
                     )
                     .build()

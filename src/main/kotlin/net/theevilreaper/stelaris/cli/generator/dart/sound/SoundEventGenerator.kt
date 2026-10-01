@@ -4,6 +4,7 @@ import com.google.auto.service.AutoService
 import net.kyori.adventure.key.Key
 import net.minestom.server.sound.SoundEvent
 import net.theevilreaper.dartpoet.DartFile
+import net.theevilreaper.dartpoet.DartFileBuilder
 import net.theevilreaper.dartpoet.DartModifier
 import net.theevilreaper.dartpoet.clazz.ClassSpec
 import net.theevilreaper.dartpoet.constructor.ConstructorSpec
@@ -14,6 +15,7 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
@@ -29,12 +31,13 @@ class SoundEventGenerator : BaseGenerator(
         val soundEntries = SoundEvent.values()
         val mappedEntries = SoundHelper.mapSoundEvents(soundEntries)
 
-        val enumFiles = mutableListOf<DartFile>()
+        val enumFiles = mutableListOf<DartFileBuilder>()
         mappedEntries.forEach { (key, value) ->
             val className = "${key.type.replaceFirstChar { it.uppercase() }}Sound"
             val fileName = "${key.type}_sound"
 
             val enumEntries = value
+                .sortedBy { it.key().asString() }
                 .distinctBy {
                     val parts = it.key().value().split(".")
                     if (parts.size >= 2) "${parts[1]}_${parts.last()}" else parts.last()
@@ -46,7 +49,7 @@ class SoundEventGenerator : BaseGenerator(
                     enumEntries.forEach { enumProperty(it) }
                 }
                 .property(
-                    PropertySpec.builder("name", String::class).modifier(DartModifier.FINAL).build()
+                    PropertySpec.builder("displayName", String::class).modifier(DartModifier.FINAL).build()
                 )
                 .property(
                     PropertySpec.builder("key", String::class).modifier(DartModifier.FINAL).build()
@@ -54,21 +57,19 @@ class SoundEventGenerator : BaseGenerator(
                 .constructor(
                     ConstructorSpec.builder(className)
                         .modifier(DartModifier.CONST)
-                        .parameter(ParameterSpec.positional("name").build())
+                        .parameter(ParameterSpec.positional("displayName").build())
                         .parameter(ParameterSpec.positional("key").build())
                         .build()
                 )
                 .build()
             val file = DartFile.builder(fileName)
-                .doc("Generated class for the sound events. Don't edit this file manually")
                 .type(enumClass)
-                .build()
             enumFiles.add(file)
         }
 
 
         // Write all enum files to the folder
-        enumFiles.forEach { it.write(folder) }
+        enumFiles.forEach { it.writeGenerated(folder) }
     }
 
     private fun buildEnumEntry(soundKey: Key): EnumEntrySpec {

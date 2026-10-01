@@ -33,22 +33,22 @@ class BossBarOverlayGeneratorTest : GenerationTestBase() {
         val expectedClass = """
             enum BossBarOverlay {
 
-              progress('Progress', 'PROGRESS'),
-              notched_6('Notched 6', 'NOTCHED_6'),
-              notched_10('Notched 10', 'NOTCHED_10'),
-              notched_12('Notched 12', 'NOTCHED_12'),
-              notched_20('Notched 20', 'NOTCHED_20');
+              progress('Progress', 'progress'),
+              notched6('Notched 6', 'notched_6'),
+              notched10('Notched 10', 'notched_10'),
+              notched12('Notched 12', 'notched_12'),
+              notched20('Notched 20', 'notched_20');
 
               final String displayName;
-              final String type;
+              final String key;
 
-              const BossBarOverlay(this.displayName, this.type);
+              const BossBarOverlay(this.displayName, this.key);
 
             }
         """.trimIndent()
 
         val content = bossBarOverlayFile.readText()
-        assertEquals(expectedClass, content, "Generated Dart class does not match expected content")
+        assertEquals(generated(expectedClass), content, "Generated Dart class does not match expected content")
     }
 
 }

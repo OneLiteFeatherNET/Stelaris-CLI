@@ -16,6 +16,7 @@ import net.theevilreaper.dartpoet.type.ClassName
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
@@ -63,7 +64,7 @@ class NamedTextColorGenerator : BaseGenerator(
                     .build()
             }
             .property {
-                PropertySpec.builder("name", String::class)
+                PropertySpec.builder("key", String::class)
                     .modifier { DartModifier.FINAL }
                     .build()
             }
@@ -76,7 +77,7 @@ class NamedTextColorGenerator : BaseGenerator(
                 ConstructorSpec.builder(className)
                     .modifier { DartModifier.CONST }
                     .parameter(ParameterSpec.positional("displayName").build())
-                    .parameter(ParameterSpec.positional("name").build())
+                    .parameter(ParameterSpec.positional("key").build())
                     .parameter(ParameterSpec.positional("color").build())
                     .build()
             }
@@ -84,10 +85,8 @@ class NamedTextColorGenerator : BaseGenerator(
 
         val enumFile = DartFile.builder("named_text_color")
             .directive(DirectiveFactory.create(DirectiveType.RELATIVE, "../api/color.dart"))
-            .doc("The file is generated. Don't change anything here")
             .type(enumClass)
-            .build()
-        enumFile.write(folder, baseDir = outputPath)
+        enumFile.writeGenerated(folder, baseDir = outputPath)
     }
 
     private fun formatColor(rgb: Int): String {

@@ -8,6 +8,7 @@ import net.minestom.server.entity.metadata.animal.tameable.ParrotMeta
 import net.minestom.server.entity.metadata.water.AxolotlMeta
 import net.minestom.server.entity.metadata.water.fish.SalmonMeta
 import net.theevilreaper.dartpoet.DartFile
+import net.theevilreaper.dartpoet.DartFileBuilder
 import net.theevilreaper.dartpoet.DartModifier
 import net.theevilreaper.dartpoet.clazz.ClassSpec
 import net.theevilreaper.dartpoet.constructor.ConstructorSpec
@@ -18,6 +19,7 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
@@ -30,7 +32,7 @@ class EntityVariantGenerator : BaseGenerator(
 
     override fun generate(outputPath: Path) {
         val folder = checkPackageFolder(outputPath, packageName)
-        val files = mutableListOf<DartFile>()
+        val files = mutableListOf<DartFileBuilder>()
 
         // 1. AxolotlVariant
         files.add(generateIdEnum(
@@ -87,14 +89,14 @@ class EntityVariantGenerator : BaseGenerator(
             }
         ))
 
-        files.forEach { it.write(folder) }
+        files.forEach { it.writeGenerated(folder) }
     }
 
     private fun generateIdEnum(
         className: String,
         fileName: String,
         entries: List<Pair<String, Pair<String, Int>>>,
-    ): DartFile {
+    ): DartFileBuilder {
         val enumProperties = entries.map { (name, data) ->
             val (displayName, id) = data
             EnumEntrySpec.builder(name)
@@ -125,16 +127,14 @@ class EntityVariantGenerator : BaseGenerator(
             .build()
 
         return DartFile.builder(fileName)
-            .doc("The file is generated. Don't change anything here")
             .type(enumClass)
-            .build()
     }
 
     private fun generateStringEnum(
         className: String,
         fileName: String,
         entries: List<Pair<String, Pair<String, String>>>,
-    ): DartFile {
+    ): DartFileBuilder {
         val enumProperties = entries.map { (name, data) ->
             val (displayName, key) = data
             EnumEntrySpec.builder(name)
@@ -165,8 +165,6 @@ class EntityVariantGenerator : BaseGenerator(
             .build()
 
         return DartFile.builder(fileName)
-            .doc("The file is generated. Don't change anything here")
             .type(enumClass)
-            .build()
     }
 }

@@ -13,6 +13,7 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
@@ -20,10 +21,11 @@ import java.nio.file.Path
 @CodeGenerator(name = "FrameTypeGenerator")
 class FrameTypeGenerator : BaseGenerator(
     className = "FrameType",
-    packageName = "frame_type",
+    packageName = "advancement",
 ) {
-    private val displayEntry: String = "display"
+    private val displayEntry: String = "displayName"
     override fun generate(outputPath: Path) {
+        val folder = checkPackageFolder(outputPath, packageName)
         val enumFile = ClassSpec.enumClass(className)
             .also {
                 FrameType.entries.forEach { model ->
@@ -44,9 +46,8 @@ class FrameTypeGenerator : BaseGenerator(
             )
             .endWithNewLine(true)
             .build()
-        val file = DartFile.builder(packageName)
+        val file = DartFile.builder("frame_type")
             .type(enumFile)
-            .build()
-        file.write(outputPath)
+        file.writeGenerated(folder)
     }
 }

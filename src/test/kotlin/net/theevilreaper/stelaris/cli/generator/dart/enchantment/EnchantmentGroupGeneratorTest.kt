@@ -24,7 +24,7 @@ class EnchantmentGroupGeneratorTest : GenerationTestBase() {
         )
 
         assertEquals(
-            """
+            generated("""
             /// Represents a category of enchantments based on their primary application
             ///
             /// Enchantments are grouped by the type of items they can be applied to,
@@ -41,7 +41,7 @@ class EnchantmentGroupGeneratorTest : GenerationTestBase() {
               const EnchantmentGroup(this.displayName);
 
             }
-        """.trimIndent(),
+        """.trimIndent()),
             generatedFile.readText(), "Generated Dart class does not match expected content"
         )
     }

@@ -29,24 +29,23 @@ class SoundTypeGeneratorTest : GenerationTestBase() {
         )
 
         val expectedClass = """
-            /// Generated class for the sound types. Don't edit this file manually
             enum SoundType {
 
-              block('Block', 'BLOCK'),
-              entity('Entity', 'ENTITY'),
-              music('Music', 'MUSIC'),
-              item('Item', 'ITEM'),
-              ambient('Ambient', 'AMBIENT');
+              block('Block', 'block'),
+              entity('Entity', 'entity'),
+              music('Music', 'music'),
+              item('Item', 'item'),
+              ambient('Ambient', 'ambient');
 
               final String displayName;
-              final String entry;
+              final String key;
 
-              const SoundType(this.displayName, this.entry);
+              const SoundType(this.displayName, this.key);
 
             }
         """.trimIndent()
 
-        assertEquals(expectedClass, soundTypeFile.readText(), "Generated Dart class does not match expected content")
+        assertEquals(generated(expectedClass), soundTypeFile.readText(), "Generated Dart class does not match expected content")
     }
 
 }

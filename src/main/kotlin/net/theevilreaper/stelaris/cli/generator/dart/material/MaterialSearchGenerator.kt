@@ -21,7 +21,7 @@ import net.theevilreaper.stelaris.cli.util.StringHelper
  */
 internal object MaterialSearchGenerator {
 
-    private const val MATERIAL_KEY = "material"
+    private const val KEY = "key"
     private const val SEARCH_KEY = "searchKey"
     private const val TERMS = "terms"
     private const val CATEGORIES = "categories"
@@ -69,7 +69,7 @@ internal object MaterialSearchGenerator {
             .implements(ClassName("SearchableMaterial"))
             .enumProperties(*entries.toTypedArray())
             .properties(
-                PropertySpec.builder(MATERIAL_KEY, String::class).modifier(enumModifier).build(),
+                PropertySpec.builder(KEY, String::class).modifier(enumModifier).build(),
                 PropertySpec.builder(SEARCH_KEY, String::class).modifier(enumModifier).build(),
                 PropertySpec.builder(TERMS, ClassName("List").parameterizedBy(STRING)).modifier(enumModifier).build(),
                 PropertySpec.builder(CATEGORIES, Int::class).modifier(enumModifier).build()
@@ -78,7 +78,7 @@ internal object MaterialSearchGenerator {
                 ConstructorSpec.builder(className)
                     .modifier(DartModifier.CONST)
                     .parameters(
-                        ParameterSpec.positional(MATERIAL_KEY).build(),
+                        ParameterSpec.positional(KEY).build(),
                         ParameterSpec.positional(SEARCH_KEY).build(),
                         ParameterSpec.positional(TERMS).build(),
                         ParameterSpec.positional(CATEGORIES).build()

@@ -28,7 +28,6 @@ class ItemRarityGeneratorTest : GenerationTestBase() {
         )
 
         val expectedContent = """
-            /// The file is generated. Don't change anything here
             enum ItemRarity {
 
               common('Common'),
@@ -43,6 +42,6 @@ class ItemRarityGeneratorTest : GenerationTestBase() {
             }
         """.trimIndent()
 
-        assertEquals(expectedContent, generatedFile.readText(), "Generated Dart class does not match expected content")
+        assertEquals(generated(expectedContent), generatedFile.readText(), "Generated Dart class does not match expected content")
     }
 }

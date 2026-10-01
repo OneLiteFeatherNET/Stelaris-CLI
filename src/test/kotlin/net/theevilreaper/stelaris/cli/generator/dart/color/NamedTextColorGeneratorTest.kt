@@ -28,7 +28,6 @@ class NamedTextColorGeneratorTest : GenerationTestBase() {
         )
 
         val expectedContent = """
-            /// The file is generated. Don't change anything here
             import '../api/color.dart';
 
             enum NamedTextColor {
@@ -51,14 +50,14 @@ class NamedTextColorGeneratorTest : GenerationTestBase() {
               yellow('Yellow', 'yellow', Color.fromRGB(0xffff55));
 
               final String displayName;
-              final String name;
+              final String key;
               final Color color;
 
-              const NamedTextColor(this.displayName, this.name, this.color);
+              const NamedTextColor(this.displayName, this.key, this.color);
 
             }
         """.trimIndent()
 
-        assertEquals(expectedContent, generatedFile.readText(), "Generated Dart class does not match expected content")
+        assertEquals(generated(expectedContent), generatedFile.readText(), "Generated Dart class does not match expected content")
     }
 }

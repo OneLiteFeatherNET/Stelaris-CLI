@@ -15,7 +15,7 @@ import net.theevilreaper.stelaris.cli.util.StringHelper
 internal object EntitySubGenerator {
 
     fun generateEntityEnum(className: String, entities: List<EntityType>): ClassBuilder {
-        val enumProperties = entities.map {
+        val enumProperties = entities.distinctBy { it.name() }.sortedBy { it.name() }.map {
             val rawName = it.name()
             val nameWithoutMinecraftPrefix = rawName.replace("minecraft:", EMPTY_STRING)
             val variableName = StringHelper.toLowerCamelCase(nameWithoutMinecraftPrefix)
@@ -24,7 +24,7 @@ internal object EntitySubGenerator {
                 .parameter(EnumParameterSpec.positional("%C", name))
                 .parameter(EnumParameterSpec.positional("%C", rawName))
                 .build()
-        }.toSet()
+        }
 
         val enumFile = ClassSpec.enumClass(className)
             .enumProperties(*enumProperties.toTypedArray())

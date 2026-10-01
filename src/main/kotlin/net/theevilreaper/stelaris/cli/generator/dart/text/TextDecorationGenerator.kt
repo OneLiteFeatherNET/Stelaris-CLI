@@ -13,6 +13,7 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
 
@@ -57,7 +58,7 @@ class TextDecorationGenerator : BaseGenerator(
                     .build()
             }
             .property {
-                PropertySpec.builder("name", String::class)
+                PropertySpec.builder("key", String::class)
                     .modifier { DartModifier.FINAL }
                     .build()
             }
@@ -65,15 +66,13 @@ class TextDecorationGenerator : BaseGenerator(
                 ConstructorSpec.builder(className)
                     .modifier { DartModifier.CONST }
                     .parameter(ParameterSpec.positional("displayName").build())
-                    .parameter(ParameterSpec.positional("name").build())
+                    .parameter(ParameterSpec.positional("key").build())
                     .build()
             }
             .build()
 
         val enumFile = DartFile.builder("text_decoration")
-            .doc("The file is generated. Don't change anything here")
             .type(enumClass)
-            .build()
-        enumFile.write(folder, baseDir = outputPath)
+        enumFile.writeGenerated(folder, baseDir = outputPath)
     }
 }

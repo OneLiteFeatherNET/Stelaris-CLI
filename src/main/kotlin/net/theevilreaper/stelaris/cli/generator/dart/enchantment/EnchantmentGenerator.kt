@@ -18,6 +18,7 @@ import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.util.CLASS_PROPERTIES
 import net.theevilreaper.stelaris.cli.generator.dart.util.CONSTRUCTOR_PARAMETERS
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Files
@@ -38,7 +39,6 @@ class EnchantmentGenerator : BaseGenerator(
 ) {
 
     override fun generate(outputPath: Path) {
-        println(outputPath)
         val enchantmentFolder = checkPackageFolder(outputPath, packageName)
         val enchantmentData: MutableCollection<Enchantment> = MinecraftServer.getEnchantmentRegistry().values()
         val mappedEnchantments: Map<EnchantmentGroup, List<Enchantment>> = enchantmentData.mapNotNull { enchantment ->
@@ -55,8 +55,11 @@ class EnchantmentGenerator : BaseGenerator(
         )
 
         mappedEnchantments.forEach { (group, enchantments) ->
-            val properties = mutableSetOf<EnumEntrySpec>()
-            enchantments.forEach { properties.add(mapEnchantmentToEnumProperty(it)) }
+            val properties = enchantments
+                .map { mapEnchantmentToEnumProperty(it) }
+                .distinctBy { (key, _) -> key }
+                .sortedBy { (key, _) -> key }
+                .map { (_, entry) -> entry }
             val updatedClassName = "${group.classPart.replaceFirstChar { it.uppercase() }}$className"
 
             val enumClass = ClassSpec.enumClass(updatedClassName)
@@ -73,36 +76,26 @@ class EnchantmentGenerator : BaseGenerator(
             val fileName = "${group.classPart}_${className.replaceFirstChar { it.lowercase() }}"
             val enumFile = DartFile.builder(fileName)
                 .directive(DirectiveFactory.create(DirectiveType.RELATIVE, "../api/enchantment.dart"))
-                .doc("The file is generated. Don't change anything here")
                 .type(enumClass)
-                .build()
-            enumFile.write(enchantmentFolder, baseDir = outputPath)
+            enumFile.writeGenerated(enchantmentFolder, baseDir = outputPath)
         }
     }
 
     /**
      * Maps the [Enchantment] to an [EnumEntrySpec] which can be used in the generated enum.
      * @param enchantment the enchantment to map
-     * @return the mapped [EnumEntrySpec]
+     * @return the key of the enchantment together with the mapped [EnumEntrySpec]
      */
-    private fun mapEnchantmentToEnumProperty(enchantment: Enchantment): EnumEntrySpec {
+    private fun mapEnchantmentToEnumProperty(enchantment: Enchantment): Pair<String, EnumEntrySpec> {
         val translatable = enchantment.description() as? TranslatableComponent
-        val keyString = translatable?.key() ?: ""
-        val minecraftValue = keyString.split(".").drop(1).joinToString(":")
-        val enchantmentName = keyString.substringAfterLast(".").split("_")
-            .mapIndexed { index, part ->
-                if (index == 0) part.lowercase() else part.replaceFirstChar { it.uppercase() }
-            }
-            .joinToString("")
-        return EnumEntrySpec.builder(enchantmentName)
-            .parameter(
-                EnumParameterSpec.positional(
-                    "%C",
-                    StringHelper.mapDisplayName(enchantmentName)
-                )
-            )
-            .parameter(EnumParameterSpec.positional("%S", minecraftValue))
+        val keyString = translatable?.key() ?: EMPTY_STRING
+        val key = keyString.split(".").drop(1).joinToString(":")
+        val rawName = keyString.substringAfterLast(".")
+        val entry = EnumEntrySpec.builder(StringHelper.toLowerCamelCase(rawName))
+            .parameter(EnumParameterSpec.positional("%C", StringHelper.mapDisplayName(rawName)))
+            .parameter(EnumParameterSpec.positional("%C", key))
             .parameter(EnumParameterSpec.positional("%L", enchantment.maxLevel()))
             .build()
+        return key to entry
     }
 }
