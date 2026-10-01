@@ -6,8 +6,6 @@ import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartModifier
 import net.theevilreaper.dartpoet.clazz.ClassSpec
 import net.theevilreaper.dartpoet.constructor.ConstructorSpec
-import net.theevilreaper.dartpoet.directive.DirectiveFactory
-import net.theevilreaper.dartpoet.directive.DirectiveType
 import net.theevilreaper.dartpoet.enum.EnumEntrySpec
 import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.dartpoet.parameter.ParameterSpec
@@ -16,6 +14,7 @@ import net.theevilreaper.dartpoet.type.ClassName
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.apiImport
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
@@ -69,7 +68,7 @@ class NamedTextColorGenerator : BaseGenerator(
                     .build()
             }
             .property {
-                PropertySpec.builder("color", ClassName("Color"))
+                PropertySpec.builder("color", ClassName("RgbColor"))
                     .modifier { DartModifier.FINAL }
                     .build()
             }
@@ -84,12 +83,12 @@ class NamedTextColorGenerator : BaseGenerator(
             .build()
 
         val enumFile = DartFile.builder("named_text_color")
-            .directive(DirectiveFactory.create(DirectiveType.RELATIVE, "../api/color.dart"))
+            .directive(apiImport("rgb_color.dart"))
             .type(enumClass)
-        enumFile.writeGenerated(folder, baseDir = outputPath)
+        enumFile.writeGenerated(folder, baseDir = outputPath.parent)
     }
 
     private fun formatColor(rgb: Int): String {
-        return "Color.fromRGB(0x%06x)".format(rgb)
+        return "RgbColor.fromRGB(0x%06x)".format(rgb)
     }
 }
