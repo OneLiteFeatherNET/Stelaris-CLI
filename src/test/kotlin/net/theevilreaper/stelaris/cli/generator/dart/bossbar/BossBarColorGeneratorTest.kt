@@ -30,7 +30,12 @@ class BossBarColorGeneratorTest : GenerationTestBase() {
         )
 
         val expectedClass = """
-            enum BossBarColor {
+            import '../../api/keyed.dart';
+
+            final Map<String, BossBarColor> _bossBarColorByKey = {for (final e in BossBarColor.values) e.key:
+                e};
+
+            enum BossBarColor implements Keyed {
 
               pink('Pink', 'pink'),
               blue('Blue', 'blue'),
@@ -45,6 +50,10 @@ class BossBarColorGeneratorTest : GenerationTestBase() {
 
               const BossBarColor(this.displayName, this.key);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static BossBarColor? byKey(String key) {
+                return _bossBarColorByKey[key];
+              }
             }
         """.trimIndent()
 

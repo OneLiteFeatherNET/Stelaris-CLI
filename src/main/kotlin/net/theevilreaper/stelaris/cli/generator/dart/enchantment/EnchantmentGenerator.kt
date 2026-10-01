@@ -8,8 +8,6 @@ import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartModifier
 import net.theevilreaper.dartpoet.clazz.ClassSpec
 import net.theevilreaper.dartpoet.constructor.ConstructorSpec
-import net.theevilreaper.dartpoet.directive.DirectiveFactory
-import net.theevilreaper.dartpoet.directive.DirectiveType
 import net.theevilreaper.dartpoet.enum.EnumEntrySpec
 import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.dartpoet.type.ClassName
@@ -18,6 +16,9 @@ import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.util.CLASS_PROPERTIES
 import net.theevilreaper.stelaris.cli.generator.dart.util.CONSTRUCTOR_PARAMETERS
+import net.theevilreaper.stelaris.cli.generator.dart.util.apiImport
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
 import net.theevilreaper.stelaris.cli.util.StringHelper
@@ -64,6 +65,7 @@ class EnchantmentGenerator : BaseGenerator(
 
             val enumClass = ClassSpec.enumClass(updatedClassName)
                 .implements(ClassName("Enchantment"))
+                .keyed(updatedClassName, implementsKeyed = false)
                 .enumProperties(*properties.toTypedArray())
                 .properties(*CLASS_PROPERTIES)
                 .constructor {
@@ -75,9 +77,10 @@ class EnchantmentGenerator : BaseGenerator(
                 .build()
             val fileName = "${group.classPart}_${className.replaceFirstChar { it.lowercase() }}"
             val enumFile = DartFile.builder(fileName)
-                .directive(DirectiveFactory.create(DirectiveType.RELATIVE, "../api/enchantment.dart"))
+                .directive(apiImport("enchantment.dart"))
+                .keyedLookup(updatedClassName, importKeyed = false)
                 .type(enumClass)
-            enumFile.writeGenerated(enchantmentFolder, baseDir = outputPath)
+            enumFile.writeGenerated(enchantmentFolder, baseDir = outputPath.parent)
         }
     }
 

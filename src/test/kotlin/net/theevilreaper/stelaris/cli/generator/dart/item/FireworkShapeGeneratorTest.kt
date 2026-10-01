@@ -28,19 +28,29 @@ class FireworkShapeGeneratorTest : GenerationTestBase() {
         )
 
         val expectedContent = """
-            enum FireworkShape {
+            import '../../api/keyed.dart';
 
-              smallBall('Small Ball', 0),
-              largeBall('Large Ball', 1),
-              star('Star', 2),
-              creeper('Creeper', 3),
-              burst('Burst', 4);
+            final Map<String, FireworkShape> _fireworkShapeByKey = {for (final e in FireworkShape.values) e.key:
+                e};
+
+            enum FireworkShape implements Keyed {
+
+              smallBall('Small Ball', 'small_ball', 0),
+              largeBall('Large Ball', 'large_ball', 1),
+              star('Star', 'star', 2),
+              creeper('Creeper', 'creeper', 3),
+              burst('Burst', 'burst', 4);
 
               final String displayName;
+              final String key;
               final int id;
 
-              const FireworkShape(this.displayName, this.id);
+              const FireworkShape(this.displayName, this.key, this.id);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static FireworkShape? byKey(String key) {
+                return _fireworkShapeByKey[key];
+              }
             }
         """.trimIndent()
 

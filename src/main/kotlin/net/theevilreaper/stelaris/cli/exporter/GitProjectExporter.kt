@@ -4,7 +4,6 @@ import net.theevilreaper.stelaris.cli.generator.Generator
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.PersonIdent
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
-import java.nio.file.Files
 import java.nio.file.Path
 
 class GitProjectExporter(
@@ -25,11 +24,10 @@ class GitProjectExporter(
 
     override fun export() {
         cloneBaseRepo(generationFolder).use { gitRepo ->
-            val libFolder = generationFolder.resolve("lib")
-
-            if (!Files.exists(libFolder)) Files.createDirectories(libFolder)
-
-            generators.forEach { generator -> generator.generate(libFolder) }
+            val library = DartLibrary(generationFolder)
+            library.clean()
+            generators.forEach { generator -> generator.generate(library.generatedFolder) }
+            library.writeLibraries()
 
             gitRepo.add().addFilepattern(".").call()
             val commit = gitRepo.commit()

@@ -7,11 +7,13 @@ import net.theevilreaper.dartpoet.clazz.ClassSpec
 import net.theevilreaper.dartpoet.constructor.ConstructorSpec
 import net.theevilreaper.dartpoet.enum.EnumEntrySpec
 import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
-import net.theevilreaper.dartpoet.parameter.ParameterSpec
-import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PARAMETERS
+import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PROPERTIES
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
@@ -27,28 +29,28 @@ class EnchantmentGroupGenerator : BaseGenerator(
         val enchantmentFolder = checkPackageFolder(outputPath, packageName)
 
         val enumClass = ClassSpec.enumClass(className)
+            .keyed(className)
             .apply {
                 EnchantmentGroup.entries.map { entry ->
                     enumProperty(EnumEntrySpec
                         .builder(entry.name.lowercase())
                         .parameter(EnumParameterSpec.positional("%C", StringHelper.mapDisplayName(entry.classPart)))
+                        .parameter(EnumParameterSpec.positional("%C", entry.classPart))
                         .build()
                     )
                 }
             }
-            .property(PropertySpec.builder("displayName", String::class)
-                .modifier(DartModifier.FINAL)
-                .build()
-            )
+            .properties(*DEFAULT_PROPERTIES)
             .constructor(
                 ConstructorSpec.builder(className)
                     .modifier(DartModifier.CONST)
-                    .parameter(ParameterSpec.positional("displayName").build())
+                    .parameters(*DEFAULT_PARAMETERS)
                     .build()
             )
             .build()
 
         val classFile = DartFile.builder("enchantment_group")
+            .keyedLookup(className)
             .type(enumClass)
             .doc("Represents a category of enchantments based on their primary application")
             .doc("")
@@ -56,6 +58,6 @@ class EnchantmentGroupGenerator : BaseGenerator(
             .doc("making it easier to filter and organize them by use case.")
 
 
-        classFile.writeGenerated(enchantmentFolder)
+        classFile.writeGenerated(enchantmentFolder, baseDir = outputPath.parent)
     }
 }

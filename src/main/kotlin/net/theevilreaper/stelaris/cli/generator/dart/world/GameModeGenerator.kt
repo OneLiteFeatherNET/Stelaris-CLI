@@ -13,6 +13,8 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
@@ -43,15 +45,18 @@ class GameModeGenerator : BaseGenerator(
             enumEntries.add(
                 EnumEntrySpec.builder(variableName)
                     .parameter(EnumParameterSpec.positional("%C", displayName))
+                    .parameter(EnumParameterSpec.positional("%C", gameMode.name.lowercase()))
                     .parameter(EnumParameterSpec.positional("%L", gameMode.ordinal))
                     .build()
             )
         }
 
         val enumClass = ClassSpec.enumClass(className)
+            .keyed(className)
             .enumProperties(*enumEntries.toTypedArray())
             .properties(
                 PropertySpec.builder("displayName", String::class).modifier(DartModifier.FINAL).build(),
+                PropertySpec.builder("key", String::class).modifier(DartModifier.FINAL).build(),
                 PropertySpec.builder("id", Int::class).modifier(DartModifier.FINAL).build()
             )
             .constructor(
@@ -59,6 +64,7 @@ class GameModeGenerator : BaseGenerator(
                     .modifier(DartModifier.CONST)
                     .parameters(
                         ParameterSpec.positional("displayName").build(),
+                        ParameterSpec.positional("key").build(),
                         ParameterSpec.positional("id").build()
                     )
                     .build()
@@ -66,7 +72,8 @@ class GameModeGenerator : BaseGenerator(
             .build()
 
         val file = DartFile.builder("game_mode")
+            .keyedLookup(className)
             .type(enumClass)
-        file.writeGenerated(folder)
+        file.writeGenerated(folder, baseDir = outputPath.parent)
     }
 }

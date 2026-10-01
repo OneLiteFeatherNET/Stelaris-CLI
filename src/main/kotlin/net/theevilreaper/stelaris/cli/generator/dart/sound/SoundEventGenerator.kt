@@ -15,6 +15,8 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
@@ -45,6 +47,7 @@ class SoundEventGenerator : BaseGenerator(
                 .map { buildEnumEntry(it.key()) }
 
             val enumClass = ClassSpec.enumClass(className)
+                .keyed(className)
                 .apply {
                     enumEntries.forEach { enumProperty(it) }
                 }
@@ -63,13 +66,14 @@ class SoundEventGenerator : BaseGenerator(
                 )
                 .build()
             val file = DartFile.builder(fileName)
+                .keyedLookup(className)
                 .type(enumClass)
             enumFiles.add(file)
         }
 
 
         // Write all enum files to the folder
-        enumFiles.forEach { it.writeGenerated(folder) }
+        enumFiles.forEach { it.writeGenerated(folder, baseDir = outputPath.parent) }
     }
 
     private fun buildEnumEntry(soundKey: Key): EnumEntrySpec {

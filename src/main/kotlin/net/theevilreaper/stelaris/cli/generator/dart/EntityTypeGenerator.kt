@@ -10,6 +10,7 @@ import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.entity.EntitySubGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.entity.EntitySubType
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
@@ -38,12 +39,13 @@ class EntityTypeGenerator : BaseGenerator(
             val enumClass = generateEntityEnum(models, className) { subType.matches(it) }
             if (enumClass == null) return@forEach
             val file = DartFile.builder(fileName)
+                .keyedLookup(className)
                 .type(enumClass)
             enumFiles.add(file)
         }
 
         if (enumFiles.isEmpty()) return
-        enumFiles.forEach { it.writeGenerated(folder) }
+        enumFiles.forEach { it.writeGenerated(folder, baseDir = outputPath.parent) }
     }
 
     private fun translateEnumClassName(entitySubType: EntitySubType): String {

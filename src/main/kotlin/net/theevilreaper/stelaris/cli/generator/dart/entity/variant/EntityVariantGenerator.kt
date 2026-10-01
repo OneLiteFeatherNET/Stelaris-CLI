@@ -19,6 +19,10 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PARAMETERS
+import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PROPERTIES
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
@@ -32,139 +36,55 @@ class EntityVariantGenerator : BaseGenerator(
 
     override fun generate(outputPath: Path) {
         val folder = checkPackageFolder(outputPath, packageName)
-        val files = mutableListOf<DartFileBuilder>()
-
-        // 1. AxolotlVariant
-        files.add(generateIdEnum(
-            className = "AxolotlVariant",
-            fileName = "axolotl_variant",
-            entries = AxolotlMeta.Variant.entries.mapIndexed { index, v ->
-                StringHelper.toLowerCamelCase(v.name) to (StringHelper.mapDisplayName(v.name) to index)
-            }
-        ))
-
-        // 2. FoxVariant
-        files.add(generateIdEnum(
-            className = "FoxVariant",
-            fileName = "fox_variant",
-            entries = FoxMeta.Variant.entries.mapIndexed { index, v ->
-                StringHelper.toLowerCamelCase(v.name) to (StringHelper.mapDisplayName(v.name) to index)
-            }
-        ))
-
-        // 3. MooshroomVariant
-        files.add(generateStringEnum(
-            className = "MooshroomVariant",
-            fileName = "mooshroom_variant",
-            entries = MooshroomMeta.Variant.entries.map { v ->
-                StringHelper.toLowerCamelCase(v.name) to (StringHelper.mapDisplayName(v.name) to v.name.lowercase())
-            }
-        ))
-
-        // 4. ParrotVariant
-        files.add(generateIdEnum(
-            className = "ParrotVariant",
-            fileName = "parrot_variant",
-            entries = ParrotMeta.Color.entries.mapIndexed { index, v ->
-                StringHelper.toLowerCamelCase(v.name) to (StringHelper.mapDisplayName(v.name) to index)
-            }
-        ))
-
-        // 5. RabbitVariant
-        files.add(generateIdEnum(
-            className = "RabbitVariant",
-            fileName = "rabbit_variant",
-            entries = RabbitMeta.Variant.entries.mapIndexed { index, v ->
-                val name = StringHelper.toLowerCamelCase(v.name.replace("THE_", ""))
-                name to (StringHelper.mapDisplayName(v.name.replace("THE_", "")) to index)
-            }
-        ))
-
-        // 6. SalmonSize
-        files.add(generateIdEnum(
-            className = "SalmonSize",
-            fileName = "salmon_size",
-            entries = SalmonMeta.Size.entries.mapIndexed { index, v ->
-                StringHelper.toLowerCamelCase(v.name) to (StringHelper.mapDisplayName(v.name) to index)
-            }
-        ))
-
-        files.forEach { it.writeGenerated(folder) }
+        val files = listOf(
+            generateEnum("AxolotlVariant", "axolotl_variant", AxolotlMeta.Variant.entries.map { it.name }),
+            generateEnum("FoxVariant", "fox_variant", FoxMeta.Variant.entries.map { it.name }),
+            generateEnum("MooshroomVariant", "mooshroom_variant", MooshroomMeta.Variant.entries.map { it.name }, withId = false),
+            generateEnum("ParrotVariant", "parrot_variant", ParrotMeta.Color.entries.map { it.name }),
+            generateEnum("RabbitVariant", "rabbit_variant", RabbitMeta.Variant.entries.map { it.name.replace("THE_", "") }),
+            generateEnum("SalmonSize", "salmon_size", SalmonMeta.Size.entries.map { it.name }),
+        )
+        files.forEach { it.writeGenerated(folder, baseDir = outputPath.parent) }
     }
 
-    private fun generateIdEnum(
+    /**
+     * Generates the enum for the given variant names. The key of an entry is its lowercase name.
+     * @param className the name of the enum
+     * @param fileName the name of the file
+     * @param names the names of the variants in the order of the game
+     * @param withId true if the index of a variant should be added as its id
+     * @return the [DartFileBuilder] of the file
+     */
+    private fun generateEnum(
         className: String,
         fileName: String,
-        entries: List<Pair<String, Pair<String, Int>>>,
+        names: List<String>,
+        withId: Boolean = true,
     ): DartFileBuilder {
-        val enumProperties = entries.map { (name, data) ->
-            val (displayName, id) = data
-            EnumEntrySpec.builder(name)
-                .parameter { EnumParameterSpec.positional("%C", displayName) }
-                .parameter { EnumParameterSpec.positional("%L", id) }
+        val enumProperties = names.mapIndexed { index, name ->
+            EnumEntrySpec.builder(StringHelper.toLowerCamelCase(name))
+                .parameter { EnumParameterSpec.positional("%C", StringHelper.mapDisplayName(name)) }
+                .parameter { EnumParameterSpec.positional("%C", name.lowercase()) }
+                .apply { if (withId) parameter { EnumParameterSpec.positional("%L", index) } }
                 .build()
         }
 
         val enumClass = ClassSpec.enumClass(className)
+            .keyed(className)
             .enumProperties(*enumProperties.toTypedArray())
-            .property {
-                PropertySpec.builder("displayName", String::class)
-                    .modifier { DartModifier.FINAL }
-                    .build()
-            }
-            .property {
-                PropertySpec.builder("id", Int::class)
-                    .modifier { DartModifier.FINAL }
-                    .build()
-            }
-            .constructor {
+            .properties(*DEFAULT_PROPERTIES)
+            .apply { if (withId) property(PropertySpec.builder("id", Int::class).modifier(DartModifier.FINAL).build()) }
+            .constructor(
                 ConstructorSpec.builder(className)
-                    .modifier { DartModifier.CONST }
-                    .parameter(ParameterSpec.positional("displayName").build())
-                    .parameter(ParameterSpec.positional("id").build())
+                    .modifier(DartModifier.CONST)
+                    .parameters(*DEFAULT_PARAMETERS)
+                    .apply { if (withId) parameter(ParameterSpec.positional("id").build()) }
                     .build()
-            }
+            )
             .build()
 
         return DartFile.builder(fileName)
-            .type(enumClass)
-    }
-
-    private fun generateStringEnum(
-        className: String,
-        fileName: String,
-        entries: List<Pair<String, Pair<String, String>>>,
-    ): DartFileBuilder {
-        val enumProperties = entries.map { (name, data) ->
-            val (displayName, key) = data
-            EnumEntrySpec.builder(name)
-                .parameter { EnumParameterSpec.positional("%C", displayName) }
-                .parameter { EnumParameterSpec.positional("%C", key) }
-                .build()
-        }
-
-        val enumClass = ClassSpec.enumClass(className)
-            .enumProperties(*enumProperties.toTypedArray())
-            .property {
-                PropertySpec.builder("displayName", String::class)
-                    .modifier { DartModifier.FINAL }
-                    .build()
-            }
-            .property {
-                PropertySpec.builder("key", String::class)
-                    .modifier { DartModifier.FINAL }
-                    .build()
-            }
-            .constructor {
-                ConstructorSpec.builder(className)
-                    .modifier { DartModifier.CONST }
-                    .parameter(ParameterSpec.positional("displayName").build())
-                    .parameter(ParameterSpec.positional("key").build())
-                    .build()
-            }
-            .build()
-
-        return DartFile.builder(fileName)
+            .keyedLookup(className, folderDepth = packageName.split('/').size)
             .type(enumClass)
     }
 }

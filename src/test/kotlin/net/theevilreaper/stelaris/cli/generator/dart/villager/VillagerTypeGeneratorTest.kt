@@ -28,7 +28,12 @@ class VillagerTypeGeneratorTest : GenerationTestBase() {
         )
 
         val expectedContent = """
-            enum VillagerType {
+            import '../../api/keyed.dart';
+
+            final Map<String, VillagerType> _villagerTypeByKey = {for (final e in VillagerType.values) e.key:
+                e};
+
+            enum VillagerType implements Keyed {
 
               desert('Desert', 'minecraft:desert'),
               jungle('Jungle', 'minecraft:jungle'),
@@ -43,6 +48,10 @@ class VillagerTypeGeneratorTest : GenerationTestBase() {
 
               const VillagerType(this.displayName, this.key);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static VillagerType? byKey(String key) {
+                return _villagerTypeByKey[key];
+              }
             }
         """.trimIndent()
 

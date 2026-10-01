@@ -31,7 +31,11 @@ class BossBarFlagGeneratorTest : GenerationTestBase() {
         )
 
         val expectedClass = """
-            enum BossBarFlag {
+            import '../../api/keyed.dart';
+
+            final Map<String, BossBarFlag> _bossBarFlagByKey = {for (final e in BossBarFlag.values) e.key: e};
+
+            enum BossBarFlag implements Keyed {
 
               darkenScreen('Darken Screen', 'darken_screen'),
               playBossMusic('Play Boss Music', 'play_boss_music'),
@@ -42,6 +46,10 @@ class BossBarFlagGeneratorTest : GenerationTestBase() {
 
               const BossBarFlag(this.displayName, this.key);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static BossBarFlag? byKey(String key) {
+                return _bossBarFlagByKey[key];
+              }
             }
         """.trimIndent()
 

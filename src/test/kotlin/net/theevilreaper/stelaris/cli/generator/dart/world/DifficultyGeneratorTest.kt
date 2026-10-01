@@ -26,10 +26,11 @@ class DifficultyGeneratorTest : GenerationTestBase() {
         val content = generatedFile.readText()
         assertTrue(content.contains("enum Difficulty"), "Generated file should declare Difficulty enum")
         assertTrue(content.contains("final String displayName;"))
+        assertTrue(content.contains("final String key;"))
         assertTrue(content.contains("final int id;"))
-        assertTrue(content.contains("peaceful('Peaceful', 0)"))
-        assertTrue(content.contains("easy('Easy', 1)"))
-        assertTrue(content.contains("normal('Normal', 2)"))
-        assertTrue(content.contains("hard('Hard', 3)"))
+        assertTrue(content.contains("peaceful('Peaceful', 'peaceful', 0)"))
+        assertTrue(content.contains("easy('Easy', 'easy', 1)"))
+        assertTrue(content.contains("normal('Normal', 'normal', 2)"))
+        assertTrue(content.contains("hard('Hard', 'hard', 3)"))
     }
 }
