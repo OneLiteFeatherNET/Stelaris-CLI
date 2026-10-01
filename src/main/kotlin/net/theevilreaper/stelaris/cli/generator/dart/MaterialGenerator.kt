@@ -57,7 +57,7 @@ class MaterialGenerator : BaseGenerator(
 
         enumFiles.add(generateSearchFile(models))
 
-        enumFiles.forEach { it.write(folder) }
+        enumFiles.forEach { it.write(folder, baseDir = outputPath) }
     }
 
     /**
