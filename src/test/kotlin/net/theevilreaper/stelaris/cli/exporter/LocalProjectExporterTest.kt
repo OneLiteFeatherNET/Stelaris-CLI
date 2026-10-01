@@ -13,7 +13,7 @@ class LocalProjectExporterTest {
     lateinit var tempDir: Path
 
     @Test
-    fun `test export creates lib directory and invokes generators`() {
+    fun `test export creates generated directory and invokes generators`() {
         var generatedTarget: Path? = null
         val mockGenerator = object : Generator {
             override fun generate(outputPath: Path) {
@@ -27,8 +27,8 @@ class LocalProjectExporterTest {
         exporter.export()
 
         assertTrue(Files.exists(exportPath), "Export path should be created")
-        val libPath = exportPath.resolve("lib")
-        assertTrue(Files.exists(libPath), "lib path should be created")
-        assertTrue(generatedTarget == libPath, "Generator should be called with lib path")
+        val generatedPath = exportPath.resolve("lib").resolve("src").resolve("generated")
+        assertTrue(Files.exists(generatedPath), "generated path should be created")
+        assertTrue(generatedTarget == generatedPath, "Generator should be called with the generated path")
     }
 }

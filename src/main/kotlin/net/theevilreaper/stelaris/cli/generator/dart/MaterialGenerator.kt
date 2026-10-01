@@ -6,14 +6,13 @@ import net.minestom.server.item.Material
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.DartFileBuilder
 import net.theevilreaper.dartpoet.clazz.ClassSpec
-import net.theevilreaper.dartpoet.directive.DirectiveFactory
-import net.theevilreaper.dartpoet.directive.DirectiveType
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.material.MaterialSearchGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.material.MaterialSubGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.material.MaterialSubType
+import net.theevilreaper.stelaris.cli.generator.dart.util.apiImport
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
@@ -56,7 +55,7 @@ class MaterialGenerator : BaseGenerator(
 
         enumFiles.add(generateSearchFile(models))
 
-        enumFiles.forEach { it.writeGenerated(folder, baseDir = outputPath) }
+        enumFiles.forEach { it.writeGenerated(folder, baseDir = outputPath.parent) }
     }
 
     /**
@@ -73,7 +72,7 @@ class MaterialGenerator : BaseGenerator(
                 .fold(0) { mask, type -> mask or MaterialSearchGenerator.mask(type) }
         }
         return DartFile.builder("material_search")
-            .directive(DirectiveFactory.create(DirectiveType.RELATIVE, "../api/material_search.dart"))
+            .directive(apiImport("material_search.dart"))
             .type(categoryEnum, searchEnum)
     }
 

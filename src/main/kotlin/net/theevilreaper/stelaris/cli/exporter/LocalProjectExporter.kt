@@ -13,8 +13,9 @@ class LocalProjectExporter(
         if (!Files.exists(exportPath)) {
             Files.createDirectories(exportPath)
         }
-        val libPath: Path = exportPath.resolve("lib")
-        if (!Files.exists(libPath)) Files.createDirectories(libPath)
-        generators.forEach { generator -> generator.generate(libPath) }
+        val library = DartLibrary(exportPath)
+        library.clean()
+        generators.forEach { generator -> generator.generate(library.generatedFolder) }
+        library.writeLibraries()
     }
 }
