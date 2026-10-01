@@ -5,9 +5,12 @@ import net.minestom.server.component.DataComponents
 import net.minestom.server.item.Material
 import net.theevilreaper.dartpoet.DartFile
 import net.theevilreaper.dartpoet.clazz.ClassSpec
+import net.theevilreaper.dartpoet.directive.DirectiveFactory
+import net.theevilreaper.dartpoet.directive.DirectiveType
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.material.MaterialSearchGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.material.MaterialSubGenerator
 import net.theevilreaper.stelaris.cli.generator.dart.material.MaterialSubType
 import net.theevilreaper.stelaris.cli.util.StringHelper
@@ -52,8 +55,29 @@ class MaterialGenerator : BaseGenerator(
             enumFiles.add(file)
         }
 
-        if (enumFiles.isEmpty()) return
-        enumFiles.forEach { it.write(folder) }
+        enumFiles.add(generateSearchFile(models))
+
+        enumFiles.forEach { it.write(folder, baseDir = outputPath) }
+    }
+
+    /**
+     * Generates the file which contains all materials in a flat, pre-normalized form for a text based search.
+     * Unlike the category enums it also contains materials which don't belong to any category.
+     * @param materials the materials to include
+     * @return the created [DartFile]
+     */
+    private fun generateSearchFile(materials: Collection<Material>): DartFile {
+        val categoryEnum = MaterialSearchGenerator.generateCategoryEnum("${materialClassName}Category")
+        val searchEnum = MaterialSearchGenerator.generateSearchEnum("${materialClassName}SearchEntry", materials) { mat ->
+            MaterialSubType.entries
+                .filter { mapTypeToBoolean(it, mat) }
+                .fold(0) { mask, type -> mask or MaterialSearchGenerator.mask(type) }
+        }
+        return DartFile.builder("material_search")
+            .directive(DirectiveFactory.create(DirectiveType.RELATIVE, "../api/material_search.dart"))
+            .type(categoryEnum, searchEnum)
+            .doc(classDocumentation)
+            .build()
     }
 
     private fun mapTypeToBoolean(subType: MaterialSubType, material: Material): Boolean {
