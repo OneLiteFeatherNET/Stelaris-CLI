@@ -13,6 +13,8 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
@@ -35,15 +37,24 @@ class FireworkShapeGenerator : BaseGenerator(
                     EnumParameterSpec.positional("%C", displayName)
                 }
                 .parameter {
+                    EnumParameterSpec.positional("%C", shape.name.lowercase())
+                }
+                .parameter {
                     EnumParameterSpec.positional("%L", index)
                 }
                 .build()
         }.toList()
 
         val enumClass = ClassSpec.enumClass(className)
+            .keyed(className)
             .enumProperties(*enumProperties.toTypedArray())
             .property {
                 PropertySpec.builder("displayName", String::class)
+                    .modifier { DartModifier.FINAL }
+                    .build()
+            }
+            .property {
+                PropertySpec.builder("key", String::class)
                     .modifier { DartModifier.FINAL }
                     .build()
             }
@@ -56,13 +67,15 @@ class FireworkShapeGenerator : BaseGenerator(
                 ConstructorSpec.builder(className)
                     .modifier { DartModifier.CONST }
                     .parameter(ParameterSpec.positional("displayName").build())
+                    .parameter(ParameterSpec.positional("key").build())
                     .parameter(ParameterSpec.positional("id").build())
                     .build()
             }
             .build()
 
         val enumFile = DartFile.builder("firework_shape")
+            .keyedLookup(className)
             .type(enumClass)
-        enumFile.writeGenerated(folder)
+        enumFile.writeGenerated(folder, baseDir = outputPath.parent)
     }
 }

@@ -28,7 +28,12 @@ class HoverEventActionGeneratorTest : GenerationTestBase() {
         )
 
         val expectedContent = """
-            enum HoverEventAction {
+            import '../../api/keyed.dart';
+
+            final Map<String, HoverEventAction> _hoverEventActionByKey = {for (final e in
+                HoverEventAction.values) e.key: e};
+
+            enum HoverEventAction implements Keyed {
 
               showEntity('Show Entity', 'show_entity'),
               showItem('Show Item', 'show_item'),
@@ -39,6 +44,10 @@ class HoverEventActionGeneratorTest : GenerationTestBase() {
 
               const HoverEventAction(this.displayName, this.key);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static HoverEventAction? byKey(String key) {
+                return _hoverEventActionByKey[key];
+              }
             }
         """.trimIndent()
 

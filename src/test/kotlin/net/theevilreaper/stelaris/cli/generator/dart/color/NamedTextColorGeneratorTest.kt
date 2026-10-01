@@ -28,9 +28,13 @@ class NamedTextColorGeneratorTest : GenerationTestBase() {
         )
 
         val expectedContent = """
+            import '../../api/keyed.dart';
             import '../../api/rgb_color.dart';
 
-            enum NamedTextColor {
+            final Map<String, NamedTextColor> _namedTextColorByKey = {for (final e in NamedTextColor.values)
+                e.key: e};
+
+            enum NamedTextColor implements Keyed {
 
               aqua('Aqua', 'aqua', RgbColor.fromRGB(0x55ffff)),
               black('Black', 'black', RgbColor.fromRGB(0x000000)),
@@ -55,6 +59,10 @@ class NamedTextColorGeneratorTest : GenerationTestBase() {
 
               const NamedTextColor(this.displayName, this.key, this.color);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static NamedTextColor? byKey(String key) {
+                return _namedTextColorByKey[key];
+              }
             }
         """.trimIndent()
 

@@ -31,7 +31,12 @@ class BossBarOverlayGeneratorTest : GenerationTestBase() {
         )
 
         val expectedClass = """
-            enum BossBarOverlay {
+            import '../../api/keyed.dart';
+
+            final Map<String, BossBarOverlay> _bossBarOverlayByKey = {for (final e in BossBarOverlay.values)
+                e.key: e};
+
+            enum BossBarOverlay implements Keyed {
 
               progress('Progress', 'progress'),
               notched6('Notched 6', 'notched_6'),
@@ -44,6 +49,10 @@ class BossBarOverlayGeneratorTest : GenerationTestBase() {
 
               const BossBarOverlay(this.displayName, this.key);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static BossBarOverlay? byKey(String key) {
+                return _bossBarOverlayByKey[key];
+              }
             }
         """.trimIndent()
 

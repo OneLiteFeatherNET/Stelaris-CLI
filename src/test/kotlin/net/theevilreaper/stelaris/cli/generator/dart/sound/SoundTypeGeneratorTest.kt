@@ -29,7 +29,11 @@ class SoundTypeGeneratorTest : GenerationTestBase() {
         )
 
         val expectedClass = """
-            enum SoundType {
+            import '../../api/keyed.dart';
+
+            final Map<String, SoundType> _soundTypeByKey = {for (final e in SoundType.values) e.key: e};
+
+            enum SoundType implements Keyed {
 
               block('Block', 'block'),
               entity('Entity', 'entity'),
@@ -42,6 +46,10 @@ class SoundTypeGeneratorTest : GenerationTestBase() {
 
               const SoundType(this.displayName, this.key);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static SoundType? byKey(String key) {
+                return _soundTypeByKey[key];
+              }
             }
         """.trimIndent()
 

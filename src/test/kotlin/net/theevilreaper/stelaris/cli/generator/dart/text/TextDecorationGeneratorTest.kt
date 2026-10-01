@@ -28,7 +28,12 @@ class TextDecorationGeneratorTest : GenerationTestBase() {
         )
 
         val expectedContent = """
-            enum TextDecoration {
+            import '../../api/keyed.dart';
+
+            final Map<String, TextDecoration> _textDecorationByKey = {for (final e in TextDecoration.values)
+                e.key: e};
+
+            enum TextDecoration implements Keyed {
 
               bold('Bold', 'bold'),
               italic('Italic', 'italic'),
@@ -41,6 +46,10 @@ class TextDecorationGeneratorTest : GenerationTestBase() {
 
               const TextDecoration(this.displayName, this.key);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static TextDecoration? byKey(String key) {
+                return _textDecorationByKey[key];
+              }
             }
         """.trimIndent()
 

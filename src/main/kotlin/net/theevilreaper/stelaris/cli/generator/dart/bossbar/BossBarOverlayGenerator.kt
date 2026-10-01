@@ -13,6 +13,8 @@ import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PARAMETERS
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PROPERTIES
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.StringHelper
 import java.nio.file.Path
@@ -26,8 +28,10 @@ class BossBarOverlayGenerator : BaseGenerator(
     override fun generate(outputPath: Path) {
         val folder = checkPackageFolder(outputPath, packageName)
         val file = DartFile.builder("boss_bar_overlay")
+            .keyedLookup(className)
             .type(
                 ClassSpec.enumClass(className)
+                    .keyed(className)
                     .apply {
                         BossBar.Overlay.entries.forEach { overlay ->
                             enumProperty(
@@ -52,6 +56,6 @@ class BossBarOverlayGenerator : BaseGenerator(
                     )
                     .build()
             )
-        file.writeGenerated(folder)
+        file.writeGenerated(folder, baseDir = outputPath.parent)
     }
 }

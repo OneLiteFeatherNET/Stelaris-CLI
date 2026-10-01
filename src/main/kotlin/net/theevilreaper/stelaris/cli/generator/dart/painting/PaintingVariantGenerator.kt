@@ -13,6 +13,8 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
 import net.theevilreaper.stelaris.cli.util.StringHelper
@@ -57,6 +59,7 @@ class PaintingVariantGenerator : BaseGenerator(
         }
 
         val enumClass = ClassSpec.enumClass(className)
+            .keyed(className)
             .enumProperties(*enumEntries.toTypedArray())
             .properties(
                 PropertySpec.builder("displayName", String::class).modifier(DartModifier.FINAL).build(),
@@ -80,7 +83,8 @@ class PaintingVariantGenerator : BaseGenerator(
             .build()
 
         val file = DartFile.builder("painting_variant")
+            .keyedLookup(className)
             .type(enumClass)
-        file.writeGenerated(folder)
+        file.writeGenerated(folder, baseDir = outputPath.parent)
     }
 }

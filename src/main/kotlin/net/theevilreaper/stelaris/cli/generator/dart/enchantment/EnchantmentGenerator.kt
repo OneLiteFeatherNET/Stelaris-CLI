@@ -17,6 +17,8 @@ import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.util.CLASS_PROPERTIES
 import net.theevilreaper.stelaris.cli.generator.dart.util.CONSTRUCTOR_PARAMETERS
 import net.theevilreaper.stelaris.cli.generator.dart.util.apiImport
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
 import net.theevilreaper.stelaris.cli.util.StringHelper
@@ -63,6 +65,7 @@ class EnchantmentGenerator : BaseGenerator(
 
             val enumClass = ClassSpec.enumClass(updatedClassName)
                 .implements(ClassName("Enchantment"))
+                .keyed(updatedClassName, implementsKeyed = false)
                 .enumProperties(*properties.toTypedArray())
                 .properties(*CLASS_PROPERTIES)
                 .constructor {
@@ -75,6 +78,7 @@ class EnchantmentGenerator : BaseGenerator(
             val fileName = "${group.classPart}_${className.replaceFirstChar { it.lowercase() }}"
             val enumFile = DartFile.builder(fileName)
                 .directive(apiImport("enchantment.dart"))
+                .keyedLookup(updatedClassName, importKeyed = false)
                 .type(enumClass)
             enumFile.writeGenerated(enchantmentFolder, baseDir = outputPath.parent)
         }

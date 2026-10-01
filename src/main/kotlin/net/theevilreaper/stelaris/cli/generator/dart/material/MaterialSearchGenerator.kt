@@ -11,6 +11,7 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.dartpoet.type.ClassName
 import net.theevilreaper.dartpoet.type.ParameterizedTypeName.Companion.parameterizedBy
 import net.theevilreaper.dartpoet.type.STRING
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
 import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
 import net.theevilreaper.stelaris.cli.util.StringHelper
 
@@ -21,6 +22,7 @@ import net.theevilreaper.stelaris.cli.util.StringHelper
  */
 internal object MaterialSearchGenerator {
 
+    private const val DISPLAY_NAME = "displayName"
     private const val KEY = "key"
     private const val SEARCH_KEY = "searchKey"
     private const val TERMS = "terms"
@@ -33,17 +35,28 @@ internal object MaterialSearchGenerator {
     fun generateCategoryEnum(className: String): ClassSpec {
         val entries = MaterialSubType.entries.map {
             EnumEntrySpec.builder(StringHelper.toLowerCamelCase(it.type))
+                .parameter(EnumParameterSpec.positional("%C", StringHelper.mapDisplayName(it.type)))
+                .parameter(EnumParameterSpec.positional("%C", it.type))
                 .parameter(EnumParameterSpec.positional("%L", mask(it)))
                 .build()
         }
         return ClassSpec.enumClass(className)
             .implements(ClassName("SearchCategory"))
+            .keyed(className, implementsKeyed = false)
             .enumProperties(*entries.toTypedArray())
-            .properties(PropertySpec.builder(MASK, Int::class).modifier(enumModifier).build())
+            .properties(
+                PropertySpec.builder(DISPLAY_NAME, String::class).modifier(enumModifier).build(),
+                PropertySpec.builder(KEY, String::class).modifier(enumModifier).build(),
+                PropertySpec.builder(MASK, Int::class).modifier(enumModifier).build()
+            )
             .constructor(
                 ConstructorSpec.builder(className)
                     .modifier(DartModifier.CONST)
-                    .parameters(ParameterSpec.positional(MASK).build())
+                    .parameters(
+                        ParameterSpec.positional(DISPLAY_NAME).build(),
+                        ParameterSpec.positional(KEY).build(),
+                        ParameterSpec.positional(MASK).build()
+                    )
                     .build()
             )
             .build()
@@ -59,6 +72,7 @@ internal object MaterialSearchGenerator {
             val nameWithoutPrefix = rawName.replace("minecraft:", EMPTY_STRING)
             val terms = nameWithoutPrefix.split('_').filter(String::isNotEmpty).distinct()
             EnumEntrySpec.builder(StringHelper.toLowerCamelCase(nameWithoutPrefix))
+                .parameter(EnumParameterSpec.positional("%C", StringHelper.mapDisplayName(nameWithoutPrefix)))
                 .parameter(EnumParameterSpec.positional("%C", rawName))
                 .parameter(EnumParameterSpec.positional("%C", terms.joinToString(" ")))
                 .parameter(EnumParameterSpec.positional("%L", terms.joinToString(prefix = "[", postfix = "]") { term -> "'$term'" }))
@@ -67,8 +81,10 @@ internal object MaterialSearchGenerator {
         }
         return ClassSpec.enumClass(className)
             .implements(ClassName("SearchableMaterial"))
+            .keyed(className, implementsKeyed = false)
             .enumProperties(*entries.toTypedArray())
             .properties(
+                PropertySpec.builder(DISPLAY_NAME, String::class).modifier(enumModifier).build(),
                 PropertySpec.builder(KEY, String::class).modifier(enumModifier).build(),
                 PropertySpec.builder(SEARCH_KEY, String::class).modifier(enumModifier).build(),
                 PropertySpec.builder(TERMS, ClassName("List").parameterizedBy(STRING)).modifier(enumModifier).build(),
@@ -78,6 +94,7 @@ internal object MaterialSearchGenerator {
                 ConstructorSpec.builder(className)
                     .modifier(DartModifier.CONST)
                     .parameters(
+                        ParameterSpec.positional(DISPLAY_NAME).build(),
                         ParameterSpec.positional(KEY).build(),
                         ParameterSpec.positional(SEARCH_KEY).build(),
                         ParameterSpec.positional(TERMS).build(),

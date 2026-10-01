@@ -28,17 +28,26 @@ class ItemRarityGeneratorTest : GenerationTestBase() {
         )
 
         val expectedContent = """
-            enum ItemRarity {
+            import '../../api/keyed.dart';
 
-              common('Common'),
-              uncommon('Uncommon'),
-              rare('Rare'),
-              epic('Epic');
+            final Map<String, ItemRarity> _itemRarityByKey = {for (final e in ItemRarity.values) e.key: e};
+
+            enum ItemRarity implements Keyed {
+
+              common('Common', 'common'),
+              uncommon('Uncommon', 'uncommon'),
+              rare('Rare', 'rare'),
+              epic('Epic', 'epic');
 
               final String displayName;
+              final String key;
 
-              const ItemRarity(this.displayName);
+              const ItemRarity(this.displayName, this.key);
 
+              /// Returns the entry with the given [key] or null if there is none.
+              static ItemRarity? byKey(String key) {
+                return _itemRarityByKey[key];
+              }
             }
         """.trimIndent()
 

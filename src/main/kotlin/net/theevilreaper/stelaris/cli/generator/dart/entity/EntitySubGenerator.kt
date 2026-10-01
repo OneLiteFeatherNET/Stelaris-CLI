@@ -9,6 +9,7 @@ import net.theevilreaper.dartpoet.enum.EnumEntrySpec
 import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PARAMETERS
 import net.theevilreaper.stelaris.cli.generator.dart.util.DEFAULT_PROPERTIES
+import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
 import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
 import net.theevilreaper.stelaris.cli.util.StringHelper
 
@@ -27,6 +28,7 @@ internal object EntitySubGenerator {
         }
 
         val enumFile = ClassSpec.enumClass(className)
+            .keyed(className)
             .enumProperties(*enumProperties.toTypedArray())
             .properties(*DEFAULT_PROPERTIES)
             .constructor(
