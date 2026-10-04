@@ -4,7 +4,13 @@ import net.theevilreaper.stelaris.cli.util.MinecraftHelper
 
 enum class EnchantmentGroup(val classPart: String, val keywords: Set<String>) {
     ARMOR("armor", setOf("armor", "foot_armor", "head_armor", "leg_armor", "equippable")),
-    WEAPON("weapon", setOf("sword", "bow", "trident", "mace", "weapon", "fire_aspect", "sharp_weapon", "crossbow")),
+    WEAPON(
+        "weapon",
+        setOf(
+            "sword", "bow", "trident", "mace", "weapon", "fire_aspect", "sharp_weapon", "crossbow",
+            "melee_weapon", "sweeping", "lunge",
+        )
+    ),
     TOOL("tool", setOf("mining", "mining_loot", "fishing")),
     META("meta", setOf("vanishing", "durability"))
     ;

@@ -9,9 +9,9 @@ import org.junit.jupiter.params.provider.ValueSource
 class EnchantmentGroupTest {
 
     @Test
-    fun `test group count should be 18`() {
+    fun `test group count should be 21`() {
         val groupCount = EnchantmentGroup.entries.sumOf { it.keywords.size }
-        Assertions.assertEquals(18, groupCount, "Expected 18 enchantment groups, but found $groupCount")
+        Assertions.assertEquals(21, groupCount, "Expected 21 enchantment groups, but found $groupCount")
     }
 
     @ParameterizedTest
