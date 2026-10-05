@@ -22,10 +22,8 @@ import net.minestom.server.item.component.Food
 import net.minestom.server.item.component.ItemBlockState
 import net.minestom.server.item.component.KineticWeapon
 import net.minestom.server.item.component.PiercingWeapon
-import net.minestom.server.item.component.SeededContainerLoot
 import net.minestom.server.item.component.SwingAnimation
 import net.minestom.server.item.component.Tool
-import net.minestom.server.item.component.TooltipDisplay
 import net.minestom.server.item.component.TypedCustomData
 import net.minestom.server.item.component.UseCooldown
 import net.minestom.server.item.component.UseEffects
@@ -98,6 +96,8 @@ class ComponentOverrides(
                 "minecraft:intangible_projectile",
                 "minecraft:bees",
                 "minecraft:sulfur_cube_content",
+                // Only sent to the client, Minestom has no codec to read it
+                "minecraft:additional_trade_cost",
             ),
             componentSchemas = mapOf(
                 // Bounds
@@ -219,6 +219,18 @@ class ComponentOverrides(
                 // Strings in Minestom which are keys in the vanilla format
                 "minecraft:item_model" to { _ -> KeySchema() },
                 "minecraft:tooltip_style" to { _ -> KeySchema() },
+                // The hidden components are keys of other data components
+                "minecraft:tooltip_display" to { _ ->
+                    ObjectSchema(
+                        mapOf(
+                            "hide_tooltip" to ComponentField(BoolSchema, optional = true),
+                            "hidden_components" to ComponentField(
+                                ListSchema(KeySchema("data_component_type")),
+                                optional = true
+                            ),
+                        )
+                    )
+                },
                 "minecraft:note_block_sound" to { _ -> KeySchema("sound_event") },
                 "minecraft:recipes" to { _ -> ListSchema(KeySchema("recipe")) },
                 // A single tag reference in the vanilla format
@@ -262,11 +274,9 @@ class ComponentOverrides(
                 PiercingWeapon::class.java to setOf("dealsKnockback", "dismounts", "sound", "hitSound"),
                 SwingAnimation::class.java to setOf("type", "duration"),
                 DeathProtection::class.java to setOf("deathEffects"),
-                TooltipDisplay::class.java to setOf("hideTooltip", "hiddenComponents"),
                 CustomModelData::class.java to setOf("floats", "flags", "strings", "colors"),
                 FireworkExplosion::class.java to setOf("colors", "fadeColors", "hasTrail", "hasTwinkle"),
-                FireworkList::class.java to setOf("flightDuration", "explosions"),
-                SeededContainerLoot::class.java to setOf("seed"),
+                FireworkList::class.java to setOf("explosions"),
             ),
             enumValues = mapOf(
                 EquipmentSlot::class.java to EquipmentSlot.entries.associate { it.name to it.nbtName() },
