@@ -4,10 +4,10 @@ import net.theevilreaper.stelaris.cli.generator.dart.util.DartSource
 import net.theevilreaper.stelaris.cli.util.StringHelper
 
 /**
- * The Kotlin side of the schema classes in `component_schema.dart`.
+ * The Kotlin side of the schema classes in `lib/src/api/component_schema.dart` of the data repository.
  *
  * Every schema knows how to render itself as a const Dart expression, which is what ends up in the
- * generated catalog. The classes have to stay in sync with the Dart template in the resources.
+ * generated catalog. The classes have to stay in sync with the Dart classes in the data repository.
  * @since 1.0.0
  */
 sealed interface ComponentSchema {

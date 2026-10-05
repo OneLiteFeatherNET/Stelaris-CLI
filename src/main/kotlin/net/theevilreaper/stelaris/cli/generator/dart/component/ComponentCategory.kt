@@ -5,36 +5,31 @@ import net.theevilreaper.stelaris.cli.util.StringHelper
 /**
  * Groups the data components, so a user interface can offer them in sections instead of one long list.
  *
- * The order of the entries is the order in which the sections should be shown.
- * @property displayName the name of the section which can be shown in a user interface
+ * The entries have to stay in sync with `lib/src/api/component_category.dart` of the data repository,
+ * which also holds the display names and the order of the sections.
  * @since 1.0.0
  */
-enum class ComponentCategory(val displayName: String) {
-    PROPERTIES("Properties"),
-    DISPLAY("Display"),
-    ENCHANTMENT("Enchantment"),
-    COMBAT("Combat"),
-    TOOL("Tool"),
-    EQUIPMENT("Equipment"),
-    CONSUMABLE("Consumable"),
-    DECORATION("Decoration"),
-    SPECIAL("Special"),
-    CONTENT("Content"),
-    ENTITY_VARIANT("Entity Variant"),
-    DATA("Data"),
+enum class ComponentCategory {
+    PROPERTIES,
+    DISPLAY,
+    ENCHANTMENT,
+    COMBAT,
+    TOOL,
+    EQUIPMENT,
+    CONSUMABLE,
+    DECORATION,
+    SPECIAL,
+    CONTENT,
+    ENTITY_VARIANT,
+    DATA,
 
     /**
      * The fallback for components which have no category yet, e.g. after a Minecraft update.
      */
-    OTHER("Other");
+    OTHER;
 
     /**
-     * The key of the category, e.g. `entity_variant`.
-     */
-    val key: String = name.lowercase()
-
-    /**
-     * The name of the entry in the generated Dart enum, e.g. `entityVariant`.
+     * The name of the entry in the Dart enum, e.g. `entityVariant`.
      */
     val dartName: String = StringHelper.toLowerCamelCase(name)
 }
