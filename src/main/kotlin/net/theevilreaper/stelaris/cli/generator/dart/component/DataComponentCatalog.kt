@@ -27,6 +27,8 @@ class DataComponentCatalog(private val overrides: ComponentOverrides = Component
                 ?: resolver.schemaOf((field.genericType as ParameterizedType).actualTypeArguments[0])
             ComponentSpec(
                 key = key,
+                displayName = overrides.displayNames[key] ?: displayName(key),
+                category = overrides.categoryOf(key),
                 javaField = field.name,
                 schema = schema,
                 managed = key in overrides.managed,

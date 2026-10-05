@@ -46,6 +46,8 @@ import net.minestom.server.potion.PotionType
  * @property optionalFields record fields which can be left out in the vanilla format
  * @property enumValues renames enum constants whose lowercase name is not the vanilla name
  * @property registries registry names for types whose snake case name is not the registry name
+ * @property displayNames replaces the derived display name of a component, keyed by the component key
+ * @property categories the category of each component, keyed by the component key
  * @since 1.0.0
  */
 class ComponentOverrides(
@@ -57,7 +59,18 @@ class ComponentOverrides(
     val optionalFields: Map<Class<*>, Set<String>> = emptyMap(),
     val enumValues: Map<Class<*>, Map<String, String>> = emptyMap(),
     val registries: Map<Class<*>, String> = emptyMap(),
+    val displayNames: Map<String, String> = emptyMap(),
+    val categories: Map<String, ComponentCategory> = emptyMap(),
 ) {
+
+    /**
+     * Returns the category of a component. Entity variants are recognized by the path of their key,
+     * e.g. `minecraft:cat/variant`.
+     * @param key the key of the component
+     * @return the category or [ComponentCategory.OTHER] if the component has none
+     */
+    fun categoryOf(key: String): ComponentCategory = categories[key]
+        ?: if (key.substringAfter(':').contains('/')) ComponentCategory.ENTITY_VARIANT else ComponentCategory.OTHER
 
     companion object {
 
@@ -273,7 +286,55 @@ class ComponentOverrides(
                 PotionEffect::class.java to "mob_effect",
                 DataComponent::class.java to "data_component_type",
             ),
+            displayNames = mapOf(
+                "minecraft:trim" to "Armor Trim",
+                "minecraft:profile" to "Player Profile",
+                "minecraft:enchantment_glint_override" to "Enchantment Glint",
+            ),
+            categories = categories(
+                ComponentCategory.PROPERTIES to listOf(
+                    "max_stack_size", "damage", "max_damage", "unbreakable", "repairable", "repair_cost",
+                    "damage_resistant", "break_sound",
+                ),
+                ComponentCategory.DISPLAY to listOf(
+                    "custom_name", "item_name", "lore", "item_model", "custom_model_data", "rarity", "tooltip_display",
+                    "tooltip_style", "enchantment_glint_override", "dyed_color", "map_color", "profile", "trim",
+                ),
+                ComponentCategory.ENCHANTMENT to listOf("enchantments", "stored_enchantments", "enchantable"),
+                ComponentCategory.COMBAT to listOf(
+                    "attribute_modifiers", "weapon", "attack_range", "kinetic_weapon", "piercing_weapon",
+                    "blocks_attacks", "swing_animation", "minimum_attack_charge", "damage_type", "death_protection",
+                ),
+                ComponentCategory.TOOL to listOf("tool", "can_break", "can_place_on"),
+                ComponentCategory.EQUIPMENT to listOf("equippable", "glider"),
+                ComponentCategory.CONSUMABLE to listOf(
+                    "food", "consumable", "use_cooldown", "use_effects", "use_remainder", "potion_contents",
+                    "potion_duration_scale", "suspicious_stew_effects", "ominous_bottle_amplifier",
+                ),
+                ComponentCategory.DECORATION to listOf(
+                    "banner_patterns", "base_color", "pot_decorations", "provides_banner_patterns",
+                    "provides_trim_material", "dye",
+                ),
+                ComponentCategory.SPECIAL to listOf(
+                    "fireworks", "firework_explosion", "instrument", "jukebox_playable", "note_block_sound",
+                    "additional_trade_cost", "recipes", "writable_book_content", "written_book_content",
+                ),
+                ComponentCategory.CONTENT to listOf(
+                    "container", "container_loot", "bundle_contents", "charged_projectiles", "bees",
+                    "sulfur_cube_content", "map_id", "map_decorations", "map_post_processing", "lodestone_tracker", "lock",
+                ),
+                ComponentCategory.DATA to listOf(
+                    "custom_data", "block_entity_data", "block_state", "bucket_entity_data", "entity_data",
+                    "debug_stick_state", "creative_slot_lock", "intangible_projectile",
+                ),
+            ),
         )
+
+        /**
+         * Maps every listed component to its category. The components are given without the namespace.
+         */
+        private fun categories(vararg entries: Pair<ComponentCategory, List<String>>): Map<String, ComponentCategory> =
+            entries.flatMap { (category, paths) -> paths.map { "minecraft:$it" to category } }.toMap()
 
         private fun blockPredicates(): ComponentSchema =
             ListSchema(ObjectSchema(mapOf("blocks" to ComponentField(ListSchema(KeySchema("block"))))))

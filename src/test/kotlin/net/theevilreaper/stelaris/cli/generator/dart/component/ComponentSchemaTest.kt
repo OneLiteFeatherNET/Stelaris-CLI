@@ -26,8 +26,8 @@ class ComponentSchemaTest {
             )
         )
         assertEquals(
-            "ObjectSchema({'nutrition': ComponentField(IntSchema(min: 0)), " +
-                "'can_always_eat': ComponentField(BoolSchema(), optional: true)})",
+            "ObjectSchema({'nutrition': ComponentField('Nutrition', IntSchema(min: 0)), " +
+                "'can_always_eat': ComponentField('Can Always Eat', BoolSchema(), optional: true)})",
             schema.toDart()
         )
     }
@@ -35,12 +35,16 @@ class ComponentSchemaTest {
     @Test
     fun `test dart rendering of a spec`() {
         assertEquals(
-            "ComponentSpec('minecraft:lore', 'LORE', TextSchema(), managed: true)",
-            ComponentSpec("minecraft:lore", "LORE", TextSchema, managed = true).toDart()
+            "ComponentSpec('minecraft:lore', 'Lore', ComponentCategory.display, 'LORE', TextSchema(), managed: true)",
+            ComponentSpec("minecraft:lore", "Lore", ComponentCategory.DISPLAY, "LORE", TextSchema, managed = true).toDart()
         )
         assertEquals(
-            "ComponentSpec('minecraft:container', 'CONTAINER', UnitSchema(), editable: false)",
-            ComponentSpec("minecraft:container", "CONTAINER", UnitSchema, editable = false).toDart()
+            "ComponentSpec('minecraft:cat/variant', 'Cat Variant', ComponentCategory.entityVariant, 'CAT_VARIANT', " +
+                "UnitSchema(), editable: false)",
+            ComponentSpec(
+                "minecraft:cat/variant", "Cat Variant", ComponentCategory.ENTITY_VARIANT, "CAT_VARIANT", UnitSchema,
+                editable = false
+            ).toDart()
         )
     }
 
@@ -54,5 +58,12 @@ class ComponentSchemaTest {
         )
         assertEquals(listOf(UnsupportedSchema("A")), schema.unsupported())
         assertTrue(IntSchema().unsupported().isEmpty())
+    }
+
+    @Test
+    fun `test display name is derived from key or field name`() {
+        assertEquals("Max Stack Size", displayName("minecraft:max_stack_size"))
+        assertEquals("Tropical Fish Pattern Color", displayName("minecraft:tropical_fish/pattern_color"))
+        assertEquals("Can Always Eat", displayName("can_always_eat"))
     }
 }

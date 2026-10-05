@@ -1,6 +1,7 @@
 package net.theevilreaper.stelaris.cli.generator.dart.component
 
 import net.theevilreaper.stelaris.cli.generator.dart.util.DartSource
+import net.theevilreaper.stelaris.cli.util.StringHelper
 
 /**
  * The Kotlin side of the schema classes in `component_schema.dart`.
@@ -68,7 +69,7 @@ data class ListSchema(val element: ComponentSchema, val maxLength: Int? = null) 
 
 data class ObjectSchema(val fields: Map<String, ComponentField>) : ComponentSchema {
     override fun toDart(): String {
-        val entries = fields.entries.joinToString(", ") { (name, field) -> "${DartSource.string(name)}: ${field.toDart()}" }
+        val entries = fields.entries.joinToString(", ") { (name, field) -> "${DartSource.string(name)}: ${field.toDart(name)}" }
         return "ObjectSchema({$entries})"
     }
 
@@ -87,15 +88,23 @@ data class UnsupportedSchema(val javaType: String) : ComponentSchema {
  * @property optional whether the field can be left out
  */
 data class ComponentField(val schema: ComponentSchema, val optional: Boolean = false) {
-    fun toDart(): String {
+
+    /**
+     * Renders the field as a Dart expression. The label is derived from the [name] of the field.
+     * @param name the name of the field in the vanilla format, e.g. `can_always_eat`
+     * @return the Dart expression
+     */
+    fun toDart(name: String): String {
         val optionalArgument = if (optional) ", optional: true" else ""
-        return "ComponentField(${schema.toDart()}$optionalArgument)"
+        return "ComponentField(${DartSource.string(displayName(name))}, ${schema.toDart()}$optionalArgument)"
     }
 }
 
 /**
  * Describes a single data component in the catalog.
  * @property key the key of the component, e.g. `minecraft:max_stack_size`
+ * @property displayName the name of the component which can be shown in a user interface
+ * @property category the section in which the component is offered
  * @property javaField the name of the constant in Minestom's `DataComponents`
  * @property schema the schema of the component value
  * @property managed whether Stelaris handles the component with a dedicated editor
@@ -103,6 +112,8 @@ data class ComponentField(val schema: ComponentSchema, val optional: Boolean = f
  */
 data class ComponentSpec(
     val key: String,
+    val displayName: String,
+    val category: ComponentCategory,
     val javaField: String,
     val schema: ComponentSchema,
     val managed: Boolean = false,
@@ -113,9 +124,20 @@ data class ComponentSpec(
             if (managed) append(", managed: true")
             if (!editable) append(", editable: false")
         }
-        return "ComponentSpec(${DartSource.string(key)}, ${DartSource.string(javaField)}, ${schema.toDart()}$flags)"
+        return "ComponentSpec(${DartSource.string(key)}, ${DartSource.string(displayName)}, " +
+            "ComponentCategory.${category.dartName}, ${DartSource.string(javaField)}, ${schema.toDart()}$flags)"
     }
 }
+
+/**
+ * Derives a name which can be shown in a user interface from a component key or a field name.
+ * The namespace is dropped and the path segments are joined, e.g. `minecraft:cat/sound_variant` becomes
+ * `Cat Sound Variant`.
+ * @param name the key or field name
+ * @return the derived name
+ */
+fun displayName(name: String): String =
+    StringHelper.mapDisplayName(name.substringAfter(':').replace('/', '_'))
 
 private fun namedArguments(vararg arguments: Pair<String, Any?>): String =
     arguments.filter { it.second != null }.joinToString(", ") { (name, value) -> "$name: $value" }

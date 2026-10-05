@@ -61,8 +61,28 @@ class DataComponentCatalogTest {
     @Test
     fun `test overrides only name existing components`() {
         val overrides = ComponentOverrides.VANILLA
-        val overriddenKeys = overrides.managed + overrides.nonEditable + overrides.componentSchemas.keys
+        val overriddenKeys = overrides.managed + overrides.nonEditable + overrides.componentSchemas.keys +
+            overrides.displayNames.keys + overrides.categories.keys
         val unknownKeys = overriddenKeys - specs.keys
         assertTrue(unknownKeys.isEmpty(), "Overrides for unknown components: $unknownKeys")
+    }
+
+    @Test
+    fun `test every component has a category`() {
+        val uncategorized = specs.values.filter { it.category == ComponentCategory.OTHER }.map { it.key }
+        assertTrue(uncategorized.isEmpty(), "Components without a category: $uncategorized")
+    }
+
+    @Test
+    fun `test entity variants are categorized by their key`() {
+        assertEquals(ComponentCategory.ENTITY_VARIANT, specs.getValue("minecraft:cat/variant").category)
+        assertEquals(ComponentCategory.CONSUMABLE, specs.getValue("minecraft:food").category)
+    }
+
+    @Test
+    fun `test display names`() {
+        assertEquals("Max Stack Size", specs.getValue("minecraft:max_stack_size").displayName)
+        assertEquals("Cat Sound Variant", specs.getValue("minecraft:cat/sound_variant").displayName)
+        assertEquals("Armor Trim", specs.getValue("minecraft:trim").displayName)
     }
 }

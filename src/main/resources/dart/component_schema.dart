@@ -1,3 +1,6 @@
+import '../../api/keyed.dart';
+import 'component_category.dart';
+
 /// Describes the shape of a data component value, so that a form can be built from it.
 sealed class ComponentSchema {
   const ComponentSchema();
@@ -77,16 +80,26 @@ final class UnsupportedSchema extends ComponentSchema {
 
 /// A field of an [ObjectSchema].
 final class ComponentField {
+  /// The name of the field which can be shown in a user interface, e.g. `Can Always Eat`.
+  final String label;
   final ComponentSchema schema;
   final bool optional;
 
-  const ComponentField(this.schema, {this.optional = false});
+  const ComponentField(this.label, this.schema, {this.optional = false});
 }
 
 /// Describes a single data component.
-final class ComponentSpec {
+final class ComponentSpec implements Keyed {
   /// The key of the component, e.g. `minecraft:max_stack_size`.
+  @override
   final String key;
+
+  /// The name of the component which can be shown in a user interface, e.g. `Max Stack Size`.
+  @override
+  final String displayName;
+
+  /// The section in which the component is offered.
+  final ComponentCategory category;
 
   /// The name of the constant in Minestom's `DataComponents`, e.g. `MAX_STACK_SIZE`.
   final String javaField;
@@ -100,5 +113,13 @@ final class ComponentSpec {
   /// Whether the component can be set by a user. It is false for runtime state.
   final bool editable;
 
-  const ComponentSpec(this.key, this.javaField, this.schema, {this.managed = false, this.editable = true});
+  const ComponentSpec(
+    this.key,
+    this.displayName,
+    this.category,
+    this.javaField,
+    this.schema, {
+    this.managed = false,
+    this.editable = true,
+  });
 }
