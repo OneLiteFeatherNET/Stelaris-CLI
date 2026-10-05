@@ -4,7 +4,7 @@ import com.google.auto.service.AutoService
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
-import net.theevilreaper.stelaris.cli.generator.dart.util.DartSource
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import java.nio.file.Path
 
 /**
@@ -25,8 +25,8 @@ class DataComponentGenerator(
 
     override fun generate(outputPath: Path) {
         val folder = checkPackageFolder(outputPath, packageName)
-        DartSource.write(folder, SCHEMA_FILE, schemaTemplate())
-        DartSource.write(folder, CATALOG_FILE, catalogSource(catalog.specs()))
+        writeGenerated(folder, SCHEMA_FILE, schemaTemplate())
+        writeGenerated(folder, CATALOG_FILE, catalogSource(catalog.specs()))
     }
 
     private fun schemaTemplate(): String {
@@ -35,7 +35,6 @@ class DataComponentGenerator(
     }
 
     private fun catalogSource(specs: List<ComponentSpec>): String = buildString {
-        appendLine(DartSource.GENERATED_HEADER)
         appendLine("import '$SCHEMA_FILE.dart';")
         appendLine()
         appendLine("/// All data components which can be set on an item, sorted by key.")

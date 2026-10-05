@@ -1,5 +1,3 @@
-// The file is generated. Don't change anything here
-
 /// Describes the shape of a data component value, so that a form can be built from it.
 sealed class ComponentSchema {
   const ComponentSchema();

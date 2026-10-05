@@ -6,6 +6,7 @@ import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.util.DartSource
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import java.nio.file.Path
 
 /**
@@ -18,17 +19,15 @@ class VersionGenerator(
     private val minecraftVersion: String = MinecraftServer.VERSION_NAME,
 ) : BaseGenerator(
     className = "vulpesMinecraftVersion",
-    packageName = "",
+    packageName = "version",
 ) {
 
     override fun generate(outputPath: Path) {
         val folder = checkPackageFolder(outputPath, packageName)
         val source = buildString {
-            appendLine(DartSource.GENERATED_HEADER)
-            appendLine()
             appendLine("/// The Minecraft version the data of the library belongs to.")
             appendLine("const String $className = ${DartSource.string(minecraftVersion)};")
         }
-        DartSource.write(folder, "version", source)
+        writeGenerated(folder, "version", source)
     }
 }

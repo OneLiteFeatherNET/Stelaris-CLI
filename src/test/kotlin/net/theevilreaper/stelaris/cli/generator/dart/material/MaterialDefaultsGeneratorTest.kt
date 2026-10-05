@@ -14,7 +14,7 @@ class MaterialDefaultsGeneratorTest : GenerationTestBase() {
     fun `test material defaults generation`(env: Env) {
         MaterialDefaultsGenerator().generate(generationPath)
 
-        val file = generationPath.resolve("materials").resolve("material_defaults.dart").toFile()
+        val file = generationPath.resolve("material").resolve("material_defaults.dart").toFile()
         assertTrue(file.exists(), "Expected material_defaults.dart to exist")
         val content = file.readText()
 

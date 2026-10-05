@@ -7,6 +7,7 @@ import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.util.DartSource
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import java.nio.file.Path
 
 /**
@@ -20,18 +21,16 @@ import java.nio.file.Path
 @CodeGenerator(name = "MaterialDefaultsGenerator")
 class MaterialDefaultsGenerator : BaseGenerator(
     className = "MaterialDefaults",
-    packageName = "materials",
+    packageName = "material",
 ) {
 
     override fun generate(outputPath: Path) {
         val folder = checkPackageFolder(outputPath, packageName)
         val materials = Material.values().sortedBy { it.name() }
-        DartSource.write(folder, "material_defaults", source(materials))
+        writeGenerated(folder, "material_defaults", source(materials))
     }
 
     private fun source(materials: List<Material>): String = buildString {
-        appendLine(DartSource.GENERATED_HEADER)
-        appendLine()
         appendLine("/// The default component values of a material.")
         appendLine("final class $className {")
         appendLine("  final int maxStackSize;")

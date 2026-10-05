@@ -11,13 +11,13 @@ class VersionGeneratorTest : GenerationTestBase() {
     fun `test version generation`() {
         VersionGenerator().generate(generationPath)
 
-        val file = generationPath.resolve("version.dart").toFile()
-        val expected = """
-            // The file is generated. Don't change anything here
-
+        val file = generationPath.resolve("version").resolve("version.dart").toFile()
+        val expected = generated(
+            """
             /// The Minecraft version the data of the library belongs to.
             const String vulpesMinecraftVersion = '${MinecraftServer.VERSION_NAME}';
-        """.trimIndent() + "\n"
+            """.trimIndent()
+        )
         assertEquals(expected, file.readText())
     }
 }

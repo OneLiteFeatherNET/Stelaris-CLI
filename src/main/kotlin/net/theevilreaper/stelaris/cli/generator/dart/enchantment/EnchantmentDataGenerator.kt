@@ -7,6 +7,7 @@ import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
 import net.theevilreaper.stelaris.cli.generator.dart.util.DartSource
+import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
 import java.nio.file.Path
 
 /**
@@ -32,11 +33,10 @@ class EnchantmentDataGenerator : BaseGenerator(
         val enchantments = registry.keys()
             .map { it.key().asString() to requireNotNull(registry.get(it)) }
             .sortedBy { it.first }
-        DartSource.write(folder, "enchantment_data", source(enchantments))
+        writeGenerated(folder, "enchantment_data", source(enchantments))
     }
 
     private fun source(enchantments: List<Pair<String, Enchantment>>): String = buildString {
-        appendLine(DartSource.GENERATED_HEADER)
         appendLine("import '../api/enchantment_data.dart';")
         appendLine()
         appendLine("/// The data of every enchantment, keyed by the enchantment key.")
