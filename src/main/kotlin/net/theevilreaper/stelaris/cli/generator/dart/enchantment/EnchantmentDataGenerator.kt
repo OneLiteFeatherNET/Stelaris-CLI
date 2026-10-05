@@ -13,7 +13,7 @@ import java.nio.file.Path
 /**
  * Generates the data of every enchantment: which items support it and which enchantments it excludes.
  *
- * The [EnchantmentData] class itself lives in `lib/api/enchantment_data.dart` of the data repository,
+ * The [EnchantmentData] class itself lives in `lib/src/api/enchantment_data.dart` of the data repository,
  * only the table is generated.
  *
  * With this table the UI can offer exactly the enchantments that fit a material and reject incompatible
@@ -37,7 +37,7 @@ class EnchantmentDataGenerator : BaseGenerator(
     }
 
     private fun source(enchantments: List<Pair<String, Enchantment>>): String = buildString {
-        appendLine("import '../api/enchantment_data.dart';")
+        appendLine("import '../../api/enchantment_data.dart';")
         appendLine()
         appendLine("/// The data of every enchantment, keyed by the enchantment key.")
         appendLine("const Map<String, $className> enchantmentData = {")

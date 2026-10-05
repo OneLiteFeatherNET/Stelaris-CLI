@@ -19,7 +19,7 @@ class EnchantmentDataGeneratorTest : GenerationTestBase() {
         assertTrue(file.exists(), "Expected enchantment_data.dart to exist")
         val lines = file.readLines()
 
-        assertTrue(lines.contains("import '../api/enchantment_data.dart';"))
+        assertTrue(lines.contains("import '../../api/enchantment_data.dart';"))
         assertFalse(lines.any { it.contains("class EnchantmentData") }, "The class belongs to the data repository")
         assertTrue(lines.contains("const Map<String, EnchantmentData> enchantmentData = {"))
         val sharpness = lines.single { it.trimStart().startsWith("'minecraft:sharpness':") }
