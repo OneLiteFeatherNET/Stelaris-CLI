@@ -45,9 +45,25 @@ fun apiImport(fileName: String, folderDepth: Int = 1): Directive {
  */
 fun DartFileBuilder.writeGenerated(folder: Path, baseDir: Path = folder): Path {
     build().write(folder, baseDir)
-    val fileName = if (name.endsWith(DART_FILE_ENDING)) name else "$name$DART_FILE_ENDING"
-    val filePath = folder.resolve(fileName)
-    val content = Files.readString(filePath).trimEnd()
-    Files.writeString(filePath, "$GENERATED_FILE_HEADER\n\n$content\n")
+    val filePath = folder.resolve(dartFileName(name))
+    return writeWithHeader(filePath, Files.readString(filePath))
+}
+
+/**
+ * Writes the given [content] to the [folder] and marks it as generated.
+ * This is the counterpart of [DartFileBuilder.writeGenerated] for files which are written as plain source
+ * instead of through DartPoet, e.g. const collections with nested constructor calls.
+ * @param folder the folder where the file should be written
+ * @param fileName the name of the file, with or without the `.dart` extension
+ * @param content the content of the file without the generated header
+ * @return the [Path] of the written file
+ */
+fun writeGenerated(folder: Path, fileName: String, content: String): Path =
+    writeWithHeader(folder.resolve(dartFileName(fileName)), content)
+
+private fun writeWithHeader(filePath: Path, content: String): Path {
+    Files.writeString(filePath, "$GENERATED_FILE_HEADER\n\n${content.trimEnd()}\n")
     return filePath
 }
+
+private fun dartFileName(name: String): String = if (name.endsWith(DART_FILE_ENDING)) name else "$name$DART_FILE_ENDING"
