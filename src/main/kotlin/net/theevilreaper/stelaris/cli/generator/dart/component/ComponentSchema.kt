@@ -49,6 +49,10 @@ data object TextSchema : ComponentSchema {
     override fun toDart(): String = "TextSchema()"
 }
 
+data object ColorSchema : ComponentSchema {
+    override fun toDart(): String = "ColorSchema()"
+}
+
 data class KeySchema(val registry: String? = null) : ComponentSchema {
     override fun toDart(): String =
         "KeySchema(${namedArguments("registry" to registry?.let(DartSource::string))})"

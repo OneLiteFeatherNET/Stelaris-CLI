@@ -85,4 +85,18 @@ class DataComponentCatalogTest {
         assertEquals("Cat Sound Variant", specs.getValue("minecraft:cat/sound_variant").displayName)
         assertEquals("Armor Trim", specs.getValue("minecraft:trim").displayName)
     }
+
+    @Test
+    fun `test rgb colors use the color schema`() {
+        assertEquals(ColorSchema, specs.getValue("minecraft:dyed_color").schema)
+        val potion = specs.getValue("minecraft:potion_contents").schema as ObjectSchema
+        assertEquals(ColorSchema, potion.fields.getValue("custom_color").schema)
+    }
+
+    @Test
+    fun `test dye colors are written by their name`() {
+        val baseColor = specs.getValue("minecraft:base_color").schema as EnumSchema
+        assertTrue("light_blue" in baseColor.values)
+        assertEquals(baseColor, specs.getValue("minecraft:wolf/collar").schema)
+    }
 }

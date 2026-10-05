@@ -74,8 +74,6 @@ class ComponentOverrides(
 
     companion object {
 
-        private val COLOR = IntSchema(min = 0, max = 0xFFFFFF)
-
         /**
          * The corrections for the vanilla item component format.
          */
@@ -179,7 +177,7 @@ class ComponentOverrides(
                     ObjectSchema(
                         mapOf(
                             "potion" to ComponentField(KeySchema("potion"), optional = true),
-                            "custom_color" to ComponentField(COLOR, optional = true),
+                            "custom_color" to ComponentField(ColorSchema, optional = true),
                             "custom_effects" to ComponentField(
                                 ListSchema(
                                     ObjectSchema(

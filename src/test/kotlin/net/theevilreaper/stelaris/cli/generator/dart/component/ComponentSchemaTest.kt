@@ -12,6 +12,7 @@ class ComponentSchemaTest {
         assertEquals("IntSchema(min: 1, max: 99)", IntSchema(1, 99).toDart())
         assertEquals("FloatSchema(min: 0.0)", FloatSchema(min = 0.0).toDart())
         assertEquals("KeySchema(registry: 'item')", KeySchema("item").toDart())
+        assertEquals("ColorSchema()", ColorSchema.toDart())
         assertEquals("EnumSchema(['common', 'rare'])", EnumSchema(listOf("common", "rare")).toDart())
         assertEquals("ListSchema(TextSchema(), maxLength: 256)", ListSchema(TextSchema, 256).toDart())
         assertEquals("UnsupportedSchema('Map<String, String>')", UnsupportedSchema("Map<String, String>").toDart())

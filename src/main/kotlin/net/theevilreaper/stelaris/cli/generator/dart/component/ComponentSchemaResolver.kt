@@ -69,10 +69,11 @@ class ComponentSchemaResolver(private val overrides: ComponentOverrides = Compon
             type == String::class.java -> StringSchema
             type == MinestomUnit::class.java -> UnitSchema
             Component::class.java.isAssignableFrom(type) -> TextSchema
-            // Colors are written as a single RGB integer in the vanilla format
-            RGBLike::class.java.isAssignableFrom(type) -> IntSchema(min = 0, max = 0xFFFFFF)
-            Key::class.java.isAssignableFrom(type) -> KeySchema()
+            // Checked before colors, because dye colors are enums which are written by their name
             type.isEnum -> EnumSchema(enumValues(type))
+            // Colors are written as a single RGB integer in the vanilla format
+            RGBLike::class.java.isAssignableFrom(type) -> ColorSchema
+            Key::class.java.isAssignableFrom(type) -> KeySchema()
             type.isRecord -> resolveRecord(type, visiting)
             type.isArray -> ListSchema(resolve(type.componentType, visiting))
             // Registry entries like materials, blocks or sounds are referenced by their key
