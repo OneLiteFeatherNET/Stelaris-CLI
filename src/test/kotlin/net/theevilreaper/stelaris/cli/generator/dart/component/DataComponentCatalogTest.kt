@@ -57,6 +57,18 @@ class DataComponentCatalogTest {
     }
 
     @Test
+    fun `test registry tags accept a tag reference`() {
+        val tool = specs.getValue("minecraft:tool").schema as ObjectSchema
+        val rule = (tool.fields.getValue("rules").schema as ListSchema).element as ObjectSchema
+        assertEquals(RegistryTagSchema("block"), rule.fields.getValue("blocks").schema)
+        assertEquals(
+            ListSchema(ObjectSchema(mapOf("blocks" to ComponentField(RegistryTagSchema("block"))))),
+            specs.getValue("minecraft:can_break").schema
+        )
+        assertEquals(RegistryTagSchema("banner_pattern"), specs.getValue("minecraft:provides_banner_patterns").schema)
+    }
+
+    @Test
     fun `test overrides only name existing components`() {
         val overrides = ComponentOverrides.VANILLA
         val overriddenKeys = overrides.nonEditable + overrides.componentSchemas.keys +

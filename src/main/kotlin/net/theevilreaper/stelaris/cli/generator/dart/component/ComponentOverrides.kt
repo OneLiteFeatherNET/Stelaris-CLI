@@ -103,7 +103,7 @@ class ComponentOverrides(
                 // Minestom unwraps these values, the vanilla format has an object around them
                 "minecraft:enchantable" to { _ -> ObjectSchema(mapOf("value" to ComponentField(IntSchema(min = 1)))) },
                 "minecraft:repairable" to { _ ->
-                    ObjectSchema(mapOf("items" to ComponentField(ListSchema(KeySchema("item")))))
+                    ObjectSchema(mapOf("items" to ComponentField(RegistryTagSchema("item"))))
                 },
                 // Minestom wraps these values, the vanilla format is the list itself
                 "minecraft:banner_patterns" to { resolver ->
@@ -150,7 +150,7 @@ class ComponentOverrides(
                 "minecraft:lock" to { _ ->
                     ObjectSchema(
                         mapOf(
-                            "items" to ComponentField(ListSchema(KeySchema("item")), optional = true),
+                            "items" to ComponentField(RegistryTagSchema("item"), optional = true),
                             "count" to ComponentField(
                                 ObjectSchema(
                                     mapOf(
@@ -224,8 +224,6 @@ class ComponentOverrides(
                 },
                 "minecraft:note_block_sound" to { _ -> KeySchema("sound_event") },
                 "minecraft:recipes" to { _ -> ListSchema(KeySchema("recipe")) },
-                // A single tag reference in the vanilla format
-                "minecraft:provides_banner_patterns" to { _ -> KeySchema("banner_pattern") },
             ),
             typeSchemas = mapOf(
                 // Arbitrary NBT and maps can't be described by the schema
@@ -336,7 +334,7 @@ class ComponentOverrides(
             entries.flatMap { (category, paths) -> paths.map { "minecraft:$it" to category } }.toMap()
 
         private fun blockPredicates(): ComponentSchema =
-            ListSchema(ObjectSchema(mapOf("blocks" to ComponentField(ListSchema(KeySchema("block"))))))
+            ListSchema(ObjectSchema(mapOf("blocks" to ComponentField(RegistryTagSchema("block")))))
 
         private fun filteredText(text: ComponentSchema): ComponentSchema = ObjectSchema(
             mapOf(
