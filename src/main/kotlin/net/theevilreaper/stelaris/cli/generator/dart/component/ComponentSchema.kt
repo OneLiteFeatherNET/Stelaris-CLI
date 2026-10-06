@@ -58,6 +58,15 @@ data class KeySchema(val registry: String? = null) : ComponentSchema {
         "KeySchema(${namedArguments("registry" to registry?.let(DartSource::string))})"
 }
 
+/**
+ * A set of registry entries, written either as a list of keys or as a single `#tag` reference.
+ * @property registry the registry of the entries, e.g. `block`
+ */
+data class RegistryTagSchema(val registry: String? = null) : ComponentSchema {
+    override fun toDart(): String =
+        "RegistryTagSchema(${namedArguments("registry" to registry?.let(DartSource::string))})"
+}
+
 data class EnumSchema(val values: List<String>) : ComponentSchema {
     override fun toDart(): String = "EnumSchema([${values.joinToString(", ", transform = DartSource::string)}])"
 }

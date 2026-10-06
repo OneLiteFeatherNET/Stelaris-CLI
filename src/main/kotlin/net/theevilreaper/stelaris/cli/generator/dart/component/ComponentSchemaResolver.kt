@@ -50,8 +50,8 @@ class ComponentSchemaResolver(private val overrides: ComponentOverrides = Compon
             // A registry key or holder is written as the key of the entry in the vanilla format
             RegistryKey::class.java.isAssignableFrom(raw) || Holder::class.java.isAssignableFrom(raw) ->
                 KeySchema(registryOf(arguments[0]))
-            // A tag is written either as '#tag' or as a list of keys, the list covers both
-            RegistryTag::class.java.isAssignableFrom(raw) -> ListSchema(KeySchema(registryOf(arguments[0])))
+            // A tag is written either as '#tag' or as a list of keys
+            RegistryTag::class.java.isAssignableFrom(raw) -> RegistryTagSchema(registryOf(arguments[0]))
             // The type arguments of a map, record or anything else can't be expressed in a schema
             else -> {
                 val resolved = resolveClass(raw, visiting)

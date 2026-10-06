@@ -135,7 +135,7 @@ class ComponentSchemaResolverTest {
         val overrides = ComponentOverrides(registries = mapOf(Material::class.java to "item"))
         val resolver = ComponentSchemaResolver(overrides)
         assertEquals(KeySchema("item"), resolver.schemaOf(genericType("materialKey")))
-        assertEquals(ListSchema(KeySchema("item")), resolver.schemaOf(genericType("materialTag")))
+        assertEquals(RegistryTagSchema("item"), resolver.schemaOf(genericType("materialTag")))
         assertEquals(KeySchema("item"), resolver.schemaOf(Material::class.java))
     }
 

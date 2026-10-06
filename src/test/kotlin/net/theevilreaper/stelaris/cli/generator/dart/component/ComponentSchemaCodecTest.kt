@@ -21,7 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith
  *
  * The UI builds the values from the schema and the generator reads them with the codecs, so both have to
  * agree. For every component which the UI offers, a value with only the required fields and one with all
- * editable fields are decoded.
+ * editable fields are decoded, once with registry tags as a list of keys and once as a `#tag` reference.
  */
 @ExtendWith(MicrotusExtension::class)
 class ComponentSchemaCodecTest {
@@ -60,6 +60,17 @@ class ComponentSchemaCodecTest {
         "zombie_nautilus_variant" to "minecraft:temperate",
     )
 
+    /**
+     * An existing tag for every registry the schema references as a [RegistryTagSchema].
+     */
+    private val sampleTags = mapOf(
+        "item" to "#minecraft:logs",
+        "block" to "#minecraft:logs",
+        "damage_type" to "#minecraft:is_fire",
+        "entity_type" to "#minecraft:skeletons",
+        "banner_pattern" to "#minecraft:pattern_item/creeper",
+    )
+
     @Test
     fun `test schema values are readable by the codecs`(env: Env) {
         val transcoder = RegistryTranscoder(Transcoder.JSON, MinecraftServer.process())
@@ -69,8 +80,8 @@ class ComponentSchemaCodecTest {
             .filterNot { sample(it.schema, withOptional = false) == null }
             .mapNotNull { spec ->
                 val codec = DataComponent.fromKey(spec.key)?.codec() ?: return@mapNotNull "${spec.key}: no codec"
-                listOf(false, true).firstNotNullOfOrNull { withOptional ->
-                    val json = sample(spec.schema, withOptional)
+                SAMPLE_VARIANTS.firstNotNullOfOrNull { (withOptional, asTag) ->
+                    val json = sample(spec.schema, withOptional, asTag)
                     val error = try {
                         (codec.decode(transcoder, json) as? Result.Error<*>)?.message()
                     } catch (exception: Exception) {
@@ -84,9 +95,10 @@ class ComponentSchemaCodecTest {
 
     /**
      * Builds a value like the UI does: required fields always, optional fields only with [withOptional].
+     * Registry tags are written as a `#tag` reference with [asTag], otherwise as a list of keys.
      * @return the value or null if a required part can't be described
      */
-    private fun sample(schema: ComponentSchema, withOptional: Boolean): JsonElement? = when (schema) {
+    private fun sample(schema: ComponentSchema, withOptional: Boolean, asTag: Boolean = false): JsonElement? = when (schema) {
         is IntSchema -> JsonPrimitive((schema.min ?: 1).coerceAtLeast(1).coerceAtMost(schema.max ?: Int.MAX_VALUE))
         is FloatSchema -> JsonPrimitive((schema.min ?: 1.0).coerceAtLeast(0.5).coerceAtMost(schema.max ?: Double.MAX_VALUE))
         BoolSchema -> JsonPrimitive(true)
@@ -94,12 +106,16 @@ class ComponentSchemaCodecTest {
         StringSchema, TextSchema -> JsonPrimitive("test")
         ColorSchema -> JsonPrimitive(0xFF0000)
         is KeySchema -> JsonPrimitive(sampleKeys[schema.registry] ?: "minecraft:stone")
+        is RegistryTagSchema -> when {
+            asTag -> JsonPrimitive(sampleTags.getValue(schema.registry ?: ""))
+            else -> JsonArray().apply { add(sampleKeys[schema.registry] ?: "minecraft:stone") }
+        }
         is EnumSchema -> JsonPrimitive(schema.values.first())
-        is ListSchema -> sample(schema.element, withOptional)?.let { element -> JsonArray().apply { add(element) } }
+        is ListSchema -> sample(schema.element, withOptional, asTag)?.let { element -> JsonArray().apply { add(element) } }
         is ObjectSchema -> {
             val value = JsonObject()
             schema.fields.forEach { (name, field) ->
-                val fieldValue = sample(field.schema, withOptional)
+                val fieldValue = sample(field.schema, withOptional, asTag)
                 when {
                     !field.optional -> value.add(name, fieldValue ?: return null)
                     withOptional && fieldValue != null -> value.add(name, fieldValue)
@@ -108,5 +124,12 @@ class ComponentSchemaCodecTest {
             value
         }
         is UnsupportedSchema -> null
+    }
+
+    private companion object {
+        /**
+         * The combinations of with optional fields and registry tags as `#tag` which are decoded.
+         */
+        val SAMPLE_VARIANTS = listOf(false to false, true to false, true to true)
     }
 }
