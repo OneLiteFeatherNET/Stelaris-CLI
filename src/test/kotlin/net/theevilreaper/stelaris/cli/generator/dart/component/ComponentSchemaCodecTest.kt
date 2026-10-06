@@ -64,7 +64,7 @@ class ComponentSchemaCodecTest {
     fun `test schema values are readable by the codecs`(env: Env) {
         val transcoder = RegistryTranscoder(Transcoder.JSON, MinecraftServer.process())
         val failures = DataComponentCatalog().specs()
-            .filter { it.editable && !it.managed }
+            .filter { it.editable }
             // A required part the UI can't edit means the UI can't create the component at all
             .filterNot { sample(it.schema, withOptional = false) == null }
             .mapNotNull { spec ->
