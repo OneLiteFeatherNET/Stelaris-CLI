@@ -34,14 +34,12 @@ class DataComponentCatalogTest {
         val spec = specs.getValue("minecraft:max_stack_size")
         assertEquals("MAX_STACK_SIZE", spec.javaField)
         assertEquals(IntSchema(min = 1, max = 99), spec.schema)
-        assertFalse(spec.managed)
         assertTrue(spec.editable)
     }
 
     @Test
-    fun `test lore is managed`() {
+    fun `test lore is limited`() {
         val spec = specs.getValue("minecraft:lore")
-        assertTrue(spec.managed)
         assertEquals(ListSchema(TextSchema, maxLength = 256), spec.schema)
     }
 
@@ -61,7 +59,7 @@ class DataComponentCatalogTest {
     @Test
     fun `test overrides only name existing components`() {
         val overrides = ComponentOverrides.VANILLA
-        val overriddenKeys = overrides.managed + overrides.nonEditable + overrides.componentSchemas.keys +
+        val overriddenKeys = overrides.nonEditable + overrides.componentSchemas.keys +
             overrides.displayNames.keys + overrides.categories.keys
         val unknownKeys = overriddenKeys - specs.keys
         assertTrue(unknownKeys.isEmpty(), "Overrides for unknown components: $unknownKeys")

@@ -31,7 +31,6 @@ class DataComponentCatalog(private val overrides: ComponentOverrides = Component
                 category = overrides.categoryOf(key),
                 javaField = field.name,
                 schema = schema,
-                managed = key in overrides.managed,
                 editable = key !in overrides.nonEditable,
             )
         }

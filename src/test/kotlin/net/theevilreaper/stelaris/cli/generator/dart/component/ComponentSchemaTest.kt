@@ -36,8 +36,8 @@ class ComponentSchemaTest {
     @Test
     fun `test dart rendering of a spec`() {
         assertEquals(
-            "ComponentSpec('minecraft:lore', 'Lore', ComponentCategory.display, 'LORE', TextSchema(), managed: true)",
-            ComponentSpec("minecraft:lore", "Lore", ComponentCategory.DISPLAY, "LORE", TextSchema, managed = true).toDart()
+            "ComponentSpec('minecraft:lore', 'Lore', ComponentCategory.display, 'LORE', TextSchema())",
+            ComponentSpec("minecraft:lore", "Lore", ComponentCategory.DISPLAY, "LORE", TextSchema).toDart()
         )
         assertEquals(
             "ComponentSpec('minecraft:cat/variant', 'Cat Variant', ComponentCategory.entityVariant, 'CAT_VARIANT', " +

@@ -36,7 +36,6 @@ import net.minestom.server.potion.PotionType
  *
  * Reflection only sees the Java model of Minestom, which is not always the vanilla format Stelaris has
  * to write. Everything that differs is corrected here. The [VANILLA] instance is the one the generator uses.
- * @property managed the keys of components which Stelaris handles with a dedicated editor
  * @property nonEditable the keys of components which hold runtime state and can't be set by a user
  * @property componentSchemas replaces the derived schema of a component, keyed by the component key
  * @property typeSchemas replaces the derived schema of a Java type wherever it occurs
@@ -49,7 +48,6 @@ import net.minestom.server.potion.PotionType
  * @since 1.0.0
  */
 class ComponentOverrides(
-    val managed: Set<String> = emptySet(),
     val nonEditable: Set<String> = emptySet(),
     val componentSchemas: Map<String, (ComponentSchemaResolver) -> ComponentSchema> = emptyMap(),
     val typeSchemas: Map<Class<*>, ComponentSchema> = emptyMap(),
@@ -76,13 +74,6 @@ class ComponentOverrides(
          * The corrections for the vanilla item component format.
          */
         val VANILLA: ComponentOverrides = ComponentOverrides(
-            managed = setOf(
-                "minecraft:lore",
-                "minecraft:enchantments",
-                "minecraft:custom_name",
-                "minecraft:item_name",
-                "minecraft:custom_model_data",
-            ),
             nonEditable = setOf(
                 "minecraft:bundle_contents",
                 "minecraft:container",

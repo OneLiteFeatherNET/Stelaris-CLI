@@ -28,7 +28,7 @@ class DataComponentGeneratorTest : GenerationTestBase() {
         assertTrue(
             catalog.contains(
                 "ComponentSpec('minecraft:lore', 'Lore', ComponentCategory.display, 'LORE', " +
-                    "ListSchema(TextSchema(), maxLength: 256), managed: true),"
+                    "ListSchema(TextSchema(), maxLength: 256)),"
             )
         )
     }

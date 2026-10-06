@@ -111,7 +111,6 @@ data class ComponentField(val schema: ComponentSchema, val optional: Boolean = f
  * @property category the section in which the component is offered
  * @property javaField the name of the constant in Minestom's `DataComponents`
  * @property schema the schema of the component value
- * @property managed whether Stelaris handles the component with a dedicated editor
  * @property editable whether the component can be set by a user, false for runtime state
  */
 data class ComponentSpec(
@@ -120,14 +119,10 @@ data class ComponentSpec(
     val category: ComponentCategory,
     val javaField: String,
     val schema: ComponentSchema,
-    val managed: Boolean = false,
     val editable: Boolean = true,
 ) {
     fun toDart(): String {
-        val flags = buildString {
-            if (managed) append(", managed: true")
-            if (!editable) append(", editable: false")
-        }
+        val flags = if (editable) "" else ", editable: false"
         return "ComponentSpec(${DartSource.string(key)}, ${DartSource.string(displayName)}, " +
             "ComponentCategory.${category.dartName}, ${DartSource.string(javaField)}, ${schema.toDart()}$flags)"
     }
