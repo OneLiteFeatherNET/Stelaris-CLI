@@ -34,7 +34,6 @@ class FireworkShapeGeneratorTest : GenerationTestBase() {
                 e};
 
             enum FireworkShape implements Keyed {
-
               smallBall('Small Ball', 'small_ball', 0),
               largeBall('Large Ball', 'large_ball', 1),
               star('Star', 'star', 2),

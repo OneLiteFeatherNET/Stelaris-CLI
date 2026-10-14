@@ -33,7 +33,6 @@ class ItemRarityGeneratorTest : GenerationTestBase() {
             final Map<String, ItemRarity> _itemRarityByKey = {for (final e in ItemRarity.values) e.key: e};
 
             enum ItemRarity implements Keyed {
-
               common('Common', 'common'),
               uncommon('Uncommon', 'uncommon'),
               rare('Rare', 'rare'),

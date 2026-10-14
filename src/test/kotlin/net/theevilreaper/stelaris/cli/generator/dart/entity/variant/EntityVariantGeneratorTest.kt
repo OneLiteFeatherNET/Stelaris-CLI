@@ -40,7 +40,6 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
                 e.key: e};
 
             enum AxolotlVariant implements Keyed {
-
               lucy('Lucy', 'lucy', 0),
               wild('Wild', 'wild', 1),
               gold('Gold', 'gold', 2),
@@ -70,7 +69,6 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
                 MooshroomVariant.values) e.key: e};
 
             enum MooshroomVariant implements Keyed {
-
               red('Red', 'red'),
               brown('Brown', 'brown');
 
@@ -93,7 +91,6 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
             final Map<String, FoxVariant> _foxVariantByKey = {for (final e in FoxVariant.values) e.key: e};
 
             enum FoxVariant implements Keyed {
-
               red('Red', 'red', 0),
               snow('Snow', 'snow', 1);
 
@@ -120,7 +117,6 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
                 e};
 
             enum ParrotVariant implements Keyed {
-
               redBlue('Red Blue', 'red_blue', 0),
               blue('Blue', 'blue', 1),
               green('Green', 'green', 2),
@@ -150,7 +146,6 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
                 e};
 
             enum RabbitVariant implements Keyed {
-
               brown('Brown', 'brown', 0),
               white('White', 'white', 1),
               black('Black', 'black', 2),
@@ -181,7 +176,6 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
             final Map<String, SalmonSize> _salmonSizeByKey = {for (final e in SalmonSize.values) e.key: e};
 
             enum SalmonSize implements Keyed {
-
               small('Small', 'small', 0),
               medium('Medium', 'medium', 1),
               large('Large', 'large', 2);

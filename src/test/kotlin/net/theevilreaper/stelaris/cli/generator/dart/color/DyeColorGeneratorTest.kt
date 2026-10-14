@@ -34,7 +34,6 @@ class DyeColorGeneratorTest : GenerationTestBase() {
             final Map<String, DyeColor> _dyeColorByKey = {for (final e in DyeColor.values) e.key: e};
 
             enum DyeColor implements Keyed {
-
               white('White', 'white', RgbColor.fromRGB(0xf9fffe), RgbColor.fromRGB(0xffffff),
                   RgbColor.fromRGB(0xf0f0f0), 8),
               orange('Orange', 'orange', RgbColor.fromRGB(0xf9801d), RgbColor.fromRGB(0xff681f),
