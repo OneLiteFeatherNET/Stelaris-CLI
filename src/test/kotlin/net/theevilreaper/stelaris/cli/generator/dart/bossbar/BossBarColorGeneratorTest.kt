@@ -36,7 +36,6 @@ class BossBarColorGeneratorTest : GenerationTestBase() {
                 e};
 
             enum BossBarColor implements Keyed {
-
               pink('Pink', 'pink'),
               blue('Blue', 'blue'),
               red('Red', 'red'),

@@ -34,7 +34,6 @@ class VillagerTypeGeneratorTest : GenerationTestBase() {
                 e};
 
             enum VillagerType implements Keyed {
-
               desert('Desert', 'minecraft:desert'),
               jungle('Jungle', 'minecraft:jungle'),
               plains('Plains', 'minecraft:plains'),

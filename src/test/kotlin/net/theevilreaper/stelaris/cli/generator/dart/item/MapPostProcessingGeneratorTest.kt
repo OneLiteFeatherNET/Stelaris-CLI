@@ -34,7 +34,6 @@ class MapPostProcessingGeneratorTest : GenerationTestBase() {
                 MapPostProcessing.values) e.key: e};
 
             enum MapPostProcessing implements Keyed {
-
               lock('Lock', 'lock'),
               scale('Scale', 'scale');
 

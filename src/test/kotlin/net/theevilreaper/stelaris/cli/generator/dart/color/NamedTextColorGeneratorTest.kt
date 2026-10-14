@@ -35,7 +35,6 @@ class NamedTextColorGeneratorTest : GenerationTestBase() {
                 e.key: e};
 
             enum NamedTextColor implements Keyed {
-
               aqua('Aqua', 'aqua', RgbColor.fromRGB(0x55ffff)),
               black('Black', 'black', RgbColor.fromRGB(0x000000)),
               blue('Blue', 'blue', RgbColor.fromRGB(0x5555ff)),

@@ -37,7 +37,6 @@ class SoundSourceGeneratorTest : GenerationTestBase() {
             final Map<String, SoundSource> _soundSourceByKey = {for (final e in SoundSource.values) e.key: e};
 
             enum SoundSource implements Keyed {
-
               master('Master', 'master'),
               music('Music', 'music'),
               record('Record', 'record'),

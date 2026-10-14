@@ -34,7 +34,6 @@ class HoverEventActionGeneratorTest : GenerationTestBase() {
                 HoverEventAction.values) e.key: e};
 
             enum HoverEventAction implements Keyed {
-
               showEntity('Show Entity', 'show_entity'),
               showItem('Show Item', 'show_item'),
               showText('Show Text', 'show_text');

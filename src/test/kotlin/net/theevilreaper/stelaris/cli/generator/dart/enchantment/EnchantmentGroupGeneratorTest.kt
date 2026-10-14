@@ -35,7 +35,6 @@ class EnchantmentGroupGeneratorTest : GenerationTestBase() {
                 EnchantmentGroup.values) e.key: e};
 
             enum EnchantmentGroup implements Keyed {
-
               armor('Armor', 'armor'),
               weapon('Weapon', 'weapon'),
               tool('Tool', 'tool'),

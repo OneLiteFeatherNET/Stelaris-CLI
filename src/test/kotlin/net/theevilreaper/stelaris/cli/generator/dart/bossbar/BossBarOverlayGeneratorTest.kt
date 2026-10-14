@@ -37,7 +37,6 @@ class BossBarOverlayGeneratorTest : GenerationTestBase() {
                 e.key: e};
 
             enum BossBarOverlay implements Keyed {
-
               progress('Progress', 'progress'),
               notched6('Notched 6', 'notched_6'),
               notched10('Notched 10', 'notched_10'),

@@ -34,7 +34,6 @@ class TextDecorationGeneratorTest : GenerationTestBase() {
                 e.key: e};
 
             enum TextDecoration implements Keyed {
-
               bold('Bold', 'bold'),
               italic('Italic', 'italic'),
               obfuscated('Obfuscated', 'obfuscated'),
