@@ -44,7 +44,9 @@ class BossBarColorGeneratorTest : GenerationTestBase() {
               purple('Purple', 'purple'),
               white('White', 'white');
 
+              @override
               final String displayName;
+              @override
               final String key;
 
               const BossBarColor(this.displayName, this.key);

@@ -43,7 +43,9 @@ class CreativeTabGeneratorTest : GenerationTestBase() {
               spawn_eggs('Spawn Eggs', 'spawn_eggs'),
               op_blocks('Operator Utilities', 'op_blocks');
 
+              @override
               final String displayName;
+              @override
               final String key;
 
               const CreativeTab(this.displayName, this.key);

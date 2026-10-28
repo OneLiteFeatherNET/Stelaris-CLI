@@ -9,6 +9,7 @@ import net.theevilreaper.dartpoet.enum.EnumEntrySpec
 import net.theevilreaper.dartpoet.enum.parameter.EnumParameterSpec
 import net.theevilreaper.dartpoet.parameter.ParameterSpec
 import net.theevilreaper.dartpoet.property.PropertySpec
+import net.theevilreaper.stelaris.cli.generator.dart.util.OVERRIDE
 import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
 import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
 import net.theevilreaper.stelaris.cli.util.StringHelper
@@ -35,8 +36,8 @@ internal object MaterialSubGenerator {
             .keyed(className)
             .enumProperties(*enumProperties.toTypedArray())
             .properties(
-                PropertySpec.builder("displayName", String::class).modifier(enumModifier).build(),
-                PropertySpec.builder(KEY, String::class).modifier(enumModifier).build(),
+                PropertySpec.builder("displayName", String::class).modifier(enumModifier).annotation(OVERRIDE).build(),
+                PropertySpec.builder(KEY, String::class).modifier(enumModifier).annotation(OVERRIDE).build(),
                 PropertySpec.builder(MAX_STACK_SIZE, Int::class).modifier(enumModifier).build()
             )
             .constructor(

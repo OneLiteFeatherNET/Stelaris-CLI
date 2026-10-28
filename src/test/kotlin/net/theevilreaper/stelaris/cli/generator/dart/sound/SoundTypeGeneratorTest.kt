@@ -40,7 +40,9 @@ class SoundTypeGeneratorTest : GenerationTestBase() {
               item('Item', 'item'),
               ambient('Ambient', 'ambient');
 
+              @override
               final String displayName;
+              @override
               final String key;
 
               const SoundType(this.displayName, this.key);

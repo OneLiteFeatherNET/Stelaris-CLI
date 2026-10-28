@@ -37,7 +37,9 @@ class MapPostProcessingGeneratorTest : GenerationTestBase() {
               lock('Lock', 'lock'),
               scale('Scale', 'scale');
 
+              @override
               final String displayName;
+              @override
               final String key;
 
               const MapPostProcessing(this.displayName, this.key);

@@ -40,7 +40,9 @@ class BossBarFlagGeneratorTest : GenerationTestBase() {
               playBossMusic('Play Boss Music', 'play_boss_music'),
               createWorldFog('Create World Fog', 'create_world_fog');
 
+              @override
               final String displayName;
+              @override
               final String key;
 
               const BossBarFlag(this.displayName, this.key);

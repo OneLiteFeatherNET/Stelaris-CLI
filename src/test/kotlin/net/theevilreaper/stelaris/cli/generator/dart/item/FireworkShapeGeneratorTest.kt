@@ -40,7 +40,9 @@ class FireworkShapeGeneratorTest : GenerationTestBase() {
               creeper('Creeper', 'creeper', 3),
               burst('Burst', 'burst', 4);
 
+              @override
               final String displayName;
+              @override
               final String key;
               final int id;
 

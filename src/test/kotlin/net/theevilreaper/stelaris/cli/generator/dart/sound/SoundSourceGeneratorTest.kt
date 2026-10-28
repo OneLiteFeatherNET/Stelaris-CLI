@@ -49,7 +49,9 @@ class SoundSourceGeneratorTest : GenerationTestBase() {
               voice('Voice', 'voice'),
               ui('Ui', 'ui');
 
+              @override
               final String displayName;
+              @override
               final String key;
 
               const SoundSource(this.displayName, this.key);

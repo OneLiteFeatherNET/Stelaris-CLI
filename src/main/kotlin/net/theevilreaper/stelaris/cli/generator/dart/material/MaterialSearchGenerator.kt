@@ -11,6 +11,7 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.dartpoet.type.ClassName
 import net.theevilreaper.dartpoet.type.ParameterizedTypeName.Companion.parameterizedBy
 import net.theevilreaper.dartpoet.type.STRING
+import net.theevilreaper.stelaris.cli.generator.dart.util.OVERRIDE
 import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
 import net.theevilreaper.stelaris.cli.util.EMPTY_STRING
 import net.theevilreaper.stelaris.cli.util.StringHelper
@@ -45,9 +46,9 @@ internal object MaterialSearchGenerator {
             .keyed(className, implementsKeyed = false)
             .enumProperties(*entries.toTypedArray())
             .properties(
-                PropertySpec.builder(DISPLAY_NAME, String::class).modifier(enumModifier).build(),
-                PropertySpec.builder(KEY, String::class).modifier(enumModifier).build(),
-                PropertySpec.builder(MASK, Int::class).modifier(enumModifier).build()
+                PropertySpec.builder(DISPLAY_NAME, String::class).modifier(enumModifier).annotation(OVERRIDE).build(),
+                PropertySpec.builder(KEY, String::class).modifier(enumModifier).annotation(OVERRIDE).build(),
+                PropertySpec.builder(MASK, Int::class).modifier(enumModifier).annotation(OVERRIDE).build()
             )
             .constructor(
                 ConstructorSpec.builder(className)
@@ -84,11 +85,11 @@ internal object MaterialSearchGenerator {
             .keyed(className, implementsKeyed = false)
             .enumProperties(*entries.toTypedArray())
             .properties(
-                PropertySpec.builder(DISPLAY_NAME, String::class).modifier(enumModifier).build(),
-                PropertySpec.builder(KEY, String::class).modifier(enumModifier).build(),
-                PropertySpec.builder(SEARCH_KEY, String::class).modifier(enumModifier).build(),
-                PropertySpec.builder(TERMS, ClassName("List").parameterizedBy(STRING)).modifier(enumModifier).build(),
-                PropertySpec.builder(CATEGORIES, Int::class).modifier(enumModifier).build()
+                PropertySpec.builder(DISPLAY_NAME, String::class).modifier(enumModifier).annotation(OVERRIDE).build(),
+                PropertySpec.builder(KEY, String::class).modifier(enumModifier).annotation(OVERRIDE).build(),
+                PropertySpec.builder(SEARCH_KEY, String::class).modifier(enumModifier).annotation(OVERRIDE).build(),
+                PropertySpec.builder(TERMS, ClassName("List").parameterizedBy(STRING)).modifier(enumModifier).annotation(OVERRIDE).build(),
+                PropertySpec.builder(CATEGORIES, Int::class).modifier(enumModifier).annotation(OVERRIDE).build()
             )
             .constructor(
                 ConstructorSpec.builder(className)

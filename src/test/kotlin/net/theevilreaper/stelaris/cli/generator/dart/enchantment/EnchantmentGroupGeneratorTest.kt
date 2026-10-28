@@ -40,7 +40,9 @@ class EnchantmentGroupGeneratorTest : GenerationTestBase() {
               tool('Tool', 'tool'),
               meta('Meta', 'meta');
 
+              @override
               final String displayName;
+              @override
               final String key;
 
               const EnchantmentGroup(this.displayName, this.key);

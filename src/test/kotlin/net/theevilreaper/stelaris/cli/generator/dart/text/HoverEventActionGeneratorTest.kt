@@ -38,7 +38,9 @@ class HoverEventActionGeneratorTest : GenerationTestBase() {
               showItem('Show Item', 'show_item'),
               showText('Show Text', 'show_text');
 
+              @override
               final String displayName;
+              @override
               final String key;
 
               const HoverEventAction(this.displayName, this.key);

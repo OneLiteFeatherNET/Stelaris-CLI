@@ -38,7 +38,9 @@ class ItemRarityGeneratorTest : GenerationTestBase() {
               rare('Rare', 'rare'),
               epic('Epic', 'epic');
 
+              @override
               final String displayName;
+              @override
               final String key;
 
               const ItemRarity(this.displayName, this.key);

@@ -40,7 +40,9 @@ class TextDecorationGeneratorTest : GenerationTestBase() {
               strikethrough('Strikethrough', 'strikethrough'),
               underlined('Underlined', 'underlined');
 
+              @override
               final String displayName;
+              @override
               final String key;
 
               const TextDecoration(this.displayName, this.key);
