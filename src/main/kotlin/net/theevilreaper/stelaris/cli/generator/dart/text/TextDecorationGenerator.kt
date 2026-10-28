@@ -13,6 +13,7 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.OVERRIDE
 import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
 import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
@@ -58,11 +59,13 @@ class TextDecorationGenerator : BaseGenerator(
             .property {
                 PropertySpec.builder("displayName", String::class)
                     .modifier { DartModifier.FINAL }
+                    .annotation(OVERRIDE)
                     .build()
             }
             .property {
                 PropertySpec.builder("key", String::class)
                     .modifier { DartModifier.FINAL }
+                    .annotation(OVERRIDE)
                     .build()
             }
             .constructor {

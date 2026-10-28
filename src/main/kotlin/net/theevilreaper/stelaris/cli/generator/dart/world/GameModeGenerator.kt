@@ -13,6 +13,7 @@ import net.theevilreaper.dartpoet.property.PropertySpec
 import net.theevilreaper.stelaris.cli.generator.BaseGenerator
 import net.theevilreaper.stelaris.cli.generator.CodeGenerator
 import net.theevilreaper.stelaris.cli.generator.Generator
+import net.theevilreaper.stelaris.cli.generator.dart.util.OVERRIDE
 import net.theevilreaper.stelaris.cli.generator.dart.util.keyed
 import net.theevilreaper.stelaris.cli.generator.dart.util.keyedLookup
 import net.theevilreaper.stelaris.cli.generator.dart.util.writeGenerated
@@ -55,8 +56,8 @@ class GameModeGenerator : BaseGenerator(
             .keyed(className)
             .enumProperties(*enumEntries.toTypedArray())
             .properties(
-                PropertySpec.builder("displayName", String::class).modifier(DartModifier.FINAL).build(),
-                PropertySpec.builder("key", String::class).modifier(DartModifier.FINAL).build(),
+                PropertySpec.builder("displayName", String::class).modifier(DartModifier.FINAL).annotation(OVERRIDE).build(),
+                PropertySpec.builder("key", String::class).modifier(DartModifier.FINAL).annotation(OVERRIDE).build(),
                 PropertySpec.builder("id", Int::class).modifier(DartModifier.FINAL).build()
             )
             .constructor(
