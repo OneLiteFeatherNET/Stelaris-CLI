@@ -52,7 +52,9 @@ class NamedTextColorGeneratorTest : GenerationTestBase() {
               white('White', 'white', RgbColor.fromRGB(0xffffff)),
               yellow('Yellow', 'yellow', RgbColor.fromRGB(0xffff55));
 
+              @override
               final String displayName;
+              @override
               final String key;
               final RgbColor color;
 

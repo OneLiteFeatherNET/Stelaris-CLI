@@ -42,7 +42,9 @@ class VillagerTypeGeneratorTest : GenerationTestBase() {
               swamp('Swamp', 'minecraft:swamp'),
               taiga('Taiga', 'minecraft:taiga');
 
+              @override
               final String displayName;
+              @override
               final String key;
 
               const VillagerType(this.displayName, this.key);

@@ -46,7 +46,9 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
               cyan('Cyan', 'cyan', 3),
               blue('Blue', 'blue', 4);
 
+              @override
               final String displayName;
+              @override
               final String key;
               final int id;
 
@@ -72,7 +74,9 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
               red('Red', 'red'),
               brown('Brown', 'brown');
 
+              @override
               final String displayName;
+              @override
               final String key;
 
               const MooshroomVariant(this.displayName, this.key);
@@ -94,7 +98,9 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
               red('Red', 'red', 0),
               snow('Snow', 'snow', 1);
 
+              @override
               final String displayName;
+              @override
               final String key;
               final int id;
 
@@ -123,7 +129,9 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
               yellowBlue('Yellow Blue', 'yellow_blue', 3),
               grey('Grey', 'grey', 4);
 
+              @override
               final String displayName;
+              @override
               final String key;
               final int id;
 
@@ -154,7 +162,9 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
               saltAndPepper('Salt And Pepper', 'salt_and_pepper', 5),
               killerBunny('Killer Bunny', 'killer_bunny', 6);
 
+              @override
               final String displayName;
+              @override
               final String key;
               final int id;
 
@@ -180,7 +190,9 @@ class EntityVariantGeneratorTest : GenerationTestBase() {
               medium('Medium', 'medium', 1),
               large('Large', 'large', 2);
 
+              @override
               final String displayName;
+              @override
               final String key;
               final int id;
 

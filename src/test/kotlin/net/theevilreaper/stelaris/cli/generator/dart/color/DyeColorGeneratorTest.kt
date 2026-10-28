@@ -67,7 +67,9 @@ class DyeColorGeneratorTest : GenerationTestBase() {
               black('Black', 'black', RgbColor.fromRGB(0x1d1d21), RgbColor.fromRGB(0x000000),
                   RgbColor.fromRGB(0x1e1b1b), 29);
 
+              @override
               final String displayName;
+              @override
               final String key;
               final RgbColor textureDiffuseColor;
               final RgbColor textColor;
