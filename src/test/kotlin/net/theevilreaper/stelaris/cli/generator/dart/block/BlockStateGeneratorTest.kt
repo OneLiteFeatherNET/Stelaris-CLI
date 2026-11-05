@@ -28,5 +28,13 @@ class BlockStateGeneratorTest : GenerationTestBase() {
             )
         )
         assertTrue(catalog.contains("BlockStateSpec('minecraft:stone', 'Stone', {}, {}),"))
+        assertTrue(
+            catalog.endsWith(
+                "];\n\n" +
+                    "final Map<String, BlockStateSpec> _blockStatesByKey = {for (final e in blockStates) e.key: e};\n\n" +
+                    "/// Returns the block with the given [key] or null if there is none.\n" +
+                    "BlockStateSpec? blockStateByKey(String key) => _blockStatesByKey[key];\n"
+            )
+        )
     }
 }

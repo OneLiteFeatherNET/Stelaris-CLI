@@ -36,5 +36,10 @@ class BlockStateGenerator(
         appendLine("const List<$className> blockStates = [")
         specs.forEach { appendLine("  ${it.toDart()},") }
         appendLine("];")
+        appendLine()
+        appendLine("final Map<String, $className> _blockStatesByKey = {for (final e in blockStates) e.key: e};")
+        appendLine()
+        appendLine("/// Returns the block with the given [key] or null if there is none.")
+        appendLine("$className? blockStateByKey(String key) => _blockStatesByKey[key];")
     }
 }
