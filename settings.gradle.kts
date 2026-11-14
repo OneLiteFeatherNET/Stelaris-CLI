@@ -30,7 +30,7 @@ dependencyResolutionManagement {
             version("guava", "33.7.2-jre")
             version("jgit", "7.8.1.202611041320-r")
             version("shadow", "9.6.1")
-            version("ksp", "2.3.13")
+            version("ksp", "2.3.14")
             version("adventure", "5.2.0")
 
             library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
