@@ -20,10 +20,10 @@ enum class ExportStrategy(
         /**
          * Returns the export strategy from the given identifier.
          * @param identifier the identifier of the strategy
-         * @return the export strategy or [LOCAL] if the identifier is unknown
+         * @return the export strategy or null if the identifier is unknown
          */
-        fun fromIdentifier(identifier: String): ExportStrategy {
-            return entries.find { it.identifier == identifier } ?: LOCAL
+        fun fromIdentifier(identifier: String): ExportStrategy? {
+            return entries.find { it.identifier == identifier }
         }
     }
 }
