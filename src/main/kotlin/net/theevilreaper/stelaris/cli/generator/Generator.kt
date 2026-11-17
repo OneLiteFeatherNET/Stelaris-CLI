@@ -20,10 +20,4 @@ interface Generator {
      * @param outputPath the output directory path where the generated files should be written
      */
     fun generate(outputPath: Path)
-
-    /**
-     * Cleans up any resources or state data used by the generator.
-     * This should be called after the generation is complete.
-     */
-    fun cleanUp()
 }

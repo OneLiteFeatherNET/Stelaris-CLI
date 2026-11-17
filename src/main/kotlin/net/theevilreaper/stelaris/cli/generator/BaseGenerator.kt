@@ -16,12 +16,6 @@ abstract class BaseGenerator(
 ) : Generator {
 
     /**
-     * Clears the internal file cache.
-     */
-    override fun cleanUp() {
-    }
-
-    /**
      * Checks if a given package folder exists, if not, it creates it.
      * @param outputPath the base [Path] where the package folder should be located
      * @param packageName the name of the package

@@ -10,7 +10,7 @@ class GitProjectExporter(
     private val generationFolder: Path,
     private val versionString: String,
     private val generators: Set<Generator>
-) : BaseExporter() {
+) : ProjectExporter {
 
     private val userName: String = System.getenv("stelaris.cli.username") ?: ""
     private val password: String = System.getenv("stelaris.cli.password") ?: ""
@@ -50,10 +50,7 @@ class GitProjectExporter(
     }
 
     /**
-     * Clones the base repository to the given path.
-     * @param username the username for the repository
-     * @param token the token for the repository
-     * @param cloneUrl the clone URL for the repository
+     * Clones the base repository to the given path with the credentials and the clone url of the environment.
      * @param temp the temporary path to store the repository
      * @return the cloned repository
      */

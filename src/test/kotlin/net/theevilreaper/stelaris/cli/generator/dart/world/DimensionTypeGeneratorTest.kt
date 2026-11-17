@@ -1,11 +1,14 @@
 package net.theevilreaper.stelaris.cli.generator.dart.world
 
+import net.minestom.testing.extension.MicrotusExtension
 import net.theevilreaper.stelaris.cli.generator.GenerationTestBase
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(MicrotusExtension::class)
 class DimensionTypeGeneratorTest : GenerationTestBase() {
 
     @Test

@@ -7,7 +7,7 @@ import java.nio.file.Path
 class LocalProjectExporter(
     private val exportPath: Path,
     private val generators: Set<Generator>
-) : BaseExporter() {
+) : ProjectExporter {
 
     override fun export() {
         if (!Files.exists(exportPath)) {

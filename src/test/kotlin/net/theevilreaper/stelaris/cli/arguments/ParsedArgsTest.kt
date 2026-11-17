@@ -1,6 +1,5 @@
 package net.theevilreaper.stelaris.cli.arguments
 
-import net.theevilreaper.stelaris.cli.util.VersionPart
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths

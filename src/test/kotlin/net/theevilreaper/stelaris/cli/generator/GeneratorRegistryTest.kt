@@ -12,7 +12,6 @@ class GeneratorRegistryTest {
 
     private class NoopGenerator : Generator {
         override fun generate(outputPath: Path) = Unit
-        override fun cleanUp() = Unit
     }
 
     private fun descriptor(

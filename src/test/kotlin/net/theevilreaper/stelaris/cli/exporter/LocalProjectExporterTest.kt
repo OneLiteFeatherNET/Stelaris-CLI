@@ -19,7 +19,6 @@ class LocalProjectExporterTest {
             override fun generate(outputPath: Path) {
                 generatedTarget = outputPath
             }
-            override fun cleanUp() {}
         }
 
         val exportPath = tempDir.resolve("export_target")

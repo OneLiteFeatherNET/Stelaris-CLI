@@ -37,7 +37,6 @@ class DimensionTypeGenerator : BaseGenerator(
 
     override fun generate(outputPath: Path) {
         val folder = checkPackageFolder(outputPath, packageName)
-        MinecraftServer.init()
         val registry = MinecraftServer.getDimensionTypeRegistry()
         val enumEntries = mutableListOf<EnumEntrySpec>()
 
