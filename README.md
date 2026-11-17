@@ -36,11 +36,38 @@ tag naming a Minecraft version the build does not generate for fails instead of 
 The CLI comes with a few arguments which can be used to customize the process of generating the Dart files.
 Below is a list of all available arguments:
 
-- `-update <major, minor, patch, rev>` - Updates the version tag of the generated files
+- `-version <version>` - The version of the generated data, e.g. `26.2-rev1` (required)
+- `-type <local, git>` - Where the data is exported to, `local` by default
+- `-path <folder>` - The folder of the Dart project, required for a local export and not allowed for a git export
+- `-experimental` - Enables experimental generators
 - `-help` - Displays the help message
-- `-experimental` - Enables experimental features
+
+A local export writes the data into the Dart project at the given path. A git export clones the data repository into a
+temporary folder, commits the data and pushes it. It reads the credentials and the clone url from the environment
+variables `stelaris.cli.username`, `stelaris.cli.password` and `stelaris.cli.cloneUrl`.
+
+An unknown argument or type, a missing value or a missing path stops the CLI with exit code 1 before anything is
+generated.
 
 #### Examples
+
+Generate the data into a local checkout of the data repository:
+
+```
+java -jar stelaris-cli.jar -version 26.2-rev1 -type local -path ../vulpes-minecraft-dart -experimental
+```
+
+Run the CLI from the sources with Gradle:
+
+```
+./gradlew run --args="-version 26.2-rev1 -path ../vulpes-minecraft-dart -experimental"
+```
+
+Push the data to the data repository, as the release workflow does:
+
+```
+java -jar stelaris-cli.jar -version 26.2-rev1 -type git -experimental
+```
 
 ### Contributing
 
