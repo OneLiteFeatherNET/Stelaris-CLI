@@ -12,13 +12,11 @@ class ExportStrategyTest {
     fun `test from identifier`(identifier: String) {
         val strategy = ExportStrategy.fromIdentifier(identifier)
         assertNotNull(strategy)
-        assertEquals(identifier, strategy.identifier)
+        assertEquals(identifier, strategy?.identifier)
     }
 
     @Test
     fun `test from unknown identifier`() {
-        val strategy = ExportStrategy.fromIdentifier("unknown")
-        assertNotNull(strategy)
-        assertEquals("local", strategy.identifier)
+        assertNull(ExportStrategy.fromIdentifier("unknown"))
     }
 }
